@@ -1,0 +1,11 @@
+SOEP-Server was developed by Francesco Feltrinelli <first_name DOT last_name AT gmail DOT com> and is released with GPLv3 licence.
+
+T-Rex was developed by Alessandro Margara (http://home.dei.polimi.it/margara) and is released with LGPLv3 licence.
+
+The following Boost C++ Libraries are released with Boost Software License v1.0:
+Boost.SmartPointers: developed by Greg Colvin, Beman Dawes, Peter Dimov and Darin Adler.
+Boost.Array: developed by Nicolai M. Josuttis.
+Boost.Thread: developed by Anthony Williams, based on original work by William E. Kempf.
+Boost.Asio: developed by Christopher M. Kohlhoff.
+Boost.Variant: developed by Eric Friedman.
+Boost.Log: developed by Andrey Semashev.
