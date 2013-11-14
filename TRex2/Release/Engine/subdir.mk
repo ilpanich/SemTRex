@@ -13,6 +13,7 @@ CC_SRCS += \
 ../Engine/FloatConstraintIndex.cc \
 ../Engine/IndexingTable.cc \
 ../Engine/IntConstraintIndex.cc \
+../Engine/NoConstraintIndex.cc \
 ../Engine/Stack.cc \
 ../Engine/StacksRule.cc \
 ../Engine/StringConstraintIndex.cc 
@@ -24,6 +25,7 @@ OBJS += \
 ./Engine/FloatConstraintIndex.o \
 ./Engine/IndexingTable.o \
 ./Engine/IntConstraintIndex.o \
+./Engine/NoConstraintIndex.o \
 ./Engine/Stack.o \
 ./Engine/StacksRule.o \
 ./Engine/StringConstraintIndex.o \
@@ -35,6 +37,7 @@ CC_DEPS += \
 ./Engine/FloatConstraintIndex.d \
 ./Engine/IndexingTable.d \
 ./Engine/IntConstraintIndex.d \
+./Engine/NoConstraintIndex.d \
 ./Engine/Stack.d \
 ./Engine/StacksRule.d \
 ./Engine/StringConstraintIndex.d 

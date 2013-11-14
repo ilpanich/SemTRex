@@ -287,6 +287,8 @@ bool RulePkt::addAggregate(int eventType, Constraint *constr, int constrLen, int
 	return true;
 }
 
+// PANIGATI Aggiungere predicato KB
+
 void RulePkt::getReferenceCount(map<int, int> &referenceCount) {
 	int numPredicates = predicates.size();
 	for (int i=0; i<numPredicates; i++) referenceCount.insert(make_pair(i, 0));

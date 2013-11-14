@@ -40,6 +40,18 @@ typedef struct EventPredicate {
 } Predicate;
 
 /**
+ * A basic KB predicate - Panigati
+ */
+typedef struct KnowledgeBasePredicate {
+//	int eventType;						// Type of the event required by this predicate
+	Constraint *constraints;	// Predicate constraints
+	int constraintsNum;				// Number of constraints in the predicate
+	int refersTo;							// Index of the reference predicate (-1 if root)
+	TimeMs win;								// Detection time window
+	CompKind kind;						// The kind of constraint
+} KBPredicate;
+
+/**
  * A RulePkt contains the definition of a composite event. More in particular, it contains
  * the pattern that must be detected and the template of the composite event to generate.
  * The pattern is expressed through a set of predicates, a set of negations, a set of aggregates,

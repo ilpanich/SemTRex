@@ -192,7 +192,7 @@ typedef struct Agg {
 } Aggregate;
 
 /**
- * Represents a parameter constraint shared between more than one sequence
+ * Represents a parameter constraint shared between more than one sequence PANIGATI
  */
 typedef struct ExtParam {
 	int seqId1;

@@ -12,11 +12,12 @@
 //---------------------------------------------------------------------------
 #include "rts/operator/Operator.hpp"
 #include <vector>
+#include <string>
 //---------------------------------------------------------------------------
 class Database;
 class DictionarySegment;
 class Register;
-//---------------------------------------------------------------------------
+
 /// Consumes its input and prints it. Produces a single empty tuple.
 class ResultsPrinter : public Operator
 {
@@ -37,6 +38,10 @@ class ResultsPrinter : public Operator
    unsigned limit;
    /// Skip the printing, resolve only?
    bool silent;
+   /// Results
+   //std::vector<std::string> rs;
+
+
 
    public:
    /// Constructor
@@ -55,6 +60,10 @@ class ResultsPrinter : public Operator
    void addMergeHint(Register* reg1,Register* reg2);
    /// Register parts of the tree that can be executed asynchronous
    void getAsyncInputCandidates(Scheduler& scheduler);
+   /// Add a result
+   //void addResultToRS(std::string result);
+   /// Return results
+   std::vector<std::string> getResultSet();
 };
 //---------------------------------------------------------------------------
 #endif

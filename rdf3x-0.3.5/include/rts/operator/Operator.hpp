@@ -40,6 +40,7 @@ class Operator
    virtual void addMergeHint(Register* reg1,Register* reg2) = 0;
    /// Register parts of the tree that can be executed asynchronous
    virtual void getAsyncInputCandidates(Scheduler& scheduler) = 0;
+
 };
 //---------------------------------------------------------------------------
 #endif

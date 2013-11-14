@@ -19,6 +19,7 @@
 //
 
 #include "EvaluationRunner.h"
+#include <unistd.h>
 
 using namespace std;
 

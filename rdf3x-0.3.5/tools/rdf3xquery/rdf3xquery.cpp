@@ -8,6 +8,7 @@
 #include "rts/database/Database.hpp"
 #include "rts/runtime/Runtime.hpp"
 #include "rts/operator/Operator.hpp"
+#include "rts/segment/DictionarySegment.hpp"
 #ifdef CONFIG_LINEEDITOR
 #include "lineeditor/LineInput.hpp"
 #endif
@@ -31,6 +32,15 @@ bool smallAddressSpace()
 {
    return sizeof(void*)<8;
 }
+//
+struct CacheEntry {
+   /// The string boundaries
+   const char* start,*stop;
+
+   /// Constructor
+   CacheEntry() : start(0),stop(0) {}
+};
+//
 //---------------------------------------------------------------------------
 static string readInput(istream& in)
    // Read a stream into a string
@@ -75,6 +85,9 @@ static void runQuery(Database& db,const string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;
+   //DictionarySegment& dict = db.getDictionary();
+   vector<string> results;
+   unsigned idx = 0;
    {
       // Parse the query
       SPARQLLexer lexer(query);
@@ -115,7 +128,7 @@ static void runQuery(Database& db,const string& query,bool explain)
    } else {
       // Else execute it
       if (operatorTree->first()) {
-         while (operatorTree->next()) ;
+         while (operatorTree->next());
       }
    }
 

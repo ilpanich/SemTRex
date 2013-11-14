@@ -15,6 +15,7 @@
 // San Francisco, California, 94105, USA.
 //---------------------------------------------------------------------------
 using namespace std;
+
 //---------------------------------------------------------------------------
 ResultsPrinter::ResultsPrinter(Database& db,Operator* input,const vector<Register*>& output,DuplicateHandling duplicateHandling,unsigned limit,bool silent)
    : output(output),input(input),dictionary(db.getDictionary()),duplicateHandling(duplicateHandling),limit(limit),silent(silent)
@@ -39,6 +40,7 @@ struct CacheEntry {
    CacheEntry() : start(0),stop(0) {}
    /// Print it
    void print() const;
+
 };
 //---------------------------------------------------------------------------
 void CacheEntry::print() const
@@ -55,11 +57,13 @@ static void printResult(map<unsigned,CacheEntry>& stringCache,vector<unsigned>::
    if (!~(*start))
       cout << "NULL"; else
       stringCache[*start].print();
+
    for (++start;start!=stop;++start) {
       cout << ' ';
       if (!~(*start))
          cout << "NULL"; else
-         stringCache[*start].print();
+             stringCache[*start].print();
+
    }
 }
 //---------------------------------------------------------------------------
@@ -68,6 +72,8 @@ static void printResult(map<unsigned,CacheEntry>& stringCache,vector<unsigned>::
 unsigned ResultsPrinter::first()
    // Produce the first tuple
 {
+
+	std::vector<std::string> rs;
    // Empty input?
    unsigned count;
    if ((count=input->first())==0) {
@@ -96,6 +102,7 @@ unsigned ResultsPrinter::first()
    for (map<unsigned,CacheEntry>::iterator iter=stringCache.begin(),limit=stringCache.end();iter!=limit;++iter) {
       CacheEntry& c=(*iter).second;
       dictionary.lookupById((*iter).first,c.start,c.stop);
+      rs.push_back(string(c.start, c.stop));
    }
 
    // Skip printing the results?
