@@ -64,3 +64,7 @@ void Field::setSValue(char v[])
 	Field::type = STRING;
 }
 
+int Field::getSValueLen()
+{
+	return strlen(Field::value.s);
+}

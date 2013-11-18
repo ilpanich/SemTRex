@@ -47,6 +47,9 @@ public:
 	void setBValue(bool v);
 	void setSValue(char* v);
 
+	//helpers
+	int getSValueLen();
+
 };
 
 #endif /* FIELD_H_ */
