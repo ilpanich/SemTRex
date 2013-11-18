@@ -2,6 +2,9 @@
 #include "rts/database/Database.hpp"
 #include "rts/runtime/Runtime.hpp"
 #include "rts/segment/DictionarySegment.hpp"
+
+#include "rts/operator/Result.hpp"
+
 #include <iostream>
 #include <map>
 //---------------------------------------------------------------------------
@@ -73,7 +76,7 @@ unsigned ResultsPrinter::first()
    // Produce the first tuple
 {
 
-	std::vector<std::string> rs;
+   Result rs;
    // Empty input?
    unsigned count;
    if ((count=input->first())==0) {
@@ -102,7 +105,7 @@ unsigned ResultsPrinter::first()
    for (map<unsigned,CacheEntry>::iterator iter=stringCache.begin(),limit=stringCache.end();iter!=limit;++iter) {
       CacheEntry& c=(*iter).second;
       dictionary.lookupById((*iter).first,c.start,c.stop);
-      rs.push_back(string(c.start, c.stop));
+      rs.addElement(string(c.start, c.stop));
    }
 
    // Skip printing the results?

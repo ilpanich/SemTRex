@@ -5,7 +5,7 @@
  *      Author: lele
  */
 
-#include "rts/operator/Field.h"
+#include "rts/operator/Field.hpp"
 
 Field::Field() {
 	// TODO Auto-generated constructor stub
@@ -17,50 +17,50 @@ Field::~Field() {
 }
 
 //getters
-int getIValue()
+int Field::getIValue()
 {
 	return Field::value.i;
 }
 
-float getFValue()
+float Field::getFValue()
 {
 	return Field::value.f;
 }
 
-bool getBValue()
+bool Field::getBValue()
 {
 	return Field::value.b;
 }
-char* getSValue()
+char* Field::getSValue()
 {
 	return Field::value.s;
 }
 
-ValType getType()
+ValType Field::getType()
 {
 	return Field::type;
 }
 
 //setters
-void setIValue(int v)
+void Field::setIValue(int v)
 {
 	Field::value.i = v;
 	Field::type = INT;
 }
 
-void setFValue(float v)
+void Field::setFValue(float v)
 {
 	Field::value.f = v;
 	Field::type = FLOAT;
 }
-void setBValue(bool v)
+void Field::setBValue(bool v)
 {
 	Field::value.b = v;
 	Field::type = BOOL;
 }
-void setSValue(char* v)
+void Field::setSValue(char v[])
 {
-	Field::value.s = v;
+	strcpy(Field::value.s, v);
 	Field::type = STRING;
 }
 
