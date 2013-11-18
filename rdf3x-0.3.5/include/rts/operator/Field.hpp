@@ -10,6 +10,8 @@
 
 #define STRING_LEN 32
 
+#include <string.h>
+
 typedef union fielddata {
 	int i;
 	float f;
