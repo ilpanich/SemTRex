@@ -23,6 +23,9 @@ class Selection::Equal : public Selection
    unsigned first();
    /// Next tuples
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Test for not equal
@@ -36,6 +39,9 @@ class Selection::NotEqual : public Selection
    unsigned first();
    /// Next tuples
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 Selection::Selection(Operator* input,const std::vector<Register*>& predicates,bool equal)
@@ -181,3 +187,20 @@ void Selection::getAsyncInputCandidates(Scheduler& scheduler)
    input->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset Selection::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset Selection::Equal::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset Selection::NotEqual::getResultset()
+{
+	Resultset res;
+	return res;
+}

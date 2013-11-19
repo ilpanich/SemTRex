@@ -70,6 +70,9 @@ class AggregatedIndexScan : public Operator
    /// Produce the next tuple
    virtual unsigned next() = 0;
 
+   /// Return the resultset
+   virtual Resultset getResultset();
+
    /// Print the operator tree. Debugging only.
    void print(DictionarySegment& dict,unsigned indent);
    /// Add a merge join hint

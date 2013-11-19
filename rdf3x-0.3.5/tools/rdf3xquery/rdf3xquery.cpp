@@ -8,6 +8,7 @@
 #include "rts/database/Database.hpp"
 #include "rts/runtime/Runtime.hpp"
 #include "rts/operator/Operator.hpp"
+#include "rts/operator/Resultset.hpp"
 #include "rts/segment/DictionarySegment.hpp"
 #ifdef CONFIG_LINEEDITOR
 #include "lineeditor/LineInput.hpp"
@@ -81,12 +82,15 @@ static void showHelp()
         << "exit          exits the query interface" << endl;
 }
 //---------------------------------------------------------------------------
+// PANIGATI: Questa è la funzione che va modificata per fare da interfaccia.
+
 static void runQuery(Database& db,const string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;
    //DictionarySegment& dict = db.getDictionary();
    vector<string> results;
+   Resultset res;
    unsigned idx = 0;
    {
       // Parse the query
@@ -131,6 +135,8 @@ static void runQuery(Database& db,const string& query,bool explain)
          while (operatorTree->next());
       }
    }
+
+   res = operatorTree->getResultset();
 
    delete operatorTree;
 }

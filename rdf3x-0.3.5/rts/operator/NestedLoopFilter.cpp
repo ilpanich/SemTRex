@@ -84,3 +84,8 @@ void NestedLoopFilter::getAsyncInputCandidates(Scheduler& scheduler)
    input->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset NestedLoopFilter::getResultset()
+{
+	Resultset res;
+	return res;
+}

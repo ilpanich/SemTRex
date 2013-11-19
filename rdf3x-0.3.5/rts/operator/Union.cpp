@@ -115,3 +115,8 @@ void Union::getAsyncInputCandidates(Scheduler& scheduler)
       parts[index]->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset Union::getResultset()
+{
+	Resultset res;
+	return res;
+}

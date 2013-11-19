@@ -22,6 +22,9 @@ class FullyAggregatedIndexScan::Scan : public FullyAggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -38,6 +41,9 @@ class FullyAggregatedIndexScan::ScanPrefix1 : public FullyAggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 FullyAggregatedIndexScan::Hint::Hint(FullyAggregatedIndexScan& scan)
@@ -226,3 +232,21 @@ unsigned FullyAggregatedIndexScan::ScanPrefix1::next()
    return scan.getCount();
 }
 //---------------------------------------------------------------------------
+Resultset FullyAggregatedIndexScan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset FullyAggregatedIndexScan::Scan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+
+//---------------------------------------------------------------------------
+Resultset FullyAggregatedIndexScan::ScanPrefix1::getResultset()
+{
+	Resultset res;
+	return res;
+}

@@ -21,6 +21,9 @@ class IndexScan::Scan : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -37,6 +40,9 @@ class IndexScan::ScanFilter2 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -53,6 +59,9 @@ class IndexScan::ScanFilter3 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -69,6 +78,9 @@ class IndexScan::ScanFilter23 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -85,6 +97,9 @@ class IndexScan::ScanPrefix1 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -103,6 +118,9 @@ class IndexScan::ScanPrefix1Filter3 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -119,6 +137,9 @@ class IndexScan::ScanPrefix12 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -135,6 +156,9 @@ class IndexScan::ScanPrefix123 : public IndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 IndexScan::Hint::Hint(IndexScan& scan)
@@ -547,3 +571,56 @@ unsigned IndexScan::ScanPrefix123::next()
    return 1;
 }
 //---------------------------------------------------------------------------
+Resultset IndexScan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::Scan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanFilter2::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanFilter3::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanFilter23::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanPrefix1::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanPrefix1Filter3::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanPrefix12::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+Resultset IndexScan::ScanPrefix123::getResultset()
+{
+	Resultset res;
+	return res;
+}

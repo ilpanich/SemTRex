@@ -57,7 +57,7 @@ void Result::addElement(string e)
 			else
 			{
 				f.setSValue(s);
-				cerr<<f.getSValue()<<" "<<f.getSValueLen()<<"\n";
+				//cerr<<f.getSValue()<<" "<<f.getSValueLen()<<"\n"; // DEBUG
 			}
 		}
 	}

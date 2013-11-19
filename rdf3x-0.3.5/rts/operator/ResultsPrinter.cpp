@@ -3,8 +3,6 @@
 #include "rts/runtime/Runtime.hpp"
 #include "rts/segment/DictionarySegment.hpp"
 
-#include "rts/operator/Result.hpp"
-
 #include <iostream>
 #include <map>
 //---------------------------------------------------------------------------
@@ -70,13 +68,38 @@ static void printResult(map<unsigned,CacheEntry>& stringCache,vector<unsigned>::
    }
 }
 //---------------------------------------------------------------------------
+//---
+static Result addToResult(map<unsigned,CacheEntry>& stringCache,vector<unsigned>::const_iterator start,vector<unsigned>::const_iterator stop)
+   // Print a result row
+{
+   Result res;
+   if (start==stop) return res;
+   if (~(*start))
+	  res.addElement(string(stringCache[*start].start, stringCache[*start].stop));
+
+   for (++start;start!=stop;++start) {
+      cout << ' ';
+      if (~(*start))
+    	  res.addElement(string(stringCache[*start].start, stringCache[*start].stop));
+
+   }
+
+   return res;
+}
+//---
 };
+//---
+Resultset ResultsPrinter::getResultset()
+{
+	return ResultsPrinter::rs;
+}
+//---
+
 //---------------------------------------------------------------------------
+// Una volta sicuri che il giro completo funziona, disattivare definitivamente le istruzioni di output in questa funzione
 unsigned ResultsPrinter::first()
    // Produce the first tuple
 {
-
-   Result rs;
    // Empty input?
    unsigned count;
    if ((count=input->first())==0) {
@@ -105,7 +128,7 @@ unsigned ResultsPrinter::first()
    for (map<unsigned,CacheEntry>::iterator iter=stringCache.begin(),limit=stringCache.end();iter!=limit;++iter) {
       CacheEntry& c=(*iter).second;
       dictionary.lookupById((*iter).first,c.start,c.stop);
-      rs.addElement(string(c.start, c.stop));
+      //rs.addElement(string(c.start, c.stop));
    }
 
    // Skip printing the results?
@@ -119,6 +142,7 @@ unsigned ResultsPrinter::first()
          unsigned count=*iter; ++iter;
          for (unsigned index=0;index<count;index++) {
             printResult(stringCache,iter,iter+columns);
+            ResultsPrinter::rs.addResult(addToResult(stringCache,iter,iter+columns));
             cout << endl;
          }
          iter+=columns;
@@ -128,12 +152,15 @@ unsigned ResultsPrinter::first()
       for (vector<unsigned>::const_iterator iter=results.begin(),limit=results.end();iter!=limit;) {
          unsigned count=*iter; ++iter;
          printResult(stringCache,iter,iter+columns);
+         ResultsPrinter::rs.addResult(addToResult(stringCache,iter,iter+columns));
          if (duplicateHandling!=ReduceDuplicates)
             cout << " " << count;
          cout << endl;
          iter+=columns;
       }
    }
+
+   cout<<"FINE!!!"; // DEBUG
 
    return 1;
 }

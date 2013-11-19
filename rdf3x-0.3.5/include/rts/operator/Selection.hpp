@@ -43,6 +43,9 @@ class Selection : public Operator
    /// Produce the next tuple
    virtual unsigned next() = 0;
 
+   /// Return the resultset
+   virtual Resultset getResultset();
+
    /// Create a selection
    static Selection* create(Operator* input,const std::vector<Register*>& predicates,bool equal);
    /// Print the operator tree. Debugging only.

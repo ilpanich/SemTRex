@@ -128,3 +128,8 @@ void Filter::getAsyncInputCandidates(Scheduler& scheduler)
    input->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset Filter::getResultset()
+{
+	Resultset res;
+	return res;
+}

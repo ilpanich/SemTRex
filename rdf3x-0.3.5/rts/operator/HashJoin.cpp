@@ -245,3 +245,8 @@ void HashJoin::getAsyncInputCandidates(Scheduler& scheduler)
    scheduler.registerAsyncPoint(probePeekTask,1,probePriority,p2);
 }
 //---------------------------------------------------------------------------
+Resultset HashJoin::getResultset()
+{
+	Resultset res;
+	return res;
+}

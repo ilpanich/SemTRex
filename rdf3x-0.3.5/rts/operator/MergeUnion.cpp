@@ -146,3 +146,8 @@ void MergeUnion::getAsyncInputCandidates(Scheduler& scheduler)
    right->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset MergeUnion::getResultset()
+{
+	Resultset res;
+	return res;
+}

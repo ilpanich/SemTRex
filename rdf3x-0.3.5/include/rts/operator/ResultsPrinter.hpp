@@ -11,6 +11,8 @@
 // San Francisco, California, 94105, USA.
 //---------------------------------------------------------------------------
 #include "rts/operator/Operator.hpp"
+#include "rts/operator/Result.hpp"
+#include "rts/operator/Resultset.hpp"
 #include <vector>
 #include <string>
 //---------------------------------------------------------------------------
@@ -39,7 +41,7 @@ class ResultsPrinter : public Operator
    /// Skip the printing, resolve only?
    bool silent;
    /// Results
-   //std::vector<std::string> rs;
+   Resultset rs;
 
 
 
@@ -54,16 +56,16 @@ class ResultsPrinter : public Operator
    /// Produce the next tuple
    unsigned next();
 
+   /// Return the resultset
+   Resultset getResultset();
+
    /// Print the operator tree. Debugging only.
    void print(DictionarySegment& dict,unsigned indent);
    /// Add a merge join hint
    void addMergeHint(Register* reg1,Register* reg2);
    /// Register parts of the tree that can be executed asynchronous
    void getAsyncInputCandidates(Scheduler& scheduler);
-   /// Add a result
-   //void addResultToRS(std::string result);
-   /// Return results
-   std::vector<std::string> getResultSet();
+
 };
 //---------------------------------------------------------------------------
 #endif

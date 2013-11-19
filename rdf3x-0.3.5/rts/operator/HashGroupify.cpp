@@ -164,3 +164,8 @@ void HashGroupify::getAsyncInputCandidates(Scheduler& scheduler)
    input->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset HashGroupify::getResultset()
+{
+	Resultset res;
+	return res;
+}

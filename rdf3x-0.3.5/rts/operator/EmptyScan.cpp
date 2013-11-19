@@ -48,3 +48,8 @@ void EmptyScan::getAsyncInputCandidates(Scheduler& /*scheduler*/)
 {
 }
 //---------------------------------------------------------------------------
+Resultset EmptyScan::getResultset()
+{
+	Resultset res;
+	return res;
+}

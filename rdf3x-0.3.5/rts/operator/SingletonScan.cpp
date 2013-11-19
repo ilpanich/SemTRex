@@ -48,3 +48,8 @@ void SingletonScan::getAsyncInputCandidates(Scheduler& /*scheduler*/)
 {
 }
 //---------------------------------------------------------------------------
+Resultset SingletonScan::getResultset()
+{
+	Resultset res;
+	return res;
+}

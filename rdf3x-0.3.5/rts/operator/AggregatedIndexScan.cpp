@@ -22,6 +22,9 @@ class AggregatedIndexScan::Scan : public AggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -38,6 +41,9 @@ class AggregatedIndexScan::ScanFilter2 : public AggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -54,6 +60,9 @@ class AggregatedIndexScan::ScanPrefix1 : public AggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 /// Implementation
@@ -70,6 +79,9 @@ class AggregatedIndexScan::ScanPrefix12 : public AggregatedIndexScan {
    unsigned first();
    /// Next tuple
    unsigned next();
+
+   /// Return the resultset
+   Resultset getResultset();
 };
 //---------------------------------------------------------------------------
 AggregatedIndexScan::Hint::Hint(AggregatedIndexScan& scan)
@@ -333,3 +345,37 @@ unsigned AggregatedIndexScan::ScanPrefix12::next()
    return scan.getCount();
 }
 //---------------------------------------------------------------------------
+/// Return the resultset
+Resultset AggregatedIndexScan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+/// Return the resultset
+Resultset AggregatedIndexScan::Scan::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+/// Return the resultset
+Resultset AggregatedIndexScan::ScanFilter2::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+/// Return the resultset
+Resultset AggregatedIndexScan::ScanPrefix1::getResultset()
+{
+	Resultset res;
+	return res;
+}
+//---------------------------------------------------------------------------
+/// Return the resultset
+Resultset AggregatedIndexScan::ScanPrefix12::getResultset()
+{
+	Resultset res;
+	return res;
+}

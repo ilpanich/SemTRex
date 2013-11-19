@@ -17,6 +17,7 @@ src_rts_operator:=					\
 	rts/operator/SingletonScan.cpp			\
 	rts/operator/Union.cpp			\
 	rts/operator/Field.cpp			\
-	rts/operator/Result.cpp
+	rts/operator/Result.cpp			\
+	rts/operator/Resultset.cpp
 
 	

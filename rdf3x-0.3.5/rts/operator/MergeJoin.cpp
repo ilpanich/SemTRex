@@ -342,3 +342,8 @@ void MergeJoin::getAsyncInputCandidates(Scheduler& scheduler)
    right->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset MergeJoin::getResultset()
+{
+	Resultset res;
+	return res;
+}

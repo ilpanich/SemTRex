@@ -84,3 +84,8 @@ void NestedLoopJoin::getAsyncInputCandidates(Scheduler& scheduler)
    right->getAsyncInputCandidates(scheduler);
 }
 //---------------------------------------------------------------------------
+Resultset NestedLoopJoin::getResultset()
+{
+	Resultset res;
+	return res;
+}

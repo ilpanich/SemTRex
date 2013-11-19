@@ -46,3 +46,8 @@ void Operator::printRegister(DictionarySegment& dict,const Register* reg)
    }
 }
 //---------------------------------------------------------------------------
+Resultset Operator::getResultset()
+{
+	Resultset res;
+	return res;
+}

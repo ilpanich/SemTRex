@@ -1,5 +1,8 @@
 #ifndef H_rts_operator_Operator
 #define H_rts_operator_Operator
+
+#include "rts/operator/Resultset.hpp"
+
 //---------------------------------------------------------------------------
 // RDF-3X
 // (c) 2008 Thomas Neumann. Web site: http://www.mpi-inf.mpg.de/~neumann/rdf3x
@@ -40,6 +43,9 @@ class Operator
    virtual void addMergeHint(Register* reg1,Register* reg2) = 0;
    /// Register parts of the tree that can be executed asynchronous
    virtual void getAsyncInputCandidates(Scheduler& scheduler) = 0;
+
+   /// Return the resultset
+   virtual Resultset getResultset();
 
 };
 //---------------------------------------------------------------------------
