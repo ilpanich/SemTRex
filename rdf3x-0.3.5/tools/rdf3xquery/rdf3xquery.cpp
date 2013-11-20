@@ -83,15 +83,68 @@ static void showHelp()
 }
 //---------------------------------------------------------------------------
 // PANIGATI: Questa è la funzione che va modificata per fare da interfaccia.
+static Resultset execQuery(Database& db,const string& query,bool explain)
+   // Evaluate a query
+{
+   QueryGraph queryGraph;
+   //DictionarySegment& dict = db.getDictionary();
+   Resultset res;
+   {
+      // Parse the query
+      SPARQLLexer lexer(query);
+      SPARQLParser parser(lexer);
+      try {
+         parser.parse();
+      } catch (const SPARQLParser::ParserException& e) {
+         cerr << "parse error: " << e.message << endl;
+         return res;
+      }
 
+      // And perform the semantic anaylsis
+      SemanticAnalysis semana(db);
+      semana.transform(parser,queryGraph);
+      if (queryGraph.knownEmpty()) {
+         if (explain)
+            //cerr << "static analysis determined that the query result will be empty" << endl; else
+            //cout << "<empty result>" << endl;
+         return res;
+      }
+   }
+
+   // Run the optimizer
+   PlanGen plangen;
+   Plan* plan=plangen.translate(db,queryGraph);
+   if (!plan) {
+      //cerr << "internal error plan generation failed" << endl;
+      return res;
+   }
+
+   // Build a physical plan
+   Runtime runtime(db);
+   Operator* operatorTree=CodeGen().translate(runtime,queryGraph,plan,false);
+
+   // Explain if requested
+   if (explain) {
+      operatorTree->print(db.getDictionary());
+   } else {
+      // Else execute it
+      if (operatorTree->first()) {
+         while (operatorTree->next());
+      }
+   }
+
+   res = operatorTree->getResultset();
+
+   delete operatorTree;
+
+   return res;
+}
+//---------------------------------------------------------------------------
 static void runQuery(Database& db,const string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;
    //DictionarySegment& dict = db.getDictionary();
-   vector<string> results;
-   Resultset res;
-   unsigned idx = 0;
    {
       // Parse the query
       SPARQLLexer lexer(query);
@@ -135,8 +188,6 @@ static void runQuery(Database& db,const string& query,bool explain)
          while (operatorTree->next());
       }
    }
-
-   res = operatorTree->getResultset();
 
    delete operatorTree;
 }
