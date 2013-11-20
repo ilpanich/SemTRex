@@ -32,7 +32,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.1535504602" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
 								<option defaultValue="true" id="macosx.cpp.link.option.shared.215125983" name="Shared (-dynamiclib)" superClass="macosx.cpp.link.option.shared" value="false" valueType="boolean"/>
-								<option id="macosx.cpp.link.option.libs.379148570" superClass="macosx.cpp.link.option.libs" valueType="libs">
+								<option id="macosx.cpp.link.option.libs.379148570" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1715665194" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -71,7 +71,9 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="rdf3x-0.3.5;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
+			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
