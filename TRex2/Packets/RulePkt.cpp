@@ -72,6 +72,22 @@ bool RulePkt::addPredicate(int eventType, Constraint constr[], int constrLen, in
 	return true;
 }
 
+bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, TimeMs &win, CompKind kind, string kb, string query) {
+	int numPredicates = predicates.size();
+	if (numPredicates<=0 || refersTo>=numPredicates) return false;
+	KBPredicate p;
+	p.eventType = eventType;
+	p.refersTo = refersTo;
+	p.win = win;
+	p.kind = kind;
+	p.constraintsNum = constrLen;
+	p.rs = RDFQuery::execQuery(kb*, query*, false);
+	p.constraints = new Constraint[constrLen];
+	for (int i=0; i<constrLen; i++) p.constraints[i] = constr[i];
+	predicates.insert(make_pair(predicates.size(), p));
+	return true;
+}
+
 bool RulePkt::addTimeBasedNegation(int eventType, Constraint *constraints, int constrLen, int referenceId, TimeMs &win) {
 	return addNegation(eventType, constraints, constrLen, -1, win, referenceId);
 }

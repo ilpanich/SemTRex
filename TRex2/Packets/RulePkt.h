@@ -24,8 +24,11 @@
 #include "../Common/Consts.h"
 #include "../Common/TimeMs.h"
 #include "../Common/CompositeEventTemplate.h"
+#include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
+#include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
 #include <set>
 #include <map>
+#include <string>
 
 /**
  * A basic event predicate
@@ -43,12 +46,13 @@ typedef struct EventPredicate {
  * A basic KB predicate - Panigati
  */
 typedef struct KnowledgeBasePredicate {
-//	int eventType;						// Type of the event required by this predicate
+	int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
 	int refersTo;							// Index of the reference predicate (-1 if root)
 	TimeMs win;								// Detection time window
 	CompKind kind;						// The kind of constraint
+	Resultset rs;					// The results of the KB query
 } KBPredicate;
 
 /**
@@ -75,6 +79,13 @@ public:
 	 * Returns false if an error occurs.
 	 */
 	bool addPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, TimeMs &win, CompKind kind);
+
+
+	/**
+	 * Adds a KB predicate; root predicate must be already defined.
+	 * Returns false if an error occurs.
+	 */
+	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, TimeMs &win, CompKind kind, std::string kb, std::string query);
 
 	/**
 	 * Adds a new time based negation.
