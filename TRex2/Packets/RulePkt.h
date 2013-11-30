@@ -50,8 +50,8 @@ typedef struct KnowledgeBasePredicate {
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
 	int refersTo;							// Index of the reference predicate (-1 if root)
-	TimeMs win;								// Detection time window
-	CompKind kind;						// The kind of constraint
+	//TimeMs win;								// Detection time window
+	//CompKind kind;						// The kind of constraint
 	Resultset rs;					// The results of the KB query
 } KBPredicate;
 
@@ -85,7 +85,7 @@ public:
 	 * Adds a KB predicate; root predicate must be already defined.
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, TimeMs &win, CompKind kind, std::string kb, std::string query);
+	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
 
 	/**
 	 * Adds a new time based negation.

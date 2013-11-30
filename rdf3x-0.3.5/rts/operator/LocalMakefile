@@ -18,6 +18,7 @@ src_rts_operator:=					\
 	rts/operator/Union.cpp			\
 	rts/operator/Field.cpp			\
 	rts/operator/Result.cpp			\
-	rts/operator/Resultset.cpp
+	rts/operator/Resultset.cpp		\
+	rts/operator/RDFQuery.cpp
 
 	

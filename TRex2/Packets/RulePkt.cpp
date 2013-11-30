@@ -72,14 +72,12 @@ bool RulePkt::addPredicate(int eventType, Constraint constr[], int constrLen, in
 	return true;
 }
 
-bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, TimeMs &win, CompKind kind, string kb, string query) {
+bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, string kb, string query) {
 	int numPredicates = predicates.size();
 	if (numPredicates<=0 || refersTo>=numPredicates) return false;
 	KBPredicate p;
 	p.eventType = eventType;
 	p.refersTo = refersTo;
-	p.win = win;
-	p.kind = kind;
 	p.constraintsNum = constrLen;
 	p.rs = RDFQuery::execQuery(kb*, query*, false);
 	p.constraints = new Constraint[constrLen];

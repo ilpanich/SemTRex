@@ -28,7 +28,7 @@ vector<Result> Resultset::getAllRes()
 	return Resultset::results;
 }
 
-std::vector<Result>::iterator Resultset::first()
+vector<Result>::iterator Resultset::first()
 {
 	return Resultset::results.begin();
 }

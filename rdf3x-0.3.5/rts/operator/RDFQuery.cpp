@@ -30,7 +30,7 @@ using namespace std;
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // PANIGATI: Questa è la funzione che va modificata per fare da interfaccia.
-static Resultset execQuery(string& kb,const string& query,bool explain)
+static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;
