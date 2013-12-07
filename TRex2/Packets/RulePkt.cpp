@@ -72,14 +72,20 @@ bool RulePkt::addPredicate(int eventType, Constraint constr[], int constrLen, in
 	return true;
 }
 
-bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, string kb, string query) {
+bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, string kb, string q, ExtParameter *prm) {
 	int numPredicates = predicates.size();
 	if (numPredicates<=0 || refersTo>=numPredicates) return false;
 	KBPredicate p;
 	p.eventType = eventType;
 	p.refersTo = refersTo;
 	p.constraintsNum = constrLen;
-	p.rs = RDFQuery::execQuery(kb*, query*, false);
+	p.db = kb;
+	p.query = q;
+	p.param = *prm;
+	p.dbId = MD5((const unsigned char*) kb.c_str(), kb.length(), NULL);
+	p.qId = MD5((const unsigned char*) q.c_str(), q.length(), NULL);
+	// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
+	//p.rs = RDFQuery::execQuery(kb*, query*, false);
 	p.constraints = new Constraint[constrLen];
 	for (int i=0; i<constrLen; i++) p.constraints[i] = constr[i];
 	predicates.insert(make_pair(predicates.size(), p));

@@ -28,6 +28,7 @@
 #include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
 #include <set>
 #include <map>
+#include <openssl/md5.h>
 #include <string>
 
 /**
@@ -45,14 +46,17 @@ typedef struct EventPredicate {
 /**
  * A basic KB predicate - Panigati
  */
-typedef struct KnowledgeBasePredicate {
+typedef struct KnowledgeBasePredicate {	//TimeMs win;								// Detection time window
 	int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
 	int refersTo;							// Index of the reference predicate (-1 if root)
-	//TimeMs win;								// Detection time window
+	std::string db;				// The KB db reference for quering
+	std::string query;			// The KB query
+	std::string dbId;			// The KB db identifier for cache access
+	std::string qId;				// The KB query identifier for cache access
+	ExtParameter param;			// External Parameter
 	//CompKind kind;						// The kind of constraint
-	Resultset rs;					// The results of the KB query
 } KBPredicate;
 
 /**
@@ -85,7 +89,7 @@ public:
 	 * Adds a KB predicate; root predicate must be already defined.
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
+	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query, ExtParameter *prm);
 
 	/**
 	 * Adds a new time based negation.
