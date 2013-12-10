@@ -84,6 +84,11 @@ public:
 	 */
 	bool addPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, TimeMs &win, CompKind kind);
 
+	/**
+		 * Adds the root predicate, in case it is a KB Predicate
+		 * Returns false if an error occurs
+		 */
+	bool addKBRootPredicate(int eventType, Constraint *constr, int constrLen, std::string kb, std::string query, ExtParameter *prm);
 
 	/**
 	 * Adds a KB predicate; root predicate must be already defined.
