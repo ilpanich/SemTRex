@@ -30,6 +30,7 @@
 #include <map>
 #include <openssl/md5.h>
 #include <string>
+#include <vector>
 
 /**
  * A basic event predicate
@@ -50,12 +51,13 @@ typedef struct KnowledgeBasePredicate {	//TimeMs win;								// Detection time w
 	int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
+	PredKind refPredType;		//Type of the referenced predicate
 	int refersTo;							// Index of the reference predicate (-1 if root)
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
 	std::string dbId;			// The KB db identifier for cache access
 	std::string qId;				// The KB query identifier for cache access
-	ExtParameter param;			// External Parameter
+	std::vector<ExtParameter> param;			// External Parameters
 	//CompKind kind;						// The kind of constraint
 } KBPredicate;
 
@@ -85,16 +87,27 @@ public:
 	bool addPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, TimeMs &win, CompKind kind);
 
 	/**
-		 * Adds the root predicate, in case it is a KB Predicate
+		 * Adds the KB root predicate, in case it is a KB Predicate
+		 * it refers the last standard predicate (at least one standard predicate must exist)
+		 * The KB base count starts from the end of the standard predicate count (KBpredicates are
+		 * inserted at the end of the predicates stack).
 		 * Returns false if an error occurs
 		 */
-	bool addKBRootPredicate(int eventType, Constraint *constr, int constrLen, std::string kb, std::string query, ExtParameter *prm);
+	bool addKBRootPredicate(int eventType, Constraint *constr, int constrLen, std::string kb, std::string query);
 
 	/**
-	 * Adds a KB predicate; root predicate must be already defined.
+	 * Adds a KB predicate; KB root predicate must be already defined.
+	 * The KB base count starts from the end of the standard predicate count (KBpredicates are
+	 * inserted at the end of the predicates stack).
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query, ExtParameter *prm);
+	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
+
+	/**
+	 * Adds external parameter to KB predicate the first id refers to a standard predicate,
+	 * the second to a KB predicate.
+	 */
+	bool addExtParamToKBPred(ExtParameter *param);
 
 	/**
 	 * Adds a new time based negation.
@@ -266,6 +279,7 @@ private:
 	static int lastId;											// Last used rule identifier
 	int ruleId;															// Identifier of the rule
 	std::map<int, Predicate> predicates;		// Array of event predicates
+	std::map<int, KBPredicate> kbPredicates;		// Array of KB predicates
 	std::map<int, Parameter> parameters;		// Parameters between different predicates (map identifier -> data structure)
 	std::map<int, Negation> negations;			// Negations defined for the rule (map identifier -> data structure)
 	std::map<int, Aggregate> aggregates;		// Aggregates defined for the rule (map identifier -> data structure)

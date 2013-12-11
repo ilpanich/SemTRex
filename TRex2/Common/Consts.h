@@ -81,6 +81,14 @@ enum CompKind {
 };
 
 /**
+ * Kinds of predicates
+ */
+enum PredKind {
+	STD=0,
+	KB=1
+};
+
+/**
  * Operations used in constraints
  */
 enum Op {
