@@ -303,17 +303,23 @@ bool RulePkt::addNegation(int eventType, Constraint *constr, int constrLen, int 
 
 bool RulePkt::addParameter(int index1, char *name1, int index2, char *name2, StateType type) {
 	int numPredicates = predicates.size();
+	int numKBPredicates = kbPredicates.size();
 	int numAggregates = aggregates.size();
 	int numNegations = negations.size();
 	if (index1<0 || index1>numPredicates) return false;
 	if (index2<0) return false;
-	if (type==STATE && index2>numPredicates) return false;
+	if (type==STATE && index2>numPredicates + numKBPredicates) return false;
 	if (type==AGG && index2>numAggregates) return false;
 	if (type==NEG && index2>numNegations) return false;
 	Parameter p;
 	p.evIndex1 = index1;
 	p.evIndex2 = index2;
-	p.type = type;
+	if (type==STATE && index2 < numPredicates)
+		p.type = STATE;
+	else {
+		if(type==STATE && index2 > numPredicates + numKBPredicates)) return false;
+		else p.type = KB;
+	}
 	strcpy(p.name1, name1);
 	strcpy(p.name2, name2);
 	parameters.insert(make_pair(parameters.size(), p));

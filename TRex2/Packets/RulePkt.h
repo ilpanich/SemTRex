@@ -47,7 +47,7 @@ typedef struct EventPredicate {
 /**
  * A basic KB predicate - Panigati
  */
-typedef struct KnowledgeBasePredicate {	//TimeMs win;								// Detection time window
+typedef struct KnowledgeBasePredicate {
 	int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
@@ -58,7 +58,6 @@ typedef struct KnowledgeBasePredicate {	//TimeMs win;								// Detection time w
 	std::string dbId;			// The KB db identifier for cache access
 	std::string qId;				// The KB query identifier for cache access
 	std::vector<ExtParameter> param;			// External Parameters
-	//CompKind kind;						// The kind of constraint
 } KBPredicate;
 
 /**
@@ -203,6 +202,11 @@ public:
 	 * Returns the predicate with the given index
 	 */
 	Predicate & getPredicate(int index) { return predicates[index]; }
+
+	/**
+	* Returns the KB predicate with the given index
+	*/
+	KBPredicate & getKBPredicate(int index) { return kbPredicates[index]; }
 
 	/**
 	 * Returns the parameter with the given index

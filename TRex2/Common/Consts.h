@@ -119,7 +119,8 @@ enum AggregateFun {
 enum StateType {
 	STATE=0,
 	NEG=1,
-	AGG=2
+	AGG=2,
+	KB=3
 };
 
 /**
@@ -168,7 +169,7 @@ typedef struct ParameterConstraints {
 	char name1[NAME_LEN];			// Name of the first attribute involved in the constraint
 	int evIndex2;							// Index of the second state involved in the constraint
 	char name2[NAME_LEN];			// Name of the second attribute involved in the constraint
-	StateType type;						// Decides whether the second index refers to a normal state, to an aggregate, or to a negation
+	StateType type;						// Decides whether the second index refers to a normal state, to an aggregate, to a negation or to a KB state
 } Parameter;
 
 /**
