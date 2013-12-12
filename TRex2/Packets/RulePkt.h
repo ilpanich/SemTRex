@@ -48,7 +48,7 @@ typedef struct EventPredicate {
  * A basic KB predicate - Panigati
  */
 typedef struct KnowledgeBasePredicate {
-	int eventType;						// Type of the event required by this predicate
+	//int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
 	PredKind refPredType;		//Type of the referenced predicate
@@ -92,7 +92,7 @@ public:
 		 * inserted at the end of the predicates stack).
 		 * Returns false if an error occurs
 		 */
-	bool addKBRootPredicate(int eventType, Constraint *constr, int constrLen, std::string kb, std::string query);
+	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
 
 	/**
 	 * Adds a KB predicate; KB root predicate must be already defined.
@@ -100,7 +100,7 @@ public:
 	 * inserted at the end of the predicates stack).
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(int eventType, Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
+	bool addKBPredicate(Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
 
 	/**
 	 * Adds external parameter to KB predicate the first id refers to a standard predicate,

@@ -72,11 +72,10 @@ bool RulePkt::addPredicate(int eventType, Constraint constr[], int constrLen, in
 	return true;
 }
 
-bool RulePkt::addKBRootPredicate(int eventType, Constraint constr[], int constrLen, string kb, string q) {
+bool RulePkt::addKBRootPredicate(Constraint constr[], int constrLen, string kb, string q) {
 	if (kbPredicates.size()>0) return false;
 	if (predicates.size()<=0) return false;
 	KBPredicate p;
-	p.eventType = eventType;
 	p.constraintsNum = constrLen;
 	p.refPredType = STD;
 	p.refersTo = predicates.size() - 1;
@@ -92,11 +91,10 @@ bool RulePkt::addKBRootPredicate(int eventType, Constraint constr[], int constrL
 	return true;
 }
 
-bool RulePkt::addKBPredicate(int eventType, Constraint constr[], int constrLen, int refersTo, string kb, string q) {
+bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, int refersTo, string kb, string q) {
 	int numKBPredicates = kbPredicates.size();
 	if (numKBPredicates<=0 || refersTo>=numKBPredicates) return false;
 	KBPredicate p;
-	p.eventType = eventType;
 	p.refPredType = KB;
 	p.refersTo = refersTo;
 	p.constraintsNum = constrLen;
