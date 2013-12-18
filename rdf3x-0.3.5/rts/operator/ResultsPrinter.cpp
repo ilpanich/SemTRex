@@ -104,7 +104,7 @@ unsigned ResultsPrinter::first()
    unsigned count;
    if ((count=input->first())==0) {
       if (!silent)
-         cout << "<empty result>" << endl;
+         // cout << "<empty result>" << endl;
       return true;
    }
 
@@ -141,9 +141,9 @@ unsigned ResultsPrinter::first()
       for (vector<unsigned>::const_iterator iter=results.begin(),limit=results.end();iter!=limit;) {
          unsigned count=*iter; ++iter;
          for (unsigned index=0;index<count;index++) {
-            printResult(stringCache,iter,iter+columns);
+            //printResult(stringCache,iter,iter+columns);
             ResultsPrinter::rs.addResult(addToResult(stringCache,iter,iter+columns));
-            cout << endl;
+            //cout << endl;
          }
          iter+=columns;
       }
@@ -151,16 +151,16 @@ unsigned ResultsPrinter::first()
       // No, reduced, count, or duplicates
       for (vector<unsigned>::const_iterator iter=results.begin(),limit=results.end();iter!=limit;) {
          unsigned count=*iter; ++iter;
-         printResult(stringCache,iter,iter+columns);
+        // printResult(stringCache,iter,iter+columns);
          ResultsPrinter::rs.addResult(addToResult(stringCache,iter,iter+columns));
          if (duplicateHandling!=ReduceDuplicates)
-            cout << " " << count;
-         cout << endl;
+           // cout << " " << count;
+         //cout << endl;
          iter+=columns;
       }
    }
 
-   cout<<"FINE!!!"; // DEBUG
+   //cout<<"FINE!!!"; // DEBUG
 
    return 1;
 }
