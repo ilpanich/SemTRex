@@ -57,9 +57,12 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	for (int i=0; i<pkt->getAggregatesNum(); i++) {
 		aggsSize[i]=0;
 		addAggregate(pkt->getAggregate(i).eventType, pkt->getAggregate(i).constraints, pkt->getAggregate(i).constraintsNum, pkt->getAggregate(i).lowerId, pkt->getAggregate(i).lowerTime, pkt->getAggregate(i).upperId, pkt->getAggregate(i).name, pkt->getAggregate(i).fun);
+		// if KB predicates negation is allowed, here we must handle it.
 	}
 	// Initialize parameters belonging to the rule
 	for (int i=0; i<pkt->getParametersNum(); i++) {
+		// Verify the following code: it must correctly handle also parameters between a predicate and KB predicate and
+		// between two KB predicates
 		addParameter(pkt->getParameter(i).evIndex1, pkt->getParameter(i).name1, pkt->getParameter(i).evIndex2, pkt->getParameter(i).name2, pkt->getParameter(i).type,pkt);
 	}
 	// Initialize the set of consuming indexes
@@ -67,6 +70,18 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	for (set<int>::iterator it=cons.begin(); it!=cons.end(); ++it) {
 		int consumedIndex = *it;
 		consumingIndexes.insert(consumedIndex);
+	}
+	// Insert here the code to handle the creation of the KB related stuff
+	for (int i=stacksNum; i< (pkt->getPredicatesNum() + pkt->getKBPredicatesNum()); i++) {
+		stacksSize[i]=0;
+				Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
+				stacks.insert(make_pair(stacksNum,tmpStack));
+				stacksNum++; //check stackNum usage and check if new changes are ok
+				int refersTo = pkt->getPredicate(i).refersTo;
+				if (refersTo!=-1) {
+					stacks[refersTo]->addLookBackTo(stacksNum-1);
+					referenceState.insert(make_pair(i, refersTo));
+				}
 	}
 }
 
@@ -130,10 +145,12 @@ StacksRule::~StacksRule() {
 		delete it->second;
 	}
 	delete eventGenerator;
+	// Check if the new code requires other cleaning actions to be performed on destroy
 }
 
 void StacksRule::addToStack(PubPkt *pkt, int index) {
 	parametricAddToStack(pkt, stacksSize[index], receivedPkts[index]);
+	// **A** Evaluate if on-the-fly selection (packet pre-filtering) could be insert here
 }
 
 void StacksRule::addToAggregateStack(PubPkt *pkt, int index) {
@@ -155,6 +172,11 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
 	list<PartialEvent *> * partialResults = getPartialResults(pkt);
 	// Checks parameters and removes invalid results from collected ones
 	removePartialEventsNotMatchingParameters(partialResults, endStackParameters);
+
+	// After having computed the CEP results, KB filtering must be performed (if any)
+	// See (and adapt) the above function code.
+	// Also check if checking KB related stuff is appropriated in an inline function
+
 	// Creates complex events and adds them to the results
 	createComplexEvents(partialResults, results);
 	// Deletes consumed events
@@ -182,6 +204,7 @@ void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &res
 			addToNegationStack(pkt, negIndex);
 		}
 	}
+	// **A** Evaluate if on-the-fly selection (packet pre-filtering) could be insert here
 	map<int, set<int> >::iterator stateIt=mh->matchingStates.find(index);
 	if (stateIt!=mh->matchingStates.end()) {
 		bool lastStack = false;
@@ -195,6 +218,7 @@ void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &res
 }
 
 void StacksRule::parametricAddToStack(PubPkt *pkt, int &parStacksSize, vector<PubPkt *> &parReceived) {
+	// **A** Evaluate if on-the-fly selection (packet pre-filtering) could be insert here
 	TimeMs timeStamp = pkt->getTimeStamp();
 	int i = getFirstValidElement(parReceived, parStacksSize, timeStamp);
 	if (i==-1) {
@@ -220,8 +244,10 @@ void StacksRule::addParameter(int index1, char *name1, int index2, char *name2, 
 	case STATE:
 		if (pkt->isInTheSameSequence(index1, index2) /*&& index2>0*/) {
 			branchStackParameters[index2].insert(tmp);
+			// KB related parameters are branchStackParameters if they could be checked during the CEP processing
 		}
 		else endStackParameters.insert(tmp);
+		// KB related parameters are endStackParameters if they must be checked after the whole CEP processing
 		break;
 	case NEG:
 		negationParameters[index2].insert(tmp);
@@ -402,6 +428,7 @@ list<PartialEvent *> * StacksRule::getPartialResults(PubPkt *pkt) {
 }
 
 bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Parameter *parameter) {
+	// **B** KB related parameters must be checked here
 	int indexOfReferenceEvent = parameter->evIndex1;
 	PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
 	ValType type1, type2;
@@ -428,6 +455,7 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 }
 
 bool StacksRule::checkParameters(PubPkt *pkt, PartialEvent *partialEvent, set<Parameter *> &parameters) {
+	// **B** KB related parameters must be retrieved here
 	for (set<Parameter *>::iterator it=parameters.begin(); it!=parameters.end(); ++it) {
 		Parameter *par = *it;
 		if (! checkParameter(pkt, partialEvent, par)) return false;
@@ -436,6 +464,7 @@ bool StacksRule::checkParameters(PubPkt *pkt, PartialEvent *partialEvent, set<Pa
 }
 
 void StacksRule::removePartialEventsNotMatchingParameters(list<PartialEvent *> *partialEvents, set<Parameter *> &parameters) {
+	// The function must handle also KB parameters
 	for (list<PartialEvent *>::iterator it=partialEvents->begin(); it!=partialEvents->end(); ) {
 		bool valid = true;
 		for (set<Parameter *>::iterator it2=parameters.begin(); it2!=parameters.end(); ++it2) {
