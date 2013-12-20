@@ -74,14 +74,14 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	// Insert here the code to handle the creation of the KB related stuff
 	for (int i=stacksNum; i< (pkt->getPredicatesNum() + pkt->getKBPredicatesNum()); i++) {
 		stacksSize[i]=0;
-				Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
-				stacks.insert(make_pair(stacksNum,tmpStack));
-				stacksNum++; //check stackNum usage and check if new changes are ok
-				int refersTo = pkt->getPredicate(i).refersTo;
-				if (refersTo!=-1) {
-					stacks[refersTo]->addLookBackTo(stacksNum-1);
-					referenceState.insert(make_pair(i, refersTo));
-				}
+		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
+		stacks.insert(make_pair(stacksNum,tmpStack));
+		stacksNum++; //check stackNum usage and check if new changes are ok
+		int refersTo = pkt->getPredicate(i).refersTo;
+		if (refersTo!=-1) {
+			stacks[refersTo]->addLookBackTo(stacksNum-1);
+			referenceState.insert(make_pair(i, refersTo));
+		}
 	}
 }
 
@@ -299,7 +299,7 @@ void StacksRule::getWinEvents(list<PartialEvent *> *results, int index, TimeMs t
 	if (receivedPkts[index][index1]->getTimeStamp()>=tsUp) return;
 	int index2 = getLastValidElement(receivedPkts[index], stacksSize[index], tsUp, index1);
 	if (index2<0) index2 = index1;
- 	map<int, set<Parameter *> >::iterator it = branchStackParameters.find(index);
+	map<int, set<Parameter *> >::iterator it = branchStackParameters.find(index);
 	if (it!=branchStackParameters.end()) useParameters = true;
 	// Computes the indexes for processing
 	int count = 0;
@@ -429,33 +429,38 @@ list<PartialEvent *> * StacksRule::getPartialResults(PubPkt *pkt) {
 
 bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Parameter *parameter) {
 	// **B** KB related parameters must be checked here
-	int indexOfReferenceEvent = parameter->evIndex1;
-	PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
-	ValType type1, type2;
-	int index1, index2;
-	if (! receivedPkt->getAttributeIndexAndType(parameter->name2, index2, type2)) return false;
-	if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
-	if (type1!=type2) return false;
-	switch(type1) {
-	case INT:
-		return receivedPkt->getIntAttributeVal(index2)==pkt->getIntAttributeVal(index1);
-	case FLOAT:
-		return receivedPkt->getFloatAttributeVal(index2)==pkt->getFloatAttributeVal(index1);
-	case BOOL:
-		return receivedPkt->getBoolAttributeVal(index2)==pkt->getBoolAttributeVal(index1);
-	case STRING:
-		char result1[STRING_VAL_LEN];
-		char result2[STRING_VAL_LEN];
-		receivedPkt->getStringAttributeVal(index2, result2);
-		pkt->getStringAttributeVal(index1, result1);
-		return strcmp(result1, result2)==0;
-	default:
+	if (parameter->type != KB) {
+		int indexOfReferenceEvent = parameter->evIndex1;
+		PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
+		ValType type1, type2;
+		int index1, index2;
+		if (! receivedPkt->getAttributeIndexAndType(parameter->name2, index2, type2)) return false;
+		if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
+		if (type1!=type2) return false;
+		switch(type1) {
+		case INT:
+			return receivedPkt->getIntAttributeVal(index2)==pkt->getIntAttributeVal(index1);
+		case FLOAT:
+			return receivedPkt->getFloatAttributeVal(index2)==pkt->getFloatAttributeVal(index1);
+		case BOOL:
+			return receivedPkt->getBoolAttributeVal(index2)==pkt->getBoolAttributeVal(index1);
+		case STRING:
+			char result1[STRING_VAL_LEN];
+			char result2[STRING_VAL_LEN];
+			receivedPkt->getStringAttributeVal(index2, result2);
+			pkt->getStringAttributeVal(index1, result1);
+			return strcmp(result1, result2)==0;
+		default:
+			return false;
+		}
+	} else
+		//Insert here the code to verify KB predicates validity.
 		return false;
-	}
+}
 }
 
 bool StacksRule::checkParameters(PubPkt *pkt, PartialEvent *partialEvent, set<Parameter *> &parameters) {
-	// **B** KB related parameters must be retrieved here
+	// **B** KB related parameters must be skipped here
 	for (set<Parameter *>::iterator it=parameters.begin(); it!=parameters.end(); ++it) {
 		Parameter *par = *it;
 		if (! checkParameter(pkt, partialEvent, par)) return false;
