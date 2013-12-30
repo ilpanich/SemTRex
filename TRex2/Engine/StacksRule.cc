@@ -242,12 +242,16 @@ void StacksRule::addParameter(int index1, char *name1, int index2, char *name2, 
 	strcpy(tmp->name2, name2);
 	switch(type){
 	case STATE:
-		if (pkt->isInTheSameSequence(index1, index2) /*&& index2>0*/) {
+		if (pkt->isInTheSameSequence(index1, index2)  /*&& index2>0*/) {
 			branchStackParameters[index2].insert(tmp);
-			// KB related parameters are branchStackParameters if they could be checked during the CEP processing
 		}
 		else endStackParameters.insert(tmp);
+
+		break;
+	case KB:
 		// KB related parameters are endStackParameters if they must be checked after the whole CEP processing
+		endStackParameters.insert(tmp);
+		// TODO - KB related parameters are branchStackParameters if they could be checked during the CEP processing
 		break;
 	case NEG:
 		negationParameters[index2].insert(tmp);
@@ -429,11 +433,11 @@ list<PartialEvent *> * StacksRule::getPartialResults(PubPkt *pkt) {
 
 bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Parameter *parameter) {
 	// **B** KB related parameters must be checked here
+	int indexOfReferenceEvent = parameter->evIndex1;
+	PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
+	ValType type1, type2;
+	int index1, index2;
 	if (parameter->type != KB) {
-		int indexOfReferenceEvent = parameter->evIndex1;
-		PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
-		ValType type1, type2;
-		int index1, index2;
 		if (! receivedPkt->getAttributeIndexAndType(parameter->name2, index2, type2)) return false;
 		if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
 		if (type1!=type2) return false;
@@ -454,7 +458,30 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 			return false;
 		}
 	} else
-		//Insert here the code to verify KB predicates validity.
+		// TODO - Complete the insertion here of the code to verify KB predicates validity.
+		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
+		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
+		Resultset rs = RDFQuery::execQuery(kb*, query*, false);
+		for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
+			Result *res = *it;
+			Field f = res->getResult()[0]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
+			if (type1 != f.getType()) return false;
+			switch(type1) {
+					case INT:
+						return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
+					case FLOAT:
+						return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
+					case BOOL:
+						return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
+					case STRING:
+						char result1[STRING_VAL_LEN];
+						char result2[STRING_VAL_LEN];
+						receivedPkt->getStringAttributeVal(index1, result1);
+						return strcmp(result1, f.getSValue())==0;
+					default:
+						return false;
+					}
+		}
 		return false;
 }
 }

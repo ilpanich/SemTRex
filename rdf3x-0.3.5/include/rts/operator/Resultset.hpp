@@ -22,7 +22,11 @@ public:
 	void addResult(Result r);
 	std::vector<Result> getAllRes();
 
-	std::vector<Result>::iterator first();
+	typedef std::vector<Result>::iterator iterator;
+
+	iterator first() {return results.begin();}
+
+	iterator last() {return results.end();}
 };
 
 #endif /* RESULTSET_HPP_ */
