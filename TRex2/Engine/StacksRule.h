@@ -24,6 +24,7 @@
 #include "../Common/Funs.h"
 #include "../Common/Consts.h"
 #include "../Common/TimeMs.h"
+#include "../Common/QueryItem.hpp"
 #include "../Packets/PubPkt.h"
 #include "../Packets/RulePkt.h"
 #include "../Engine/IndexingTableCommon.h"
@@ -109,6 +110,8 @@ private:
 	std::set<int> consumingIndexes;																// Indexes of events in the consuming clause (set of stack ids)
 	CompositeEventGenerator *eventGenerator;											// Used to generate composite event attributes (if any)
 	int compositeEventId;																					// Used to generate a composite event id no attributes are defined
+
+	std::map<int, std::vector<QueryItem *> > queryRegistry;					// Keeps the registry of the query to be executed
 
 	/**
 	 * Adds the packet to the given stack (can be a normal stack, or a stack for negations or aggregates)

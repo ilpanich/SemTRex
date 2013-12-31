@@ -77,11 +77,13 @@ StacksRule::StacksRule(RulePkt *pkt) {
 		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
 		stacks.insert(make_pair(stacksNum,tmpStack));
 		stacksNum++; //check stackNum usage and check if new changes are ok
-		int refersTo = pkt->getPredicate(i).refersTo;
+		int refersTo = pkt->getKBPredicate(i).refersTo;
 		if (refersTo!=-1) {
 			stacks[refersTo]->addLookBackTo(stacksNum-1);
 			referenceState.insert(make_pair(i, refersTo));
 		}
+		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId);
+		queryRegistry.insert(make_pair(pkt->getKBPredicate(i).refersTo, item));
 	}
 }
 
@@ -457,32 +459,35 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		default:
 			return false;
 		}
-	} else
+	} else {
 		// TODO - Complete the insertion here of the code to verify KB predicates validity.
 		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
-		Resultset rs = RDFQuery::execQuery(kb*, query*, false);
+		QueryItem * item = queryRegistry.at(index2);
+	if (*item->runQuery()) {
+		Resultset rs = *item->getResult();
 		for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
 			Result *res = *it;
 			Field f = res->getResult()[0]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
 			if (type1 != f.getType()) return false;
 			switch(type1) {
-					case INT:
-						return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
-					case FLOAT:
-						return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
-					case BOOL:
-						return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
-					case STRING:
-						char result1[STRING_VAL_LEN];
-						char result2[STRING_VAL_LEN];
-						receivedPkt->getStringAttributeVal(index1, result1);
-						return strcmp(result1, f.getSValue())==0;
-					default:
-						return false;
-					}
+			case INT:
+				return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
+			case FLOAT:
+				return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
+			case BOOL:
+				return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
+			case STRING:
+				char result1[STRING_VAL_LEN];
+				char result2[STRING_VAL_LEN];
+				receivedPkt->getStringAttributeVal(index1, result1);
+				return strcmp(result1, f.getSValue())==0;
+			default:
+				return false;
+			}
 		}
-		return false;
+	}
+	return false;
 }
 }
 

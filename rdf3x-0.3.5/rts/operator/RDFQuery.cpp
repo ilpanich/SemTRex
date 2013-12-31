@@ -39,7 +39,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
 
    Database db;
    if (!db.open(kb.c_str())) {
-      return 1;
+      return NULL;
    }
 
       // Parse the query
@@ -49,7 +49,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
          parser.parse();
       } catch (const SPARQLParser::ParserException& e) {
          cerr << "parse error: " << e.message << endl;
-         return res;
+         return NULL;
       }
 
       // And perform the semantic anaylsis
@@ -59,7 +59,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
          if (explain)
             //cerr << "static analysis determined that the query result will be empty" << endl; else
             //cout << "<empty result>" << endl;
-         return res;
+         return NULL;
       }
 
 
@@ -68,7 +68,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
    Plan* plan=plangen.translate(db,queryGraph);
    if (!plan) {
       //cerr << "internal error plan generation failed" << endl;
-      return res;
+      return NULL;
    }
 
    // Build a physical plan

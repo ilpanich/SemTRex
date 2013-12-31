@@ -24,8 +24,6 @@
 #include "../Common/Consts.h"
 #include "../Common/TimeMs.h"
 #include "../Common/CompositeEventTemplate.h"
-#include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
-#include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
 #include <set>
 #include <map>
 #include <openssl/md5.h>
