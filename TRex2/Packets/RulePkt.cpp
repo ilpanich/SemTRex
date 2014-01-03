@@ -154,6 +154,10 @@ bool RulePkt::addParameterBetweenStates(int id1, char *name1, int id2, char *nam
 	return addParameter(lowerId, lowerName, upperId, upperName, STATE);
 }
 
+bool RulePkt::addParamerForQueryKB(int id1, char *name1, int id2, char *name2) {
+	return addParameter(id1, name1, id2, name2, KB);
+}
+
 bool RulePkt::addParameterForNegation(int id, char *name, int negId, char *negName) {
 	return addParameter(id, name, negId, negName, NEG);
 }

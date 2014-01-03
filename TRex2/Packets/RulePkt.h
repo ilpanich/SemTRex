@@ -128,6 +128,13 @@ public:
 	bool addParameterBetweenStates(int id1, char *name1, int id2, char *name2);
 
 	/**
+	 * Add a new parameter between a state and a KBPredicate.
+	 * It asks the value of the attribute having name name1 in the event used for id id1 to be
+	 * present in the set of values returned by the query of the KB predicate id2 in variable name2.
+	 */
+	bool addParamerForQueryKB(int id1, char *name1, int id2, char *name2);
+
+	/**
 	 * Adds a new parameter between a state and a negation.
 	 * It asks the value of the attribute having name name in the event used for id to be
 	 * equal to the value of the attribute having name negName in the event used for negation negId.
