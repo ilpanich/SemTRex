@@ -74,11 +74,10 @@ bool RulePkt::addPredicate(int eventType, Constraint constr[], int constrLen, in
 
 bool RulePkt::addKBRootPredicate(Constraint constr[], int constrLen, string kb, string q) {
 	if (kbPredicates.size()>0) return false;
-	if (predicates.size()<=0) return false;
 	KBPredicate p;
 	p.constraintsNum = constrLen;
-	p.refPredType = STD;
-	p.refersTo = predicates.size() - 1;
+	//	p.refPredType = STD;
+//	p.refersTo = predicates.size() - 1;
 	p.db = kb;
 	p.query = q;
 	p.dbId = MD5((const unsigned char*) kb.c_str(), kb.length(), NULL);
@@ -89,12 +88,12 @@ bool RulePkt::addKBRootPredicate(Constraint constr[], int constrLen, string kb, 
 	return true;
 }
 
-bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, int refersTo, string kb, string q) {
+bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, string kb, string q) {
 	int numKBPredicates = kbPredicates.size();
-	if (numKBPredicates<=0 || refersTo>=numKBPredicates) return false;
+	if (numKBPredicates<=0) return false;
 	KBPredicate p;
-	p.refPredType = KB;
-	p.refersTo = refersTo;
+//	p.refPredType = KB;
+//	p.refersTo = refersTo;
 	p.constraintsNum = constrLen;
 	p.db = kb;
 	p.query = q;
@@ -104,7 +103,7 @@ bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, int refersTo, s
 	//p.rs = RDFQuery::execQuery(kb*, query*, false);
 	p.constraints = new Constraint[constrLen];
 	for (int i=0; i<constrLen; i++) p.constraints[i] = constr[i];
-	kbPredicates.insert(make_pair(predicates.size() + kbPredicates.size(), p));
+	kbPredicates.insert(make_pair(kbPredicates.size(), p));
 	return true;
 }
 
@@ -304,18 +303,19 @@ bool RulePkt::addParameter(int index1, char *name1, int index2, char *name2, Sta
 	int numNegations = negations.size();
 	if (index1<0 || index1>numPredicates) return false;
 	if (index2<0) return false;
-	if (type==STATE && index2>numPredicates + numKBPredicates) return false;
+	if (type==STATE && index2>numPredicates) return false;
 	if (type==AGG && index2>numAggregates) return false;
 	if (type==NEG && index2>numNegations) return false;
+	if (type==KB && index2>numKBPredicates) return false;
 	Parameter p;
 	p.evIndex1 = index1;
 	p.evIndex2 = index2;
-	if (type==STATE && index2 < numPredicates)
-		p.type = STATE;
-	else {
-		if(type==STATE && index2 > numPredicates + numKBPredicates)) return false;
-		else p.type = KB;
-	}
+//	if (type==STATE && index2 < numPredicates)
+//		p.type = STATE;
+//	else {
+//		if(type==STATE && index2 > numKBPredicates) return false;
+//		else p.type = KB;
+//	}
 	strcpy(p.name1, name1);
 	strcpy(p.name2, name2);
 	parameters.insert(make_pair(parameters.size(), p));

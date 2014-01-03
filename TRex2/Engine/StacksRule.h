@@ -96,6 +96,7 @@ private:
 	int stacksNum;																								// Number of stacks in the rule
 	int aggrsNum;																									// Number of aggregates in the rule
 	int negsNum;																									// Number of negations in the rule
+	int kbNum;														// NUmber of KB predicates in the rule
 
 	std::map<int, int> referenceState;														// Stack id -> state it refers to in the rule
 
@@ -111,7 +112,7 @@ private:
 	CompositeEventGenerator *eventGenerator;											// Used to generate composite event attributes (if any)
 	int compositeEventId;																					// Used to generate a composite event id no attributes are defined
 
-	std::map<int, std::vector<QueryItem *> > queryRegistry;					// Keeps the registry of the query to be executed
+	std::map<int, QueryItem * > queryRegistry;					// Keeps the registry of the query to be executed
 
 	/**
 	 * Adds the packet to the given stack (can be a normal stack, or a stack for negations or aggregates)

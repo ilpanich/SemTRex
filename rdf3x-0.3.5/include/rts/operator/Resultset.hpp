@@ -16,13 +16,13 @@ class Resultset {
 private:
 	std::vector<Result> results;
 public:
+	typedef std::vector<Result>::iterator iterator;
+
 	Resultset();
 	virtual ~Resultset();
 
 	void addResult(Result r);
 	std::vector<Result> getAllRes();
-
-	typedef std::vector<Result>::iterator iterator;
 
 	iterator first() {return results.begin();}
 

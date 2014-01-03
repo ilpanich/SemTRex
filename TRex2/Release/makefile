@@ -48,6 +48,7 @@ endif
 # All Target
 all: TRex2
 
+
 # Tool invocations
 TRex2: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'

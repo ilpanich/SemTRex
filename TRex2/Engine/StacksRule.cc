@@ -34,6 +34,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	stacksNum = 0;
 	aggrsNum = 0;
 	negsNum = 0;
+	kbNum = 0;
 	// Initialize stacks map with predicate and fills it with references
 	for (int i=0; i<pkt->getPredicatesNum(); i++) {
 		stacksSize[i]=0;
@@ -73,17 +74,18 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	}
 	// Insert here the code to handle the creation of the KB related stuff
 	for (int i=stacksNum; i< (pkt->getPredicatesNum() + pkt->getKBPredicatesNum()); i++) {
-		stacksSize[i]=0;
-		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
-		stacks.insert(make_pair(stacksNum,tmpStack));
-		stacksNum++; //check stackNum usage and check if new changes are ok
-		int refersTo = pkt->getKBPredicate(i).refersTo;
-		if (refersTo!=-1) {
-			stacks[refersTo]->addLookBackTo(stacksNum-1);
-			referenceState.insert(make_pair(i, refersTo));
-		}
-		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId);
-		queryRegistry.insert(make_pair(pkt->getKBPredicate(i).refersTo, item));
+//		stacksSize[i]=0;
+//		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
+//		stacks.insert(make_pair(stacksNum,tmpStack));
+//		stacksNum++; //check stackNum usage and check if new changes are ok
+//		int refersTo = pkt->getKBPredicate(i).refersTo;
+//		if (refersTo!=-1) {
+//			stacks[refersTo]->addLookBackTo(stacksNum-1);
+//			referenceState.insert(make_pair(i, refersTo));
+//		}
+		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
+		queryRegistry.insert(make_pair(kbNum, item));
+		kbNum++;
 	}
 }
 
@@ -146,6 +148,11 @@ StacksRule::~StacksRule() {
 	for (map<int, Negation *>::iterator it=negations.begin(); it!=negations.end(); ++it) {
 		delete it->second;
 	}
+
+	for (map<int, QueryItem *>::iterator it=queryRegistry.begin(); it!=queryRegistry.end(); ++it) {
+		delete it->second;
+	}
+
 	delete eventGenerator;
 	// Check if the new code requires other cleaning actions to be performed on destroy
 }
@@ -252,8 +259,13 @@ void StacksRule::addParameter(int index1, char *name1, int index2, char *name2, 
 		break;
 	case KB:
 		// KB related parameters are endStackParameters if they must be checked after the whole CEP processing
-		endStackParameters.insert(tmp);
-		// TODO - KB related parameters are branchStackParameters if they could be checked during the CEP processing
+		if (pkt->getKBPredicate(index2).param != NULL)
+			endStackParameters.insert(tmp);
+		else
+			// TODO - KB related parameters are branchStackParameters if they could be checked during the CEP processing
+			// The following rule must be uncommented (and the second one commented) after the first test
+			//branchStackParameters[index1].insert(tmp);
+			endStackParameters.insert(tmp);
 		break;
 	case NEG:
 		negationParameters[index2].insert(tmp);

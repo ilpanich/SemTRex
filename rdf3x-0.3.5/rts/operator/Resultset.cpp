@@ -27,8 +27,3 @@ vector<Result> Resultset::getAllRes()
 {
 	return Resultset::results;
 }
-
-vector<Result>::iterator Resultset::first()
-{
-	return Resultset::results.begin();
-}

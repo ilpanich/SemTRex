@@ -1,21 +1,5 @@
-#include "cts/codegen/CodeGen.hpp"
-#include "cts/infra/QueryGraph.hpp"
-#include "cts/parser/SPARQLLexer.hpp"
-#include "cts/parser/SPARQLParser.hpp"
-#include "cts/plangen/PlanGen.hpp"
-#include "cts/semana/SemanticAnalysis.hpp"
-#include "infra/osdep/Timestamp.hpp"
-#include "rts/database/Database.hpp"
-#include "rts/runtime/Runtime.hpp"
-#include "rts/operator/Operator.hpp"
-#include "rts/operator/Resultset.hpp"
-#include "rts/segment/DictionarySegment.hpp"
-#ifdef CONFIG_LINEEDITOR
-#include "lineeditor/LineInput.hpp"
-#endif
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
+#include "rts/operator/RDFQuery.hpp"
+
 //---------------------------------------------------------------------------
 // RDF-3X
 // (c) 2008 Thomas Neumann. Web site: http://www.mpi-inf.mpg.de/~neumann/rdf3x
@@ -30,7 +14,7 @@ using namespace std;
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // PANIGATI: Questa è la funzione che va modificata per fare da interfaccia.
-static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain)
+Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;
@@ -39,7 +23,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
 
    Database db;
    if (!db.open(kb.c_str())) {
-      return NULL;
+      return res;
    }
 
       // Parse the query
@@ -49,7 +33,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
          parser.parse();
       } catch (const SPARQLParser::ParserException& e) {
          cerr << "parse error: " << e.message << endl;
-         return NULL;
+         return res;
       }
 
       // And perform the semantic anaylsis
@@ -59,7 +43,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
          if (explain)
             //cerr << "static analysis determined that the query result will be empty" << endl; else
             //cout << "<empty result>" << endl;
-         return NULL;
+         return res;
       }
 
 
@@ -68,7 +52,7 @@ static Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain
    Plan* plan=plangen.translate(db,queryGraph);
    if (!plan) {
       //cerr << "internal error plan generation failed" << endl;
-      return NULL;
+      return res;
    }
 
    // Build a physical plan

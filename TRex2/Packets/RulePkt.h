@@ -49,12 +49,12 @@ typedef struct KnowledgeBasePredicate {
 	//int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
-	PredKind refPredType;		//Type of the referenced predicate
-	int refersTo;							// Index of the reference predicate (-1 if root)
+//	PredKind refPredType;		//Type of the referenced predicate
+//	int refersTo;							// Index of the reference predicate (-1 if root)
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
-	std::string dbId;			// The KB db identifier for cache access
-	std::string qId;				// The KB query identifier for cache access
+	unsigned char * dbId;			// The KB db identifier for cache access
+	unsigned char * qId;				// The KB query identifier for cache access
 	std::vector<ExtParameter> param;			// External Parameters
 } KBPredicate;
 
@@ -98,7 +98,7 @@ public:
 	 * inserted at the end of the predicates stack).
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(Constraint *constr, int constrLen, int refersTo, std::string kb, std::string query);
+	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
 
 	/**
 	 * Adds external parameter to KB predicate the first id refers to a standard predicate,
