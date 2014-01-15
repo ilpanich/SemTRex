@@ -28,7 +28,6 @@ rts/runtime \
 rts/operator \
 rts/database \
 rts/buffer \
-makeutil \
 infra/util \
 infra/osdep \
 cts/semana \

@@ -13,7 +13,6 @@ RM := rm -rf
 -include rts/operator/subdir.mk
 -include rts/database/subdir.mk
 -include rts/buffer/subdir.mk
--include makeutil/subdir.mk
 -include infra/util/subdir.mk
 -include infra/osdep/subdir.mk
 -include cts/semana/subdir.mk
