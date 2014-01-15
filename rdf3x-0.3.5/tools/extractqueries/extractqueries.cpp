@@ -68,6 +68,12 @@ class LookupFilter : public Operator {
    void print(DictionarySegment& dict,unsigned indent);
    /// Handle a merge hint
    void addMergeHint(Register* l,Register* r);
+   /// Register parts of the tree that can be executed asynchronous
+   void getAsyncInputCandidates(Scheduler& scheduler);
+
+   /// Return the resultset
+   Resultset getResultset();
+
 };
 //---------------------------------------------------------------------------
 unsigned LookupFilter::first()
@@ -111,6 +117,12 @@ void LookupFilter::addMergeHint(Register* l,Register* r)
    // Handle a merge hint
 {
    input->addMergeHint(l,r);
+}
+//---------------------------------------------------------------------------
+Resultset LookupFilter::getResultset()
+{
+	Resultset res;
+	return res;
 }
 //---------------------------------------------------------------------------
 template <class T> void eliminateDuplicates(vector<T>& data)

@@ -335,7 +335,7 @@ static double joinSelectivityExact(Database& db,const QueryGraph::Node& l,const 
    return static_cast<double>(resultSize)/crossSize;
 }
 //---------------------------------------------------------------------------
-static double abs(double x) { return (x<0)?-x:x; }
+static double absol(double x) { return (x<0)?-x:x; }
 //---------------------------------------------------------------------------
 static unsigned long long hrclock()
 {
@@ -353,8 +353,8 @@ static void computeJoinSelectivity(Database& db,const QueryGraph::Node& a,const 
    double sel2=joinSelectivityNewMethod(db,a,b);
    unsigned long long t3=hrclock();
    double sel3=joinSelectivityExact(db,a,b);
-   double relErr1=(abs(sel1-sel3)/sel3);
-   double relErr2=(abs(sel2-sel3)/sel3);
+   double relErr1=(absol(sel1-sel3)/sel3);
+   double relErr2=(absol(sel2-sel3)/sel3);
 
 #if 1
    cout << "old estimation: " << sel1 << endl;
