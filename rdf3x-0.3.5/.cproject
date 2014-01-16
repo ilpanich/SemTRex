@@ -48,7 +48,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/rdf3x-0.3.5"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/rdf3x-0.3.5/Library"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x-0.3.5" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -61,7 +61,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="so" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" cleanCommand="rm -rf" description="Build rdf3x as a library to be used in connection with external software (e.g. TRex2)" id="cdt.managedbuild.config.gnu.so.release.859175091" name="Library" parent="cdt.managedbuild.config.gnu.so.release">
+				<configuration artifactExtension="so" artifactName="rdf3x" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.sharedLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.sharedLib" cleanCommand="rm -rf" description="Build rdf3x as a library to be used in connection with external software (e.g. TRex2)" id="cdt.managedbuild.config.gnu.so.release.859175091" name="Library" parent="cdt.managedbuild.config.gnu.so.release">
 					<folderInfo id="cdt.managedbuild.config.gnu.so.release.859175091." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.so.release.169503382" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.so.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.so.release.1292369520" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.so.release"/>
@@ -72,7 +72,6 @@
 								<option id="gnu.cpp.compiler.so.release.option.debugging.level.982342068" name="Debug Level" superClass="gnu.cpp.compiler.so.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1736793478" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TRex2/Common}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.pic.117361009" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.964632141" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -112,7 +111,14 @@
 		<project id="rdf3x-0.3.5.null.830135784" name="rdf3x-0.3.5"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/rdf3x-0.3.5"/>
+		</configuration>
+		<configuration configurationName="Library">
+			<resource resourceType="PROJECT" workspacePath="/rdf3x-0.3.5"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1338922994;cdt.managedbuild.toolchain.gnu.base.1338922994.938897295;cdt.managedbuild.tool.gnu.cpp.compiler.base.1456682629;cdt.managedbuild.tool.gnu.cpp.compiler.input.1461289222">
