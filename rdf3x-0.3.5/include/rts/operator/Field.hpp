@@ -19,17 +19,17 @@ typedef union fielddata {
 	char s[STRING_LEN];
 } fielddata_t;
 
-enum ValType {
-	INT=0,
-	FLOAT=1,
-	BOOL=2,
-	STRING=3
+enum ValT {
+	INTV=0,
+	FLOATV=1,
+	BOOLV=2,
+	STRINGV=3
 };
 
 class Field {
 private:
 	fielddata_t value;
-	ValType type;
+	ValT type;
 public:
 	Field();
 	virtual ~Field();
@@ -39,7 +39,7 @@ public:
 	float getFValue();
 	bool getBValue();
 	char* getSValue();
-	ValType getType();
+	ValT getType();
 
 	//setters
 	void setIValue(int v);

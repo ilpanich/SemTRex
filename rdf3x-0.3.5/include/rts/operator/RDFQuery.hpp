@@ -37,7 +37,7 @@ public:
 	RDFQuery();
 	virtual ~RDFQuery();
 
-	static Resultset execQuery(std::string& kb,const std::string& query,bool explain);
+	static Resultset execQuery(std::string& kb, std::string& query,bool explain);
 };
 
 #endif /* RESULTSET_HPP_ */

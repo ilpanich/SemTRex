@@ -72,6 +72,7 @@
 								<option id="gnu.cpp.compiler.so.release.option.debugging.level.982342068" name="Debug Level" superClass="gnu.cpp.compiler.so.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1736793478" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/TRex2/Common}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.pic.117361009" name="Position Independent Code (-fPIC)" superClass="gnu.cpp.compiler.option.other.pic" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.964632141" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

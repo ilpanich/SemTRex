@@ -14,7 +14,7 @@ using namespace std;
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // PANIGATI: Questa è la funzione che va modificata per fare da interfaccia.
-Resultset RDFQuery::execQuery(string& kb,const string& query,bool explain)
+Resultset RDFQuery::execQuery(string& kb, string& query,bool explain)
    // Evaluate a query
 {
    QueryGraph queryGraph;

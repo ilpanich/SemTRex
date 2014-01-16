@@ -3,6 +3,11 @@
 *.owl
 *.n3
 
+# Compilation subfiles #
+#######################
+*.d
+*.o
+
 # OS generated files #
 ######################
 .DS_Store

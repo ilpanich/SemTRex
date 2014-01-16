@@ -18,19 +18,19 @@ using namespace std;
  }
 
  QueryItem::~QueryItem() {
-	 delete db;
-	 delete query;
+	 //delete db;
+	 //delete query;
 	 delete dbId;
 	 delete qId;
-	 delete params;
+	 //delete *params;
  }
 
  bool QueryItem::runQuery() {
-	 if(params == NULL)
-		 rs = RDFQuery::execQuery(kb*, query*, false);
+	 if(params.empty())
+		 rs = RDFQuery::execQuery(db, query, false);
 	 else				// TODO: here external parameters of the query must be handled
-		 rs = RDFQuery::execQuery(kb*, query*, false);
-	 if(rs == NULL)
+		 rs = RDFQuery::execQuery(db, query, false);
+	 if(rs.getAllRes().empty())
 		 return false;
 	 else
 		 return true;

@@ -36,7 +36,7 @@ char* Field::getSValue()
 	return Field::value.s;
 }
 
-ValType Field::getType()
+ValT Field::getType()
 {
 	return Field::type;
 }
@@ -45,23 +45,23 @@ ValType Field::getType()
 void Field::setIValue(int v)
 {
 	Field::value.i = v;
-	Field::type = INT;
+	Field::type = INTV;
 }
 
 void Field::setFValue(float v)
 {
 	Field::value.f = v;
-	Field::type = FLOAT;
+	Field::type = FLOATV;
 }
 void Field::setBValue(bool v)
 {
 	Field::value.b = v;
-	Field::type = BOOL;
+	Field::type = BOOLV;
 }
 void Field::setSValue(char v[])
 {
 	strcpy(Field::value.s, v);
-	Field::type = STRING;
+	Field::type = STRINGV;
 }
 
 int Field::getSValueLen()

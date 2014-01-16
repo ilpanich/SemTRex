@@ -259,7 +259,7 @@ void StacksRule::addParameter(int index1, char *name1, int index2, char *name2, 
 		break;
 	case KB:
 		// KB related parameters are endStackParameters if they must be checked after the whole CEP processing
-		if (pkt->getKBPredicate(index2).param != NULL)
+		if (!pkt->getKBPredicate(index2).param.empty())
 			endStackParameters.insert(tmp);
 		else
 			// TODO - KB related parameters are branchStackParameters if they could be checked during the CEP processing
@@ -476,12 +476,15 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
 		QueryItem * item = queryRegistry.at(index2);
-	if (*item->runQuery()) {
-		Resultset rs = *item->getResult();
+	if (item->runQuery()) {
+		Resultset rs = item->getResult();
 		for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
-			Result *res = *it;
-			Field f = res->getResult()[0]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
-			if (type1 != f.getType()) return false;
+			Result res = *it;
+			Field f = res.getResult()[0]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
+			if (type1 == INT && f.getType() != INTV) return false;
+			if (type1 == FLOAT && f.getType() != FLOATV) return false;
+			if (type1 == BOOL && f.getType() != BOOLV) return false;
+			if (type1 == STRING && f.getType() != STRINGV) return false;
 			switch(type1) {
 			case INT:
 				return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
@@ -491,7 +494,6 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 				return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
 			case STRING:
 				char result1[STRING_VAL_LEN];
-				char result2[STRING_VAL_LEN];
 				receivedPkt->getStringAttributeVal(index1, result1);
 				return strcmp(result1, f.getSValue())==0;
 			default:

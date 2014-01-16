@@ -9,6 +9,7 @@
 #define QUERYITEM_HPP_
 
 #include "../Common/Consts.h"
+#include "../../rdf3x-0.3.5/include/rts/operator/Field.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
 #include <string>
