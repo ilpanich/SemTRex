@@ -23,6 +23,13 @@ int main(int argc, char * argv[]) {
 
 	rs = RDFQuery::execQuery(db, query, false);
 
+	for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+		Result res = *it;
+		Field f = res.getResult()[0];
+
+		cout << f.getSValue() << "\n";
+	}
+
 	cout << "DONE!\n";
 
 	return 0;
