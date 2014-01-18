@@ -33,7 +33,7 @@
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release.1535504602" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.release">
 								<option defaultValue="true" id="macosx.cpp.link.option.shared.215125983" name="Shared (-dynamiclib)" superClass="macosx.cpp.link.option.shared" value="false" valueType="boolean"/>
 								<option id="macosx.cpp.link.option.libs.379148570" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="rdf3x-0.3.5"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="rdf3x"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<option id="macosx.cpp.link.option.paths.1527627753" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
@@ -89,7 +89,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/rdf3x-0.3.5"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/rdf3x-0.3.5/Library"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x-0.3.5" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -221,6 +221,11 @@
 								<option id="gnu.cpp.link.option.paths.1120171877" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rdf3x-0.3.5/Library}&quot;"/>
 								</option>
+								<option id="gnu.cpp.link.option.libs.1873553134" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="rdf3x"/>
+									<listOptionValue builtIn="false" value="crypto"/>
+									<listOptionValue builtIn="false" value="ssl"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.491303201" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -228,6 +233,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.1575489988" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 								<option id="gnu.both.asm.option.include.paths.693962666" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rdf3x-0.3.5}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rdf3x-0.3.5/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1056208806" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -253,7 +259,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/rdf3x-0.3.5"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/rdf3x-0.3.5/Library"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x-0.3.5" srcPrefixMapping="" srcRootPath=""/>
+						<entry flags="RESOLVED" kind="libraryFile" name="rdf3x" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>

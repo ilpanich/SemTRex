@@ -49,10 +49,10 @@ endif
 all: TRex2
 
 dependents:
-	-cd /home/lele/git/SemTRex/rdf3x-0.3.5/Library && $(MAKE) clean all
+	-cd /home/lele/git/SemTRex/rdf3x-0.3.5/Library && $(MAKE) all
 
 # Tool invocations
-TRex2: $(OBJS) $(USER_OBJS) /home/lele/git/SemTRex/rdf3x-0.3.5/Library/librdf3x-0.3.5.so
+TRex2: $(OBJS) $(USER_OBJS) /home/lele/git/SemTRex/rdf3x-0.3.5/Library/librdf3x.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
 	g++ -L"/home/lele/git/SemTRex/rdf3x-0.3.5/Library" -o "TRex2" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -66,6 +66,6 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
-/home/lele/git/SemTRex/rdf3x-0.3.5/Library/librdf3x-0.3.5.so:
+/home/lele/git/SemTRex/rdf3x-0.3.5/Library/librdf3x.so:
 
 -include ../makefile.targets

@@ -480,7 +480,7 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		Resultset rs = item->getResult();
 		for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
 			Result res = *it;
-			Field f = res.getResult()[0]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
+			Field f = res.getResult()[item->getField(parameter->name2)]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
 			if (type1 == INT && f.getType() != INTV) return false;
 			if (type1 == FLOAT && f.getType() != FLOATV) return false;
 			if (type1 == BOOL && f.getType() != BOOLV) return false;

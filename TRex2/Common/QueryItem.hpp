@@ -23,6 +23,7 @@ private:
 	unsigned char * dbId;						// The KB db identifier for cache access
 	unsigned char * qId;						// The KB query identifier for cache access
 	std::vector<ExtParameter> params;			// The KB query optional external parameters
+	std::vector<std::string> fields;			// The list of fields that the query returns
 	Resultset rs;							// The KB query retrieved results set
 
 public:
@@ -34,6 +35,8 @@ public:
 	bool runQuery();
 
 	Resultset getResult();
+
+	int getField(char * name);
 
 
 };
