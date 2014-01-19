@@ -50,12 +50,14 @@ Resultset QueryItem::getResult() {
 }
 
 int QueryItem::getField(char * name) {
-	int i = -1;
+	int i = 0;
 	for(vector<string>::iterator it = fields.begin(); it != fields.end(); it++) {
 		string s = *it;
 		if(s.compare(name))
-			return i++;
+			return i;
 		else
 			i++;
 	}
+
+	return -1;
 }

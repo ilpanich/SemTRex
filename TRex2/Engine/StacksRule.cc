@@ -74,15 +74,15 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	}
 	// Insert here the code to handle the creation of the KB related stuff
 	for (int i=stacksNum; i< (pkt->getPredicatesNum() + pkt->getKBPredicatesNum()); i++) {
-//		stacksSize[i]=0;
-//		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
-//		stacks.insert(make_pair(stacksNum,tmpStack));
-//		stacksNum++; //check stackNum usage and check if new changes are ok
-//		int refersTo = pkt->getKBPredicate(i).refersTo;
-//		if (refersTo!=-1) {
-//			stacks[refersTo]->addLookBackTo(stacksNum-1);
-//			referenceState.insert(make_pair(i, refersTo));
-//		}
+		//		stacksSize[i]=0;
+		//		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
+		//		stacks.insert(make_pair(stacksNum,tmpStack));
+		//		stacksNum++; //check stackNum usage and check if new changes are ok
+		//		int refersTo = pkt->getKBPredicate(i).refersTo;
+		//		if (refersTo!=-1) {
+		//			stacks[refersTo]->addLookBackTo(stacksNum-1);
+		//			referenceState.insert(make_pair(i, refersTo));
+		//		}
 		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
 		queryRegistry.insert(make_pair(kbNum, item));
 		kbNum++;
@@ -476,33 +476,36 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
 		QueryItem * item = queryRegistry.at(index2);
-	if (item->runQuery()) {
-		Resultset rs = item->getResult();
-		for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
-			Result res = *it;
-			Field f = res.getResult()[item->getField(parameter->name2)]; // TODO FIX: choose the right field result vector index (now we suppose it is the first one
-			if (type1 == INT && f.getType() != INTV) return false;
-			if (type1 == FLOAT && f.getType() != FLOATV) return false;
-			if (type1 == BOOL && f.getType() != BOOLV) return false;
-			if (type1 == STRING && f.getType() != STRINGV) return false;
-			switch(type1) {
-			case INT:
-				return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
-			case FLOAT:
-				return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
-			case BOOL:
-				return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
-			case STRING:
-				char result1[STRING_VAL_LEN];
-				receivedPkt->getStringAttributeVal(index1, result1);
-				return strcmp(result1, f.getSValue())==0;
-			default:
-				return false;
+		if (item->runQuery()) {
+			Resultset rs = item->getResult();
+			for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
+				Result res = *it;
+				if(item->getField(parameter->name2) != -1) {
+					Field f = res.getResult()[item->getField(parameter->name2)];
+					if (type1 == INT && f.getType() != INTV) return false;
+					if (type1 == FLOAT && f.getType() != FLOATV) return false;
+					if (type1 == BOOL && f.getType() != BOOLV) return false;
+					if (type1 == STRING && f.getType() != STRINGV) return false;
+					switch(type1) {
+					case INT:
+						return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
+					case FLOAT:
+						return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
+					case BOOL:
+						return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
+					case STRING:
+						char result1[STRING_VAL_LEN];
+						receivedPkt->getStringAttributeVal(index1, result1);
+						return strcmp(result1, f.getSValue())==0;
+					default:
+						return false;
+					}
+				} else
+					return false;
 			}
 		}
+		return false;
 	}
-	return false;
-}
 }
 
 bool StacksRule::checkParameters(PubPkt *pkt, PartialEvent *partialEvent, set<Parameter *> &parameters) {
