@@ -18,7 +18,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 //
 
-#include "StacksRuleTest.h"
+#include "StacksRuleKBTest.h"
 
 using namespace std;
 
@@ -44,23 +44,32 @@ bool trex_testing::testKBSequence() {
 	pkt->addPredicate(2, c2, 1, 0, win, kind);
 	buildConstraint(c3, 3);
 	pkt->addPredicate(3, c3, 1, 1, win, kind);
+	pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> <London> }");
+	pkt->addParamerForQueryKB(3,"name",1,"name");
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
 	IndexingTable *indexingTable = new IndexingTable();
 	indexingTable->installRulePkt(pkt);
 
-	Attribute att;
-	strcpy(att.name, "V");
-	att.type = INT;
-	att.intVal = 3;
-	PubPkt *pkt1 = new PubPkt(3, &att, 1);
-	att.intVal = 2;
-	PubPkt *pkt2 = new PubPkt(2, &att, 1);
-	att.intVal = 1;
-	PubPkt *pkt3 = new PubPkt(1, &att, 1);
-	PubPkt *pkt4 = new PubPkt(1, &att, 1);
-	PubPkt *pkt5 = new PubPkt(1, &att, 1);
+	Attribute att1;
+	strcpy(att1.name, "V");
+	att1.type = INT;
+	att1.intVal = 3;
+	Attribute att2;
+	strcpy(att2.name, "name");
+	att2.type = STRING;
+	strcpy(att2.stringVal, "Stanley Holloway");
+	PubPkt *pkt1 = new PubPkt(3, &att1, 1);
+	att1.intVal = 2;
+	PubPkt *pkt2 = new PubPkt(2, &att1, 1);
+	att1.intVal = 1;
+	Attribute attPkt[2];
+	attPkt[0] = att1;
+	attPkt[1] = att2;
+	PubPkt *pkt3 = new PubPkt(1, attPkt, 2);
+	PubPkt *pkt4 = new PubPkt(1, &att1, 1);
+	PubPkt *pkt5 = new PubPkt(1, &att1, 1);
 
 	MatchingHandler *mh = new MatchingHandler();
 	set<PubPkt *> results;
@@ -134,3 +143,11 @@ bool trex_testing::testKBSequence() {
 	if (pkt5->decRefCount()) delete pkt5;
 	return true;
 }
+
+/*void trex_testing::buildConstraint(Constraint *constraints, int val) {
+	constraints[0].name[0] = 'V';
+	constraints[0].name[1] = '\0';
+	constraints[0].op = EQ;
+	constraints[0].type = INT;
+	constraints[0].intVal = val;
+}*/

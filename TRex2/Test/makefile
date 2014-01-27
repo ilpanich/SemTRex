@@ -49,7 +49,7 @@ endif
 all: TRex2
 
 dependents:
-	-cd /home/lele/git/SemTRex/rdf3x-0.3.5/Library && $(MAKE) clean all
+	-cd /home/lele/git/SemTRex/rdf3x-0.3.5/Library && $(MAKE) all
 
 # Tool invocations
 TRex2: $(OBJS) $(USER_OBJS) /home/lele/git/SemTRex/rdf3x-0.3.5/Library/librdf3x.so

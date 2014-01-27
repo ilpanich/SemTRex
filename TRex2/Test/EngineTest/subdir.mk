@@ -6,18 +6,21 @@
 CPP_SRCS += \
 ../EngineTest/FilteringTest.cpp \
 ../EngineTest/RunTest.cpp \
+../EngineTest/StacksRuleKBTest.cpp \
 ../EngineTest/StacksRuleTest.cpp \
 ../EngineTest/TimeMsTest.cpp 
 
 OBJS += \
 ./EngineTest/FilteringTest.o \
 ./EngineTest/RunTest.o \
+./EngineTest/StacksRuleKBTest.o \
 ./EngineTest/StacksRuleTest.o \
 ./EngineTest/TimeMsTest.o 
 
 CPP_DEPS += \
 ./EngineTest/FilteringTest.d \
 ./EngineTest/RunTest.d \
+./EngineTest/StacksRuleKBTest.d \
 ./EngineTest/StacksRuleTest.d \
 ./EngineTest/TimeMsTest.d 
 
