@@ -23,9 +23,10 @@
 using namespace std;
 
 // Define tests to run
-const	bool timeMs=true;
+const	bool timeMs=false;
 const bool filtering=false; // FIXME: adapt filtering tests for TRex2 data structures
-const bool stacksRule=true;
+const bool stacksRule=false;
+const bool stacksRuleKB=true;
 
 void err() {
 	cout << "### Test Failed! ###" << endl;
@@ -36,4 +37,5 @@ void trex_testing::runTest() {
 	if (timeMs) if (! timeMsTest()) err();
 	if (filtering) if (! filteringTest()) err();
 	if (stacksRule) if (! stacksRuleTest()) err();
+	if (stacksRuleKB) if(! stacksRuleKBTest()) err();
 }

@@ -191,7 +191,7 @@ public:
 	/**
 	 * Returns the number of predicates in the rule
 	 */
-	int getKBPredicatesNum() { return kbPredicates.size() - predicates.size(); }
+	int getKBPredicatesNum() { return kbPredicates.size(); }
 
 	/**
 	 * Returns the number of parameters in the rule

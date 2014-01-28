@@ -84,7 +84,7 @@ bool RulePkt::addKBRootPredicate(Constraint constr[], int constrLen, string kb, 
 	p.qId = MD5((const unsigned char*) q.c_str(), q.length(), NULL);
 	p.constraints = new Constraint[constrLen];
 	for (int i=0; i<constrLen; i++) p.constraints[i] = constr[i];
-	kbPredicates.insert(make_pair(predicates.size(), p));
+	kbPredicates.insert(make_pair(kbPredicates.size(), p));
 	return true;
 }
 
@@ -314,14 +314,9 @@ bool RulePkt::addParameter(int index1, char *name1, int index2, char *name2, Sta
 	Parameter p;
 	p.evIndex1 = index1;
 	p.evIndex2 = index2;
-//	if (type==STATE && index2 < numPredicates)
-//		p.type = STATE;
-//	else {
-//		if(type==STATE && index2 > numKBPredicates) return false;
-//		else p.type = KB;
-//	}
 	strcpy(p.name1, name1);
 	strcpy(p.name2, name2);
+	p.type = type;
 	parameters.insert(make_pair(parameters.size(), p));
 	return true;
 }

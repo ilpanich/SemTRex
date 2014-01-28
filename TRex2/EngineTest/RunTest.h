@@ -24,6 +24,7 @@
 #include "TimeMsTest.h"
 #include "FilteringTest.h"
 #include "StacksRuleTest.h"
+#include "StacksRuleKBTest.h"
 #include <iostream>
 
 namespace trex_testing {

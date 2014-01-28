@@ -73,7 +73,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 		consumingIndexes.insert(consumedIndex);
 	}
 	// Insert here the code to handle the creation of the KB related stuff
-	for (int i=stacksNum; i< (pkt->getPredicatesNum() + pkt->getKBPredicatesNum()); i++) {
+	for (int i=0; i< pkt->getKBPredicatesNum(); i++) {
 		//		stacksSize[i]=0;
 		//		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
 		//		stacks.insert(make_pair(stacksNum,tmpStack));
@@ -83,6 +83,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 		//			stacks[refersTo]->addLookBackTo(stacksNum-1);
 		//			referenceState.insert(make_pair(i, refersTo));
 		//		}
+
 		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
 		queryRegistry.insert(make_pair(kbNum, item));
 		kbNum++;

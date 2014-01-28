@@ -9,20 +9,23 @@
 
 using namespace std;
 
-QueryItem::QueryItem(string kb, string q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p) {
-	db = kb;
-	query = q;
+QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p) {
+
+	db = string(kb);
+	query = string(q);
 	dbId = kbId;
 	qId = queryId;
 	params = p;
 
-	const char* t;
-	char * qy = new char[query.length() + 1];
-	strcpy(qy, query.substr(query.find_first_of("?") - 1, query.find("where") - 6).c_str());
+	if(query.length() > 0) {
+		const char* t;
+		char * qy = new char[query.length() + 1];
+		strcpy(qy, query.substr(query.find_first_of("?"), query.find("where") - 6).c_str());
 
-	for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
-	{
-		fields.push_back(t);
+		for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
+		{
+			fields.push_back(t);
+		}
 	}
 }
 
