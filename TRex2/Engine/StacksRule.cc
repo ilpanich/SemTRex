@@ -35,6 +35,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 	aggrsNum = 0;
 	negsNum = 0;
 	kbNum = 0;
+
 	// Initialize stacks map with predicate and fills it with references
 	for (int i=0; i<pkt->getPredicatesNum(); i++) {
 		stacksSize[i]=0;
@@ -49,45 +50,41 @@ StacksRule::StacksRule(RulePkt *pkt) {
 			referenceState.insert(make_pair(i, refersTo));
 		}
 	}
+
+	// Initialize the query registry with the kb predicates related queries
+	for (int i=0; i< pkt->getKBPredicatesNum(); i++) {
+		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
+		queryRegistry.insert(make_pair(kbNum, item));
+		kbNum++;
+	}
+
 	// Initialize negations and fills stacks with references
 	for (int i=0; i<pkt->getNegationsNum(); i++) {
 		negsSize[i]=0;
 		addNegation(pkt->getNegation(i).eventType, pkt->getNegation(i).constraints, pkt->getNegation(i).constraintsNum, pkt->getNegation(i).lowerId, pkt->getNegation(i).lowerTime, pkt->getNegation(i).upperId);
 	}
+
 	// Initialize aggregates belonging to the rule
 	for (int i=0; i<pkt->getAggregatesNum(); i++) {
 		aggsSize[i]=0;
 		addAggregate(pkt->getAggregate(i).eventType, pkt->getAggregate(i).constraints, pkt->getAggregate(i).constraintsNum, pkt->getAggregate(i).lowerId, pkt->getAggregate(i).lowerTime, pkt->getAggregate(i).upperId, pkt->getAggregate(i).name, pkt->getAggregate(i).fun);
 		// if KB predicates negation is allowed, here we must handle it.
 	}
+
 	// Initialize parameters belonging to the rule
 	for (int i=0; i<pkt->getParametersNum(); i++) {
 		// Verify the following code: it must correctly handle also parameters between a predicate and KB predicate and
 		// between two KB predicates
 		addParameter(pkt->getParameter(i).evIndex1, pkt->getParameter(i).name1, pkt->getParameter(i).evIndex2, pkt->getParameter(i).name2, pkt->getParameter(i).type,pkt);
 	}
+
 	// Initialize the set of consuming indexes
 	set<int> cons = pkt->getConsuming();
 	for (set<int>::iterator it=cons.begin(); it!=cons.end(); ++it) {
 		int consumedIndex = *it;
 		consumingIndexes.insert(consumedIndex);
 	}
-	// Insert here the code to handle the creation of the KB related stuff
-	for (int i=0; i< pkt->getKBPredicatesNum(); i++) {
-		//		stacksSize[i]=0;
-		//		Stack * tmpStack= new Stack(pkt->getKBPredicate(i).refersTo, NULL, NULL);
-		//		stacks.insert(make_pair(stacksNum,tmpStack));
-		//		stacksNum++; //check stackNum usage and check if new changes are ok
-		//		int refersTo = pkt->getKBPredicate(i).refersTo;
-		//		if (refersTo!=-1) {
-		//			stacks[refersTo]->addLookBackTo(stacksNum-1);
-		//			referenceState.insert(make_pair(i, refersTo));
-		//		}
 
-		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
-		queryRegistry.insert(make_pair(kbNum, item));
-		kbNum++;
-	}
 }
 
 StacksRule::~StacksRule() {
