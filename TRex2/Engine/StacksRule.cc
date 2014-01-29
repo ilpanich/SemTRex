@@ -179,6 +179,8 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
 	// Gets partial results (patterns)
 	list<PartialEvent *> * partialResults = getPartialResults(pkt);
 
+	cerr << partialResults->size() << endl;
+
 	// Checks parameters and removes invalid results from collected ones
 	removePartialEventsNotMatchingParameters(partialResults, endStackParameters);
 

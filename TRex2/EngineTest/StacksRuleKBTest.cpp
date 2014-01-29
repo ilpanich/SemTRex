@@ -74,15 +74,20 @@ bool trex_testing::testKBSequence() {
 	att2.type = STRING;
 	strcpy(att2.stringVal, "Stanley Holloway");
 	PubPkt *pkt1 = new PubPkt(3, &att1, 1);
+	pkt1->setTime(1);
 	att1.intVal = 2;
 	PubPkt *pkt2 = new PubPkt(2, &att1, 1);
+	pkt2->setTime(2);
 	att1.intVal = 1;
 	Attribute attPkt[2];
 	attPkt[0] = att1;
 	attPkt[1] = att2;
 	PubPkt *pkt3 = new PubPkt(1, attPkt, 2);
+	pkt3->setTime(3);
 	PubPkt *pkt4 = new PubPkt(1, &att1, 1);
+	pkt4->setTime(4);
 	PubPkt *pkt5 = new PubPkt(1, &att1, 1);
+	pkt5->setTime(5);
 
 	MatchingHandler *mh = new MatchingHandler();
 	set<PubPkt *> results;
