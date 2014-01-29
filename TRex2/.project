@@ -3,6 +3,7 @@
 	<name>TRex2</name>
 	<comment></comment>
 	<projects>
+		<project>rdf3x-0.3.5</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

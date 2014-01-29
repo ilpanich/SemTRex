@@ -169,6 +169,7 @@ void StacksRule::addToNegationStack(PubPkt *pkt, int index) {
 }
 
 void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
+
 	// Adds the terminator to the last stack
 	pkt->incRefCount();
 	receivedPkts[0].push_back(pkt);
@@ -177,6 +178,7 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
 	clearStacks();
 	// Gets partial results (patterns)
 	list<PartialEvent *> * partialResults = getPartialResults(pkt);
+
 	// Checks parameters and removes invalid results from collected ones
 	removePartialEventsNotMatchingParameters(partialResults, endStackParameters);
 

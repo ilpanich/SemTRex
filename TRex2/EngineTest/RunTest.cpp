@@ -25,7 +25,7 @@ using namespace std;
 // Define tests to run
 const	bool timeMs=false;
 const bool filtering=false; // FIXME: adapt filtering tests for TRex2 data structures
-const bool stacksRule=false;
+const bool stacksRule=true;
 const bool stacksRuleKB=true;
 
 void err() {

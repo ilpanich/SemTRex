@@ -45,7 +45,20 @@ bool trex_testing::testKBSequence() {
 	buildConstraint(c3, 3);
 	pkt->addPredicate(3, c3, 1, 1, win, kind);
 	pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> <London> }");
-	pkt->addParamerForQueryKB(3,"name",1,"?name");
+	char param1name[5];
+	char param2name[6];
+	param1name[0] = 'n';
+	param1name[1] = 'a';
+	param1name[2] = 'm';
+	param1name[3] = 'e';
+	param1name[4] = '\0';
+	param2name[0] = '?';
+	param2name[1] = 'n';
+	param2name[2] = 'a';
+	param2name[3] = 'm';
+	param2name[4] = 'e';
+	param2name[5] = '\0';
+	pkt->addParamerForQueryKB(3,param1name,0,param2name);
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
