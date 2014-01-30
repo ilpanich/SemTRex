@@ -20,7 +20,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 	if(query.length() > 0) {
 		const char* t;
 		char * qy = new char[query.length() + 1];
-		strcpy(qy, query.substr(query.find_first_of("?"), query.find("where") - 6).c_str());
+		strcpy(qy, query.substr(query.find_first_of("?") + 1, query.find("where") - 7).c_str());
 
 		for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
 		{
@@ -56,7 +56,7 @@ int QueryItem::getField(char * name) {
 	int i = 0;
 	for(vector<string>::iterator it = fields.begin(); it != fields.end(); it++) {
 		string s = *it;
-		if(s.compare(name))
+		if(strcmp(name, s.c_str()) == 0)
 			return i;
 		else
 			i++;

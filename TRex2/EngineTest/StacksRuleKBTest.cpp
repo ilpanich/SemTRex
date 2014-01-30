@@ -52,13 +52,15 @@ bool trex_testing::testKBSequence() {
 	param1name[2] = 'm';
 	param1name[3] = 'e';
 	param1name[4] = '\0';
+	/*
 	param2name[0] = '?';
 	param2name[1] = 'n';
 	param2name[2] = 'a';
 	param2name[3] = 'm';
 	param2name[4] = 'e';
 	param2name[5] = '\0';
-	pkt->addParamerForQueryKB(0,param1name,0,param2name);
+	*/
+	pkt->addParamerForQueryKB(0,param1name,0,param1name);
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
@@ -86,7 +88,7 @@ bool trex_testing::testKBSequence() {
 	pkt3->setTime(3);
 	PubPkt *pkt4 = new PubPkt(1, &att1, 1);
 	pkt4->setTime(4);
-	PubPkt *pkt5 = new PubPkt(1, &att1, 1);
+	PubPkt *pkt5 = new PubPkt(1, attPkt, 2);
 	pkt5->setTime(5);
 
 	MatchingHandler *mh = new MatchingHandler();
@@ -126,7 +128,7 @@ bool trex_testing::testKBSequence() {
 	mh = new MatchingHandler();
 	indexingTable->processMessage(pkt4, *mh);
 	sr->processPkt(pkt4, mh, results, 0);
-	if (results.size()!=1) {
+	if (results.size()!=0) {
 		cout << "Error: generating the wrong number of packets after processing packet 4!" << endl;
 		return false;
 	}

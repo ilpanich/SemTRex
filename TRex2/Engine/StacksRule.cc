@@ -490,21 +490,28 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 					if (type1 == STRING && f.getType() != STRINGV) return false;
 					switch(type1) {
 					case INT:
-						return receivedPkt->getIntAttributeVal(index1)==f.getIValue();
+						if (pkt->getIntAttributeVal(index1)==f.getIValue())
+							return true;
+						break;
 					case FLOAT:
-						return receivedPkt->getFloatAttributeVal(index1)==f.getFValue();
+						if (pkt->getFloatAttributeVal(index1)==f.getFValue())
+							return true;
+						break;
 					case BOOL:
-						return receivedPkt->getBoolAttributeVal(index1)==f.getBValue();
+						if (pkt->getBoolAttributeVal(index1)==f.getBValue())
+							return true;
+						break;
 					case STRING:
 						char result1[STRING_VAL_LEN];
-						receivedPkt->getStringAttributeVal(index1, result1);
-						return strcmp(result1, f.getSValue())==0;
-					default:
-						return false;
+						pkt->getStringAttributeVal(index1, result1);
+						if (strcmp(result1, f.getSValue())==0)
+							return true;
+						break;
 					}
 				} else
 					return false;
 			}
+			return false;
 		}
 		return false;
 	}
