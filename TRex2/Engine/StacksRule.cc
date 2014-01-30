@@ -178,9 +178,6 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
 	clearStacks();
 	// Gets partial results (patterns)
 	list<PartialEvent *> * partialResults = getPartialResults(pkt);
-
-	cerr << partialResults->size() << endl;
-
 	// Checks parameters and removes invalid results from collected ones
 	removePartialEventsNotMatchingParameters(partialResults, endStackParameters);
 
@@ -451,9 +448,9 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 	// **B** KB related parameters must be checked here
 	int indexOfReferenceEvent = parameter->evIndex1;
 	PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
-	ValType type1, type2;
-	int index1, index2;
 	if (parameter->type != KB) {
+		ValType type1, type2;
+		int index1, index2;
 		if (! receivedPkt->getAttributeIndexAndType(parameter->name2, index2, type2)) return false;
 		if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
 		if (type1!=type2) return false;
@@ -477,7 +474,10 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		// TODO - Complete the insertion here of the code to verify KB predicates validity.
 		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
-		QueryItem * item = queryRegistry.at(index2);
+		ValType type1;
+		int index1;
+		if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
+		QueryItem * item = queryRegistry.at(parameter->evIndex2);
 		if (item->runQuery()) {
 			Resultset rs = item->getResult();
 			for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
@@ -525,7 +525,11 @@ void StacksRule::removePartialEventsNotMatchingParameters(list<PartialEvent *> *
 		bool valid = true;
 		for (set<Parameter *>::iterator it2=parameters.begin(); it2!=parameters.end(); ++it2) {
 			Parameter *par = *it2;
-			int indexOfReferenceEvent = par->evIndex2;
+			int indexOfReferenceEvent = -1;
+			if (par->type == KB)
+				indexOfReferenceEvent = par->evIndex1;
+			else
+				indexOfReferenceEvent = par->evIndex2;
 			PartialEvent *partialEvent = *it;
 			PubPkt *receivedPkt = partialEvent->indexes[indexOfReferenceEvent];
 			if (! checkParameter(receivedPkt, partialEvent, par)) {

@@ -58,7 +58,7 @@ bool trex_testing::testKBSequence() {
 	param2name[3] = 'm';
 	param2name[4] = 'e';
 	param2name[5] = '\0';
-	pkt->addParamerForQueryKB(3,param1name,0,param2name);
+	pkt->addParamerForQueryKB(0,param1name,0,param2name);
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
