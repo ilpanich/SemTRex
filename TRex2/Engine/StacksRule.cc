@@ -147,9 +147,11 @@ StacksRule::~StacksRule() {
 		delete it->second;
 	}
 
+	/*
 	for (map<int, QueryItem *>::iterator it=queryRegistry.begin(); it!=queryRegistry.end(); ++it) {
 		delete it->second;
 	}
+	*/
 
 	delete eventGenerator;
 	// Check if the new code requires other cleaning actions to be performed on destroy
@@ -480,7 +482,7 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		QueryItem * item = queryRegistry.at(parameter->evIndex2);
 		if (item->runQuery()) {
 			Resultset rs = item->getResult();
-			for(Resultset::iterator it=rs.first(); it!=rs.last(); ) {
+			for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
 				Result res = *it;
 				if(item->getField(parameter->name2) != -1) {
 					Field f = res.getResult()[item->getField(parameter->name2)];

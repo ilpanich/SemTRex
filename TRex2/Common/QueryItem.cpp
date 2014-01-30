@@ -30,11 +30,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 }
 
 QueryItem::~QueryItem() {
-	//delete db;
-	//delete query;
-	delete dbId;
-	delete qId;
-	//delete *params;
+
 }
 
 bool QueryItem::runQuery() {

@@ -41,7 +41,9 @@ void buildConstraint(Constraint *constraints, int val);
 /**
  * Testing methods
  */
-bool testKBSequence();
+bool TestKBSequenceWithParamOnTerminator();
+
+bool TestKBSequenceWithParamOnState();
 
 }
 
