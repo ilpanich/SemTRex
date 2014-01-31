@@ -151,7 +151,7 @@ StacksRule::~StacksRule() {
 	for (map<int, QueryItem *>::iterator it=queryRegistry.begin(); it!=queryRegistry.end(); ++it) {
 		delete it->second;
 	}
-	*/
+	 */
 
 	delete eventGenerator;
 	// Check if the new code requires other cleaning actions to be performed on destroy
@@ -477,45 +477,114 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 		// THE FOLLOWING LINES MUST BE FIXED! Insert KB and QUERY in stacks or use a different structure to store KB predicates
 		ValType type1;
-		int index1;
-		if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
-		QueryItem * item = queryRegistry.at(parameter->evIndex2);
-		if (item->runQuery()) {
-			Resultset rs = item->getResult();
-			for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
-				Result res = *it;
-				if(item->getField(parameter->name2) != -1) {
-					Field f = res.getResult()[item->getField(parameter->name2)];
-					if (type1 == INT && f.getType() != INTV) return false;
-					if (type1 == FLOAT && f.getType() != FLOATV) return false;
-					if (type1 == BOOL && f.getType() != BOOLV) return false;
-					if (type1 == STRING && f.getType() != STRINGV) return false;
-					switch(type1) {
-					case INT:
-						if (pkt->getIntAttributeVal(index1)==f.getIValue())
-							return true;
-						break;
-					case FLOAT:
-						if (pkt->getFloatAttributeVal(index1)==f.getFValue())
-							return true;
-						break;
-					case BOOL:
-						if (pkt->getBoolAttributeVal(index1)==f.getBValue())
-							return true;
-						break;
-					case STRING:
-						char result1[STRING_VAL_LEN];
-						pkt->getStringAttributeVal(index1, result1);
-						if (strcmp(result1, f.getSValue())==0)
-							return true;
-						break;
+		int index1, parSize;
+		vector<string> pars1;
+		vector<string> pars2;
+
+		char * p;
+		for (p = strtok( parameter->name1, "," );  p;  p = strtok( NULL, "," )) {
+			pars1.push_back(p);
+		}
+		for (p = strtok( parameter->name2, "," );  p;  p = strtok( NULL, "," )) {
+			pars2.push_back(p);
+		}
+
+		if(pars1.size() != pars2.size())
+			return false;
+		else
+			parSize = pars1.size();
+
+		if(parSize == 1) {
+			if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
+			QueryItem * item = queryRegistry.at(parameter->evIndex2);
+			if (item->runQuery()) {
+				Resultset rs = item->getResult();
+				for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+					Result res = *it;
+					if(item->getField(parameter->name2) != -1) {
+						Field f = res.getResult()[item->getField(parameter->name2)];
+						if (type1 == INT && f.getType() != INTV) return false;
+						if (type1 == FLOAT && f.getType() != FLOATV) return false;
+						if (type1 == BOOL && f.getType() != BOOLV) return false;
+						if (type1 == STRING && f.getType() != STRINGV) return false;
+						switch(type1) {
+						case INT:
+							if (pkt->getIntAttributeVal(index1)==f.getIValue())
+								return true;
+							break;
+						case FLOAT:
+							if (pkt->getFloatAttributeVal(index1)==f.getFValue())
+								return true;
+							break;
+						case BOOL:
+							if (pkt->getBoolAttributeVal(index1)==f.getBValue())
+								return true;
+							break;
+						case STRING:
+							char result1[STRING_VAL_LEN];
+							pkt->getStringAttributeVal(index1, result1);
+							if (strcmp(result1, f.getSValue())==0)
+								return true;
+							break;
+						}
+					} else
+						return false;
+				}
+				return false;
+			}
+			return false;
+		} else {
+			// More than a single parameter
+			int valid = 0;
+			int idx;
+			for(idx = 0; idx < parSize; idx++) {
+				char * par1Name = new char[pars1[idx].length() + 1];
+				strcpy(par1Name, pars1[idx].c_str());
+				char * par2Name = new char[pars2[idx].length() + 1];
+				strcpy(par2Name, pars2[idx].c_str());
+				if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
+				QueryItem * item = queryRegistry.at(parameter->evIndex2);
+				if (item->runQuery()) {
+					Resultset rs = item->getResult();
+					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+						Result res = *it;
+						if(item->getField(par2Name) != -1) {
+							Field f = res.getResult()[item->getField(par2Name)];
+							if (type1 == INT && f.getType() != INTV) return false;
+							if (type1 == FLOAT && f.getType() != FLOATV) return false;
+							if (type1 == BOOL && f.getType() != BOOLV) return false;
+							if (type1 == STRING && f.getType() != STRINGV) return false;
+							switch(type1) {
+							case INT:
+								if (pkt->getIntAttributeVal(index1)==f.getIValue())
+									valid++;
+								break;
+							case FLOAT:
+								if (pkt->getFloatAttributeVal(index1)==f.getFValue())
+									valid++;
+								break;
+							case BOOL:
+								if (pkt->getBoolAttributeVal(index1)==f.getBValue())
+									valid++;
+								break;
+							case STRING:
+								char result1[STRING_VAL_LEN];
+								pkt->getStringAttributeVal(index1, result1);
+								if (strcmp(result1, f.getSValue())==0)
+									valid++;
+								break;
+							}
+						} else
+							return false;
+
+						if (valid > idx)
+							break;
 					}
 				} else
 					return false;
 			}
-			return false;
+			return valid;
 		}
-		return false;
 	}
 }
 

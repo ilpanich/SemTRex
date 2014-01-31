@@ -25,10 +25,12 @@ using namespace std;
 bool trex_testing::stacksRuleKBTest() {
 	cout << "*** StacksRule ***" << endl;
 	cout << "TestKBSequenceWithParamOnTerminator\t";
-	//if (! TestKBSequenceWithParamOnTerminator()) return false;
+	if (! TestKBSequenceWithParamOnTerminator()) return false;
 	cout << "OK" << endl << "TestKBSequenceWithParamOnState\t" ;
 	if (! TestKBSequenceWithParamOnState()) return false;
 	cout << "OK" << endl;
+	cout << "\nAll StacksRuleKB tests ran successfully!\n" << endl;
+	cout << endl;
 	return true;
 }
 
@@ -54,15 +56,15 @@ bool trex_testing::TestKBSequenceWithParamOnTerminator() {
 	param1name[2] = 'm';
 	param1name[3] = 'e';
 	param1name[4] = '\0';
-	/*
+
 	param2name[0] = '?';
 	param2name[1] = 'n';
 	param2name[2] = 'a';
 	param2name[3] = 'm';
 	param2name[4] = 'e';
 	param2name[5] = '\0';
-	*/
-	pkt->addParamerForQueryKB(0,param1name,0,param1name);
+
+	pkt->addParamerForQueryKB(0,param1name,0,param2name);
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
@@ -187,16 +189,15 @@ bool trex_testing::TestKBSequenceWithParamOnState() {
 	param1name[1] = 'a';
 	param1name[2] = 'm';
 	param1name[3] = 'e';
-	param1name[4] = '\0';
-	/*
+
 	param2name[0] = '?';
 	param2name[1] = 'n';
 	param2name[2] = 'a';
 	param2name[3] = 'm';
 	param2name[4] = 'e';
 	param2name[5] = '\0';
-	*/
-	pkt->addParamerForQueryKB(1,param1name,0,param1name);
+
+	pkt->addParamerForQueryKB(1,param1name,0,param2name);
 	pkt->setCompositeEventTemplate(ceTemplate);
 
 	StacksRule *sr = new StacksRule(pkt);
