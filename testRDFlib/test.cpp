@@ -16,7 +16,7 @@ using namespace std;
 int main(int argc, char * argv[]) {
 
 	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city}";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city. ?p <bornInLocation> \"Winnipeg\"}";
 	string test = "name";
 
 	const char* p;

@@ -535,19 +535,20 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 			return false;
 		} else {
 			// More than a single parameter
-			int valid = 0;
+			int valid;
 			int idx;
-			for(idx = 0; idx < parSize; idx++) {
-				char * par1Name = new char[pars1[idx].length() + 1];
-				strcpy(par1Name, pars1[idx].c_str());
-				char * par2Name = new char[pars2[idx].length() + 1];
-				strcpy(par2Name, pars2[idx].c_str());
-				if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
-				QueryItem * item = queryRegistry.at(parameter->evIndex2);
-				if (item->runQuery()) {
-					Resultset rs = item->getResult();
-					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
-						Result res = *it;
+			QueryItem * item = queryRegistry.at(parameter->evIndex2);
+			if (item->runQuery()) {
+				Resultset rs = item->getResult();
+				for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+					Result res = *it;
+					valid = 0;
+					for(idx = 0; idx < parSize; idx++) {
+						char * par1Name = new char[pars1[idx].length() + 1];
+						strcpy(par1Name, pars1[idx].c_str());
+						char * par2Name = new char[pars2[idx].length() + 1];
+						strcpy(par2Name, pars2[idx].c_str());
+						if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
 						if(item->getField(par2Name) != -1) {
 							Field f = res.getResult()[item->getField(par2Name)];
 							if (type1 == INT && f.getType() != INTV) return false;
@@ -576,14 +577,15 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 							}
 						} else
 							return false;
-
-						if (valid > idx)
+						if (valid != idx +1)
 							break;
 					}
-				} else
-					return false;
-			}
-			return valid;
+					if (valid == parSize)
+						return true;
+				}
+				return false;
+			} else
+				return false;
 		}
 	}
 }
