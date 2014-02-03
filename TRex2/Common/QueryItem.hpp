@@ -38,6 +38,8 @@ public:
 
 	int getField(char * name);
 
+	void replaceExtParam(const std::string& pName, const std::string& pValue);
+
 
 };
 

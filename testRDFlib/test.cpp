@@ -13,11 +13,17 @@
 
 using namespace std;
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
+
 int main(int argc, char * argv[]) {
 
 	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
 	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city. ?p <bornInLocation> \"Winnipeg\"}";
 	string test = "name";
+
+	string test1 = "a &pippo piace la &paprica. viva &pippo";
+	string test2 = "&pippo";
+	string test3 = "0";
 
 	const char* p;
 	const char* z;
@@ -32,6 +38,8 @@ int main(int argc, char * argv[]) {
 	vector<string> params;
 
 	Resultset rs;
+
+	replaceAll(test1, test2, test3);
 
 	cout << "Executing query... ";
 
@@ -58,4 +66,14 @@ int main(int argc, char * argv[]) {
 
 	return 0;
 
+}
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
 }
