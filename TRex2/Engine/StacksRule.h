@@ -36,6 +36,8 @@
 #include <bitset>
 #include <vector>
 
+#include <boost/lexical_cast.hpp>
+
 /**
  * Represents a single detection sequence: it is represented by a set of stacks with optional negations and parameters.
  */

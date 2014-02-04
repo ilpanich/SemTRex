@@ -27,6 +27,16 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 			fields.push_back(t);
 		}
 	}
+
+	if (params.empty())
+		runnable = true;
+	else {
+		runnable = false;
+		for(vector<ExtParameter>::iterator it=params.begin(); it!=params.end(); it++) {
+			ExtParameter par = *it;
+			replacedParams.insert(make_pair(string(par.name2), false));
+		}
+	}
 }
 
 QueryItem::~QueryItem() {
@@ -34,10 +44,10 @@ QueryItem::~QueryItem() {
 }
 
 bool QueryItem::runQuery() {
-	if(params.empty())
+	if(runnable)
 		rs = RDFQuery::execQuery(db, query, false);
 	else				// TODO: here external parameters of the query must be handled
-		rs = RDFQuery::execQuery(db, query, false);
+		return false;
 	if(rs.getAllRes().empty())
 		return false;
 	else
@@ -61,12 +71,43 @@ int QueryItem::getField(char * name) {
 	return -1;
 }
 
-void QueryItem::replaceExtParam(const std::string& pName, const std::string& pValue) {
+bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pValue) {
+
+	map<string,bool>::iterator foundEl;
+
     if(pName.empty())
-        return;
+        return false;
     size_t start_pos = 0;
     while((start_pos = query.find(pName, start_pos)) != std::string::npos) {
         query.replace(start_pos, pName.length(), pValue);
         start_pos += pValue.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
+    foundEl = replacedParams.find(pName);
+    if (foundEl == replacedParams.end())
+    	return false;
+    else {
+    	foundEl->second = true;
+    	return true;
+    }
+}
+
+bool QueryItem::needsReplace() {
+
+	if (params.empty())
+		return false;
+	else {
+		for (map<string,bool>::iterator it=replacedParams.begin(); it!=replacedParams.end(); it++) {
+			if (it->second == false)
+				return true;
+		}
+		return false;
+	}
+}
+
+void QueryItem::resetExtParRepl() {
+	if (!params.empty()) {
+		for (map<string,bool>::iterator it=replacedParams.begin(); it!=replacedParams.end(); it++) {
+			it->second = false;
+		}
+	}
 }

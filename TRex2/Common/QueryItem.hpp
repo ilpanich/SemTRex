@@ -25,6 +25,8 @@ private:
 	std::vector<ExtParameter> params;			// The KB query optional external parameters
 	std::vector<std::string> fields;			// The list of fields that the query returns
 	Resultset rs;							// The KB query retrieved results set
+	bool runnable;							// Define if a query is ready to be run
+	std::map<std::string, bool> replacedParams;	// Tell if a parameter has been replaced or not
 
 public:
 
@@ -38,7 +40,15 @@ public:
 
 	int getField(char * name);
 
-	void replaceExtParam(const std::string& pName, const std::string& pValue);
+	bool replaceExtParam(const std::string& pName, const std::string& pValue);
+
+	bool isRunnable() { return runnable; }
+
+	bool needsReplace();
+
+	std::vector<ExtParam>& getExtParams () { return params;}
+
+	void resetExtParRepl();
 
 
 };

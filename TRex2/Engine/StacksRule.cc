@@ -21,6 +21,7 @@
 #include "StacksRule.h"
 
 using namespace std;
+using namespace boost;
 
 StacksRule::StacksRule(RulePkt *pkt) {
 	// Initializes the rule identifier
@@ -197,6 +198,10 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
 	receivedPkts[0].clear();
 	if (pkt->decRefCount()) delete pkt;
 	stacksSize[0] = 0;
+
+	for(map<int,QueryItem*>::iterator it=queryRegistry.begin(); it!=queryRegistry.end(); it++) {
+		it->second->resetExtParRepl();
+	}
 }
 
 void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &results, int index) {
@@ -497,60 +502,49 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 		if(parSize == 1) {
 			if (! pkt->getAttributeIndexAndType(parameter->name1, index1, type1)) return false;
 			QueryItem * item = queryRegistry.at(parameter->evIndex2);
-			if (item->runQuery()) {
-				Resultset rs = item->getResult();
-				for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
-					Result res = *it;
-					if(item->getField(parameter->name2) != -1) {
-						Field f = res.getResult()[item->getField(parameter->name2)];
-						if (type1 == INT && f.getType() != INTV) return false;
-						if (type1 == FLOAT && f.getType() != FLOATV) return false;
-						if (type1 == BOOL && f.getType() != BOOLV) return false;
-						if (type1 == STRING && f.getType() != STRINGV) return false;
-						switch(type1) {
+
+			if (item->needsReplace()) {
+				vector<ExtParameter> ep = item->getExtParams();
+				if (ep.size() > 0){
+					for (vector<ExtParameter>::iterator iter = ep.begin(); iter != ep.end(); iter++) {
+						ExtParameter epar = *iter;
+						PubPkt* referred = partialEvent->indexes[epar.evIndex1];
+						int attIdx;
+						ValType attV;
+						referred->getAttributeIndexAndType(epar.name1, attIdx, attV);
+						switch(attV) {
+						case BOOL:
+							if (!item->replaceExtParam(epar.name2, "" + lexical_cast<string>(referred->getAttribute(attIdx).boolVal)))
+								return false;
+							break;
 						case INT:
-							if (pkt->getIntAttributeVal(index1)==f.getIValue())
-								return true;
+							if(!item->replaceExtParam(epar.name2, "" + lexical_cast<string>(referred->getAttribute(attIdx).intVal)))
+								return false;
 							break;
 						case FLOAT:
-							if (pkt->getFloatAttributeVal(index1)==f.getFValue())
-								return true;
-							break;
-						case BOOL:
-							if (pkt->getBoolAttributeVal(index1)==f.getBValue())
-								return true;
+							if(!item->replaceExtParam(epar.name2, lexical_cast<string>(referred->getAttribute(attIdx).floatVal)))
+								return false;
 							break;
 						case STRING:
-							char result1[STRING_VAL_LEN];
-							pkt->getStringAttributeVal(index1, result1);
-							if (strcmp(result1, f.getSValue())==0)
-								return true;
+							if(!item->replaceExtParam(epar.name2, string(referred->getAttribute(attIdx).stringVal)))
+								return false;
 							break;
 						}
-					} else
-						return false;
+					}
 				}
+			}
+			if (item->needsReplace()) {
+				//cerr << "Errors replacing parameters" << endl;
 				return false;
 			}
-			return false;
-		} else {
-			// More than a single parameter
-			int valid;
-			int idx;
-			QueryItem * item = queryRegistry.at(parameter->evIndex2);
-			if (item->runQuery()) {
-				Resultset rs = item->getResult();
-				for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
-					Result res = *it;
-					valid = 0;
-					for(idx = 0; idx < parSize; idx++) {
-						char * par1Name = new char[pars1[idx].length() + 1];
-						strcpy(par1Name, pars1[idx].c_str());
-						char * par2Name = new char[pars2[idx].length() + 1];
-						strcpy(par2Name, pars2[idx].c_str());
-						if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
-						if(item->getField(par2Name) != -1) {
-							Field f = res.getResult()[item->getField(par2Name)];
+			else {
+
+				if (item->runQuery()) {
+					Resultset rs = item->getResult();
+					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+						Result res = *it;
+						if(item->getField(parameter->name2) != -1) {
+							Field f = res.getResult()[item->getField(parameter->name2)];
 							if (type1 == INT && f.getType() != INTV) return false;
 							if (type1 == FLOAT && f.getType() != FLOATV) return false;
 							if (type1 == BOOL && f.getType() != BOOLV) return false;
@@ -558,34 +552,120 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 							switch(type1) {
 							case INT:
 								if (pkt->getIntAttributeVal(index1)==f.getIValue())
-									valid++;
+									return true;
 								break;
 							case FLOAT:
 								if (pkt->getFloatAttributeVal(index1)==f.getFValue())
-									valid++;
+									return true;
 								break;
 							case BOOL:
 								if (pkt->getBoolAttributeVal(index1)==f.getBValue())
-									valid++;
+									return true;
 								break;
 							case STRING:
 								char result1[STRING_VAL_LEN];
 								pkt->getStringAttributeVal(index1, result1);
 								if (strcmp(result1, f.getSValue())==0)
-									valid++;
+									return true;
 								break;
 							}
 						} else
 							return false;
-						if (valid != idx +1)
-							break;
 					}
-					if (valid == parSize)
-						return true;
+					return false;
 				}
 				return false;
-			} else
+			}
+		} else {
+			// More than a single parameter
+			int valid;
+			int idx;
+			QueryItem * item = queryRegistry.at(parameter->evIndex2);
+
+			if (item->needsReplace()) {
+				vector<ExtParameter> ep = item->getExtParams();
+				if (ep.size() > 0){
+					for (vector<ExtParameter>::iterator iter = ep.begin(); iter != ep.end(); iter++) {
+						ExtParameter epar = *iter;
+						PubPkt* referred = partialEvent->indexes[epar.evIndex1];
+						int attIdx;
+						ValType attV;
+						referred->getAttributeIndexAndType(epar.name1, attIdx, attV);
+						switch(attV) {
+						case BOOL:
+							if (!item->replaceExtParam(epar.name2, "" + lexical_cast<string>(referred->getAttribute(attIdx).boolVal)))
+								return false;
+							break;
+						case INT:
+							if(!item->replaceExtParam(epar.name2, "" + lexical_cast<string>(referred->getAttribute(attIdx).intVal)))
+								return false;
+							break;
+						case FLOAT:
+							if(!item->replaceExtParam(epar.name2, lexical_cast<string>(referred->getAttribute(attIdx).floatVal)))
+								return false;
+							break;
+						case STRING:
+							if(!item->replaceExtParam(epar.name2, string(referred->getAttribute(attIdx).stringVal)))
+								return false;
+							break;
+						}
+					}
+				}
+			}
+			if (item->needsReplace()) {
+				//cerr << "Errors replacing parameters" << endl;
 				return false;
+			} else {
+
+				if (item->runQuery()) {
+					Resultset rs = item->getResult();
+					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
+						Result res = *it;
+						valid = 0;
+						for(idx = 0; idx < parSize; idx++) {
+							char * par1Name = new char[pars1[idx].length() + 1];
+							strcpy(par1Name, pars1[idx].c_str());
+							char * par2Name = new char[pars2[idx].length() + 1];
+							strcpy(par2Name, pars2[idx].c_str());
+							if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
+							if(item->getField(par2Name) != -1) {
+								Field f = res.getResult()[item->getField(par2Name)];
+								if (type1 == INT && f.getType() != INTV) return false;
+								if (type1 == FLOAT && f.getType() != FLOATV) return false;
+								if (type1 == BOOL && f.getType() != BOOLV) return false;
+								if (type1 == STRING && f.getType() != STRINGV) return false;
+								switch(type1) {
+								case INT:
+									if (pkt->getIntAttributeVal(index1)==f.getIValue())
+										valid++;
+									break;
+								case FLOAT:
+									if (pkt->getFloatAttributeVal(index1)==f.getFValue())
+										valid++;
+									break;
+								case BOOL:
+									if (pkt->getBoolAttributeVal(index1)==f.getBValue())
+										valid++;
+									break;
+								case STRING:
+									char result1[STRING_VAL_LEN];
+									pkt->getStringAttributeVal(index1, result1);
+									if (strcmp(result1, f.getSValue())==0)
+										valid++;
+									break;
+								}
+							} else
+								return false;
+							if (valid != idx +1)
+								break;
+						}
+						if (valid == parSize)
+							return true;
+					}
+					return false;
+				} else
+					return false;
+			}
 		}
 	}
 }
