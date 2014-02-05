@@ -13,6 +13,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 
 	db = string(kb);
 	query = string(q);
+	originalQuery = string(q);
 	dbId = kbId;
 	qId = queryId;
 	params = p;
@@ -28,10 +29,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 		}
 	}
 
-	if (params.empty())
-		runnable = true;
-	else {
-		runnable = false;
+	if (!params.empty()) {
 		for(vector<ExtParameter>::iterator it=params.begin(); it!=params.end(); it++) {
 			ExtParameter par = *it;
 			replacedParams.insert(make_pair(string(par.name2), false));
@@ -44,7 +42,7 @@ QueryItem::~QueryItem() {
 }
 
 bool QueryItem::runQuery() {
-	if(runnable)
+	if(!needsReplace())
 		rs = RDFQuery::execQuery(db, query, false);
 	else				// TODO: here external parameters of the query must be handled
 		return false;
@@ -106,8 +104,8 @@ bool QueryItem::needsReplace() {
 
 void QueryItem::resetExtParRepl() {
 	if (!params.empty()) {
-		for (map<string,bool>::iterator it=replacedParams.begin(); it!=replacedParams.end(); it++) {
+		for (map<string,bool>::iterator it=replacedParams.begin(); it!=replacedParams.end(); it++)
 			it->second = false;
-		}
+		query = originalQuery;
 	}
 }

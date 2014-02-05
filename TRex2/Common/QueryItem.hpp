@@ -20,12 +20,12 @@ class QueryItem {
 private:
 	std::string db;							// The KB db reference for quering
 	std::string query;						// The KB query
+	std::string originalQuery;				// The original query, in case substitution occurs
 	unsigned char * dbId;						// The KB db identifier for cache access
 	unsigned char * qId;						// The KB query identifier for cache access
 	std::vector<ExtParameter> params;			// The KB query optional external parameters
 	std::vector<std::string> fields;			// The list of fields that the query returns
 	Resultset rs;							// The KB query retrieved results set
-	bool runnable;							// Define if a query is ready to be run
 	std::map<std::string, bool> replacedParams;	// Tell if a parameter has been replaced or not
 
 public:
@@ -41,8 +41,6 @@ public:
 	int getField(char * name);
 
 	bool replaceExtParam(const std::string& pName, const std::string& pValue);
-
-	bool isRunnable() { return runnable; }
 
 	bool needsReplace();
 

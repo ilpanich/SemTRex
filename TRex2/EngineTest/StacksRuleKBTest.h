@@ -47,6 +47,8 @@ bool TestKBSequenceWithParamOnState();
 
 bool TestKBSequenceWithMultipleQueryFields();
 
+bool TestKBSequenceWithExtParams();
+
 }
 
 #endif
