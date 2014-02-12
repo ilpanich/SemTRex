@@ -126,6 +126,11 @@ private:
 	 */
 	void createAggregateRules(std::set<RulePkt *> &rules);
 
+	/**
+	 * Creates numRules rules for the "KB" case study
+	 */
+	void createKbRules(std::set<RulePkt *> &rules);
+
 };
 
 #endif

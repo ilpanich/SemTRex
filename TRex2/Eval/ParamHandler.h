@@ -30,6 +30,7 @@
 #define WIDTH_STUDY 4
 #define SELECTION_STUDY 5
 #define AGGREGATE_STUDY 6
+#define KB_STUDY 7
 
 /**
  * This class handles parameters during evaluations

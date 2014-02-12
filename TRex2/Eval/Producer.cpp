@@ -36,6 +36,7 @@ PubPkt * Producer::createPubPkt() {
 	if (caseStudy==RAIN_STUDY) return createRainPkt();
 	if (caseStudy==LENGTH_STUDY || caseStudy==WIDTH_STUDY) return createLengthPkt();
 	if (caseStudy==SELECTION_STUDY) return createSelectionPkt();
+	if (caseStudy==KB_STUDY) return createKbPkt();
 	int eventType = getRandomEventType();
 	Attribute attributes[paramHandler->getNumAttributes()];
 	initAttributes(attributes, paramHandler->getNumAttributes());
@@ -138,5 +139,37 @@ PubPkt * Producer::createSelectionPkt() {
 	attr[0].type = INT;
 	attr[0].intVal = (rand()%paramHandler->getNumRules())+1;
 	PubPkt *pkt = new PubPkt(type, attr, 1);
+	return pkt;
+}
+
+PubPkt * Producer::createKbPkt() {
+	int smokeType = (rand()%paramHandler->getNumDefinitions())+1;
+	int r = (rand()%100)+1;
+	PubPkt *pkt;
+	if (r<=paramHandler->getSmokePerc()) {
+		Attribute attr[2];
+		attr[0].name[0] = 'S';
+		attr[0].name[1] = '\0';
+		attr[0].type = INT;
+		attr[0].intVal = 1;
+		attr[1].name[0] = 'Q';
+		attr[1].name[1] = '1';
+		attr[1].name[2] = '\0';
+		attr[1].type = STRING;
+		strcpy(attr[1].stringVal, "RANDOM_VAL");	// RANDOM_VAL must be selected among several values extracted from the KB
+		pkt = new PubPkt(smokeType, attr, 1);
+	} else {
+		Attribute attr[2];
+		attr[0].name[0] = 'T';
+		attr[0].name[1] = '\0';
+		attr[0].type = INT;
+		attr[0].intVal = (rand()%100)+1;
+		attr[1].name[0] = 'Q';
+		attr[1].name[1] = '2';
+		attr[1].name[2] = '\0';
+		attr[1].type = STRING;
+		strcpy(attr[1].stringVal, "RANDOM_VAL");	// RANDOM_VAL must be selected among several values extracted from the KB
+		pkt = new PubPkt(smokeType+1000, attr, 1);
+	}
 	return pkt;
 }

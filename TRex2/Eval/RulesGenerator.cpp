@@ -349,3 +349,43 @@ void RulesGenerator::createAggregateRules(set<RulePkt *> &rules) {
 		rules.insert(pkt);
 	}
 }
+
+
+// Edit the following function to generate kb rules, no matter if they are non-sense, it is just a test case
+void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
+	int tempVal = 1;
+	// This is the id of the smoke event (we compute the id of the temp event as smokeId+1000).
+	// SmokeId varies in the range 1..numFireDefinitions
+	int smokeId = 0;
+	for (int i=1; i<=paramHandler->getNumRules(); i++) {
+		if (i%(paramHandler->getNumDefinitions())==0) smokeId=1;
+		else smokeId++;
+		// 100 different temperature (between 1 and 100)
+		if (tempVal++>=100) tempVal = 1;
+		Constraint tempConst[1];
+		tempConst[0].name[0] = 'T';
+		tempConst[0].name[1] = '\0';
+		tempConst[0].type = INT;
+		tempConst[0].intVal = tempVal;
+		tempConst[0].op = GT;
+		Constraint smokeConst[1];
+		smokeConst[0].name[0] = 'S';
+		smokeConst[0].name[1] = '\0';
+		smokeConst[0].type = INT;
+		smokeConst[0].intVal = 1;
+		smokeConst[0].op = EQ;
+		TimeMs win = getWindow();
+		// Packet Temp -> Smoke
+		RulePkt *pkt = new RulePkt(i==1);
+		pkt->addRootPredicate(smokeId, smokeConst, 1);
+		char attrName[3];
+		attrName[0] = 'T';
+		attrName[1] = '\0';
+		pkt->addTimeBasedAggregate(smokeId+1000, tempConst, 1, 0, win, attrName, AVG);
+		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
+		OpTree *opTree = new OpTree(new RulePktValueReference(0), INT);
+		ceTemplate->addAttribute(attrName, opTree);
+		pkt->setCompositeEventTemplate(ceTemplate);
+		rules.insert(pkt);
+	}
+}

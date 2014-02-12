@@ -87,6 +87,7 @@ void trex_testing::runEval() {
 		runNumProcEach(seed, paramHandler, resultListener);
 		runSelection(seed, paramHandler, resultListener);
 		runAggregate(seed, paramHandler, resultListener);
+		runAggregate(seed, paramHandler, resultListener);
 	}
 
 	delete resultListener;
@@ -1403,6 +1404,62 @@ void runAggregate(int seed, ParamHandler *paramHandler, EvalResultListener *resu
 	getPercTimeFile(minTimeFile, name, seed);
 	paramHandler->setDefaultParameters();
 	paramHandler->setCaseStudy(AGGREGATE_STUDY);
+	paramHandler->setNumRules(1000);
+	paramHandler->setPubNum(10000);
+
+	paramHandler->setEachPerc(0);
+	paramHandler->setFirstPerc(0);
+	paramHandler->setLastPerc(100);
+
+	paramHandler->setNumProc(5);
+
+	int maxMessagesPerSecond = 10000;
+	int minMessagesPerSecond = 1000;
+	int tick = 1000;
+
+	for (int s=minMessagesPerSecond; s<=maxMessagesPerSecond; s+=tick) {
+		paramHandler->setSleepTime(1000000/s);
+		for (int i=10; i<=90; i+=40) {
+			srand(seed);
+			cout << endl << "* Msg/s -> " << s << " | Smoke percentage -> " << i << endl;
+			paramHandler->setSmokePerc(i);
+			EvaluationRunner runner = EvaluationRunner(paramHandler, resultListener);
+			resultListener->reset();
+			int dropped = runner.startEval();
+			double duration = ((double) paramHandler->getPubNum()*paramHandler->getSleepTime())/1000000.00;
+			resultListener->printToFile(s, throughputFile.data(), duration, (i==10 && s!=minMessagesPerSecond), (i==10));
+			resultListener->printMeanProcTime(s, meanTimeFile.data(), (i==10 && s!=minMessagesPerSecond), (i==10));
+			resultListener->printMinProcTime(s, minTimeFile.data(), (i==10 && s!=minMessagesPerSecond), (i==10));
+			resultListener->printMaxProcTime(s, maxTimeFile.data(), (i==10 && s!=minMessagesPerSecond), (i==10));
+			resultListener->printPercProcTime(s, percTimeFile.data(), (i==10 && s!=minMessagesPerSecond), (i==10));
+			ofstream file;
+			file.open(droppedFile.data(), ios::app);
+			if (i==10) {
+				file << s << "\t" << (dropped*100/paramHandler->getPubNum()) << "\t";
+			}
+			else if (i<90) {
+				file << (dropped*100/paramHandler->getPubNum()) << "\t";
+			}
+			else {
+				file << (dropped*100/paramHandler->getPubNum()) << "\n";
+			}
+			file.close();
+		}
+	}
+}
+
+// Kb Test Case
+void runKb(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener) {
+	string name = "TRex2_KnowledgeBase";
+	string throughputFile, droppedFile, minTimeFile, maxTimeFile, meanTimeFile, percTimeFile;
+	getThroughputFile(throughputFile, name, seed);
+	getDroppedFile(droppedFile, name, seed);
+	getMinTimeFile(minTimeFile, name, seed);
+	getMaxTimeFile(minTimeFile, name, seed);
+	getMeanTimeFile(minTimeFile, name, seed);
+	getPercTimeFile(minTimeFile, name, seed);
+	paramHandler->setDefaultParameters();
+	paramHandler->setCaseStudy(KB_STUDY);
 	paramHandler->setNumRules(1000);
 	paramHandler->setPubNum(10000);
 
