@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="makeJars" name="TRex-Client-JavaLib">
+  <target name="init">
+    <mkdir dir="bin"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="bin"/>
+  </target>
+
+  <target name="cleanAll">
+    <delete dir="bin"/>
+    <delete dir="doc"/>
+    <delete file="TRex-Client-JavaLib.jar"/>
+    <delete file="TRex-Client-JavaEx.jar"/>
+  </target>
+
+  <target depends="init" name="build">
+    <javac destdir="bin" includeantruntime="false">
+      <src path="src"/>
+      <classpath path="bin"/>
+    </javac>
+  </target>
+
+  <target depends="build" name="makeLibJar">
+    <jar destfile="TRex-Client-JavaLib.jar" basedir="bin" excludes="polimi/trex/client/examples/**"/>
+  </target>
+
+  <target depends="build" name="makeExJar">
+    <jar destfile="TRex-Client-JavaEx.jar" basedir="bin">
+      <manifest>
+	<attribute name="Built-By" value="${user.name}"/>
+	<attribute name="Main-Class" value="polimi.trex.client.examples.CommandLineClient"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="makeJars" depends="makeLibJar, makeExJar" description="create all jars">
+  </target>
+
+  <target name="doc" description="create documentation">
+    <javadoc sourcepath="src"
+           packagenames="polimi.trex.*"
+	   excludepackagenames="polimi.trex.client.examples.*"
+           destdir="doc"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="${ant.project.name} API"
+	   additionalparam="-notimestamp" />
+  </target>
+
+  <target name="deploy" depends="makeJars, doc" description="create and deploy jars and doc, cleaning up at the end (for GreenMove only)">
+    <copy file="TRex-Client-JavaLib.jar" tofile="../../lib/TRexClient-JavaLib.jar"/>
+    <copy file="TRex-Client-JavaEx.jar" tofile="../../TRexClient-JavaEx.jar"/>
+    <delete dir="../../lib/TRex-Client-JavaLib/doc"/>
+    <mkdir dir="../../lib/TRex-Client-JavaLib/doc"/>
+    <copy includeemptydirs="false" todir="../../lib/TRex-Client-JavaLib/doc">
+      <fileset dir="doc"/>
+    </copy>
+    <delete file="../../lib/TRexClient-JavaLib-Javadoc.zip"/>
+    <zip destfile="../../lib/TRexClient-JavaLib-Javadoc.zip" basedir="." includes="doc/**"/>
+    <delete dir="bin"/>
+    <delete dir="doc"/>
+    <delete file="TRex-Client-JavaLib.jar"/>
+    <delete file="TRex-Client-JavaEx.jar"/>
+  </target>
+</project>
