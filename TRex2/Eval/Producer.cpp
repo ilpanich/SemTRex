@@ -145,6 +145,10 @@ PubPkt * Producer::createSelectionPkt() {
 PubPkt * Producer::createKbPkt() {
 	int smokeType = (rand()%paramHandler->getNumDefinitions())+1;
 	int r = (rand()%100)+1;
+	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
+	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
+	int n = rand() % 79;
+	int c = rand() % 5;
 	PubPkt *pkt;
 	if (r<=paramHandler->getSmokePerc()) {
 		Attribute attr[2];
@@ -156,8 +160,13 @@ PubPkt * Producer::createKbPkt() {
 		attr[1].name[1] = '1';
 		attr[1].name[2] = '\0';
 		attr[1].type = STRING;
-		strcpy(attr[1].stringVal, "RANDOM_VAL");	// RANDOM_VAL must be selected among several values extracted from the KB
-		pkt = new PubPkt(smokeType, attr, 1);
+		strcpy(attr[1].stringVal, names[n].c_str());
+		attr[2].name[0] = 'Q';
+		attr[2].name[1] = '2';
+		attr[2].name[2] = '\0';
+		attr[2].type = STRING;
+		strcpy(attr[2].stringVal, cities[c].c_str());
+		pkt = new PubPkt(smokeType, attr, 3);
 	} else {
 		Attribute attr[2];
 		attr[0].name[0] = 'T';
@@ -168,8 +177,13 @@ PubPkt * Producer::createKbPkt() {
 		attr[1].name[1] = '2';
 		attr[1].name[2] = '\0';
 		attr[1].type = STRING;
-		strcpy(attr[1].stringVal, "RANDOM_VAL");	// RANDOM_VAL must be selected among several values extracted from the KB
-		pkt = new PubPkt(smokeType+1000, attr, 1);
+		strcpy(attr[1].stringVal, names[n].c_str());
+		attr[2].name[0] = 'Q';
+		attr[2].name[1] = '2';
+		attr[2].name[2] = '\0';
+		attr[2].type = STRING;
+		strcpy(attr[2].stringVal, cities[c].c_str());
+		pkt = new PubPkt(smokeType+1000, attr, 3);
 	}
 	return pkt;
 }
