@@ -150,40 +150,30 @@ PubPkt * Producer::createKbPkt() {
 	int n = rand() % 79;
 	int c = rand() % 5;
 	PubPkt *pkt;
-	if (r<=paramHandler->getSmokePerc()) {
-		Attribute attr[2];
-		attr[0].name[0] = 'S';
-		attr[0].name[1] = '\0';
-		attr[0].type = INT;
-		attr[0].intVal = 1;
-		attr[1].name[0] = 'Q';
-		attr[1].name[1] = '1';
-		attr[1].name[2] = '\0';
-		attr[1].type = STRING;
-		strcpy(attr[1].stringVal, names[n].c_str());
-		attr[2].name[0] = 'Q';
-		attr[2].name[1] = '2';
-		attr[2].name[2] = '\0';
-		attr[2].type = STRING;
-		strcpy(attr[2].stringVal, cities[c].c_str());
-		pkt = new PubPkt(smokeType, attr, 3);
-	} else {
-		Attribute attr[2];
-		attr[0].name[0] = 'T';
-		attr[0].name[1] = '\0';
-		attr[0].type = INT;
-		attr[0].intVal = (rand()%100)+1;
-		attr[1].name[0] = 'Q';
-		attr[1].name[1] = '2';
-		attr[1].name[2] = '\0';
-		attr[1].type = STRING;
-		strcpy(attr[1].stringVal, names[n].c_str());
-		attr[2].name[0] = 'Q';
-		attr[2].name[1] = '2';
-		attr[2].name[2] = '\0';
-		attr[2].type = STRING;
-		strcpy(attr[2].stringVal, cities[c].c_str());
-		pkt = new PubPkt(smokeType+1000, attr, 3);
-	}
+	Attribute attr[4];
+	attr[0].name[0] = 'S';
+	attr[0].name[1] = '\0';
+	attr[0].type = INT;
+	attr[0].intVal = 1;
+	attr[1].name[0] = 'n';
+	attr[1].name[1] = 'a';
+	attr[1].name[2] = 'm';
+	attr[1].name[3] = 'e';
+	attr[1].name[4] = '\0';
+	attr[1].type = STRING;
+	strcpy(attr[1].stringVal, names[n].c_str());
+	attr[2].name[0] = 'c';
+	attr[2].name[1] = 'i';
+	attr[2].name[2] = 't';
+	attr[2].name[3] = 'y';
+	attr[2].name[4] = '\0';
+	attr[2].type = STRING;
+	strcpy(attr[2].stringVal, cities[c].c_str());
+	attr[3].name[0] = 'T';
+	attr[3].name[1] = '\0';
+	attr[3].type = INT;
+	attr[3].intVal = (rand()%100)+1;
+	pkt = new PubPkt(smokeType, attr, 4);
+
 	return pkt;
 }

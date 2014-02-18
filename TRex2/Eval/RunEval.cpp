@@ -53,6 +53,7 @@ void runNumProcLast(int seed, ParamHandler *paramHandler, EvalResultListener *re
 void runNumProcEach(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 void runSelection(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 void runAggregate(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
+void runKb(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 
 void trex_testing::runEval() {
 	// How many runs?

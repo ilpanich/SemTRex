@@ -357,6 +357,13 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 	// This is the id of the smoke event (we compute the id of the temp event as smokeId+1000).
 	// SmokeId varies in the range 1..numFireDefinitions
 	int smokeId = 0;
+	string queries[] = {"select ?name where { ?p <isCalled> ?name }", "select ?city where { ?p <bornInLocation> ?city }",
+			"select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }",
+			"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> &city }",
+			"select ?city where { ?p <isCalled> &name. ?p <bornInLocation> ?city }",
+			"select ?name ?city where { ?p <isCalled> &name. ?p <bornInLocation> &city }"};
+	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
+	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	for (int i=1; i<=paramHandler->getNumRules(); i++) {
 		if (i%(paramHandler->getNumDefinitions())==0) smokeId=1;
 		else smokeId++;
@@ -378,13 +385,280 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		// Packet Temp -> Smoke
 		RulePkt *pkt = new RulePkt(i==1);
 		pkt->addRootPredicate(smokeId, smokeConst, 1);
-		char attrName[3];
-		attrName[0] = 'T';
-		attrName[1] = '\0';
-		pkt->addTimeBasedAggregate(smokeId+1000, tempConst, 1, 0, win, attrName, AVG);
+		int q = rand() % 10;
+		if (q == 0) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'n';
+			param2name[2] = 'a';
+			param2name[3] = 'm';
+			param2name[4] = 'e';
+			param2name[5] = '\0';
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+		}
+		if (q == 1) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'c';
+			param1name[1] = 'i';
+			param1name[2] = 't';
+			param1name[3] = 'y';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'c';
+			param2name[2] = 'i';
+			param2name[3] = 't';
+			param2name[4] = 'y';
+			param2name[5] = '\0';
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+		}
+		if (q == 2) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			char param1name[10];
+			char param2name[12];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = ',';
+			param1name[5] = 'c';
+			param1name[6] = 'i';
+			param1name[7] = 't';
+			param1name[8] = 'y';
+			param1name[9] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'n';
+			param2name[2] = 'a';
+			param2name[3] = 'm';
+			param2name[4] = 'e';
+			param2name[5] = ',';
+			param2name[6] = '?';
+			param2name[7] = 'c';
+			param2name[8] = 'i';
+			param2name[9] = 't';
+			param2name[10] = 'y';
+			param2name[11] = '\0';
+
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+		}
+		if(q == 3) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			ExtParameter * ep;
+			char ext_param1name[5];
+			char ext_param2name[6];
+			ext_param1name[0] = 'c';
+			ext_param1name[1] = 'i';
+			ext_param1name[2] = 't';
+			ext_param1name[3] = 'y';
+			ext_param1name[4] = '\0';
+
+			ext_param2name[0] = '&';
+			ext_param2name[1] = 'c';
+			ext_param2name[2] = 'i';
+			ext_param2name[3] = 't';
+			ext_param2name[4] = 'y';
+			ext_param2name[5] = '\0';
+			ep->evIndex1 = 1;
+			ep->evIndex2 = 0;
+			strcpy(ep->name1, ext_param1name);
+			strcpy(ep->name2, ext_param2name);
+			ep->seqId1 = 0;
+			ep->seqId2 = 0;
+
+			pkt->addExtParamToKBPred(ep);
+
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'c';
+			param1name[1] = 'i';
+			param1name[2] = 't';
+			param1name[3] = 'y';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'c';
+			param2name[2] = 'i';
+			param2name[3] = 't';
+			param2name[4] = 'y';
+			param2name[5] = '\0';
+
+			pkt->addParamerForQueryKB(0,param1name,0,param2name);
+
+		}
+		if(q == 4) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			ExtParameter * ep;
+			char ext_param1name[5];
+			char ext_param2name[6];
+			ext_param1name[0] = 'n';
+			ext_param1name[1] = 'a';
+			ext_param1name[2] = 'm';
+			ext_param1name[3] = 'e';
+			ext_param1name[4] = '\0';
+
+			ext_param2name[0] = '&';
+			ext_param2name[1] = 'n';
+			ext_param2name[2] = 'a';
+			ext_param2name[3] = 'm';
+			ext_param2name[4] = 'e';
+			ext_param2name[5] = '\0';
+			ep->evIndex1 = 1;
+			ep->evIndex2 = 0;
+			strcpy(ep->name1, ext_param1name);
+			strcpy(ep->name2, ext_param2name);
+			ep->seqId1 = 0;
+			ep->seqId2 = 0;
+
+			pkt->addExtParamToKBPred(ep);
+
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'c';
+			param1name[1] = 'i';
+			param1name[2] = 't';
+			param1name[3] = 'y';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'c';
+			param2name[2] = 'i';
+			param2name[3] = 't';
+			param2name[4] = 'y';
+			param2name[5] = '\0';
+
+			pkt->addParamerForQueryKB(0,param1name,0,param2name);
+
+		}
+		if(q == 5) {
+			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
+			ExtParameter * ep;
+			char ext_param1name[5];
+			char ext_param2name[6];
+			ext_param1name[0] = 'c';
+			ext_param1name[1] = 'i';
+			ext_param1name[2] = 't';
+			ext_param1name[3] = 'y';
+			ext_param1name[4] = '\0';
+
+			ext_param2name[0] = '&';
+			ext_param2name[1] = 'c';
+			ext_param2name[2] = 'i';
+			ext_param2name[3] = 't';
+			ext_param2name[4] = 'y';
+			ext_param2name[5] = '\0';
+			ep->evIndex1 = 1;
+			ep->evIndex2 = 0;
+			strcpy(ep->name1, ext_param1name);
+			strcpy(ep->name2, ext_param2name);
+			ep->seqId1 = 0;
+			ep->seqId2 = 0;
+
+			pkt->addExtParamToKBPred(ep);
+			ext_param1name[0] = 'c';
+			ext_param1name[1] = 'i';
+			ext_param1name[2] = 't';
+			ext_param1name[3] = 'y';
+			ext_param1name[4] = '\0';
+
+			ext_param2name[0] = '&';
+			ext_param2name[1] = 'c';
+			ext_param2name[2] = 'i';
+			ext_param2name[3] = 't';
+			ext_param2name[4] = 'y';
+			ext_param2name[5] = '\0';
+			ep->evIndex1 = 1;
+			ep->evIndex2 = 0;
+			strcpy(ep->name1, ext_param1name);
+			strcpy(ep->name2, ext_param2name);
+			ep->seqId1 = 0;
+			ep->seqId2 = 0;
+
+			pkt->addExtParamToKBPred(ep);
+
+			char param1name[10];
+			char param2name[12];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = ',';
+			param1name[5] = 'c';
+			param1name[6] = 'i';
+			param1name[7] = 't';
+			param1name[8] = 'y';
+			param1name[9] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'n';
+			param2name[2] = 'a';
+			param2name[3] = 'm';
+			param2name[4] = 'e';
+			param2name[5] = ',';
+			param2name[6] = '?';
+			param2name[7] = 'c';
+			param2name[8] = 'i';
+			param2name[9] = 't';
+			param2name[10] = 'y';
+			param2name[11] = '\0';
+
+			pkt->addParamerForQueryKB(0,param1name,0,param2name);
+
+		}
+		if (q > 5) {
+			string query = "";
+			int n = rand() % 79;
+			int c = rand() % 5;
+			if (q % 2 == 0) {
+				query = "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> <" + cities[c] +"> }";
+				pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",query);
+				char param1name[5];
+				char param2name[6];
+				param1name[0] = 'n';
+				param1name[1] = 'a';
+				param1name[2] = 'm';
+				param1name[3] = 'e';
+				param1name[4] = '\0';
+
+				param2name[0] = '?';
+				param2name[1] = 'n';
+				param2name[2] = 'a';
+				param2name[3] = 'm';
+				param2name[4] = 'e';
+				param2name[5] = '\0';
+				pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+			} else {
+				query = "select ?city where { ?p <isCalled> <" + names[n] + ". ?p <bornInLocation> ?city }";
+				pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",query);
+				char param1name[5];
+				char param2name[6];
+				param1name[0] = 'c';
+				param1name[1] = 'i';
+				param1name[2] = 't';
+				param1name[3] = 'y';
+				param1name[4] = '\0';
+
+				param2name[0] = '?';
+				param2name[1] = 'c';
+				param2name[2] = 'i';
+				param2name[3] = 't';
+				param2name[4] = 'y';
+				param2name[5] = '\0';
+				pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+			}
+
+		}
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
-		OpTree *opTree = new OpTree(new RulePktValueReference(0), INT);
-		ceTemplate->addAttribute(attrName, opTree);
 		pkt->setCompositeEventTemplate(ceTemplate);
 		rules.insert(pkt);
 	}
