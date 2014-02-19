@@ -40,6 +40,7 @@ void RulesGenerator::createRulePkts(set<RulePkt *> &rules) {
 	else if (caseStudy==WIDTH_STUDY) createWidthRules(rules);
 	else if (caseStudy==SELECTION_STUDY) createSelectionRules(rules);
 	else if (caseStudy==AGGREGATE_STUDY) createAggregateRules(rules);
+	else if (caseStudy==KB_STUDY) createKbRules(rules);
 	else {
 		// Rules are randomly generated (synthetic workload)
 		for (int i=0; i<numRules; i++) {
@@ -369,22 +370,21 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		else smokeId++;
 		// 100 different temperature (between 1 and 100)
 		if (tempVal++>=100) tempVal = 1;
-		Constraint tempConst[1];
-		tempConst[0].name[0] = 'T';
-		tempConst[0].name[1] = '\0';
-		tempConst[0].type = INT;
-		tempConst[0].intVal = tempVal;
-		tempConst[0].op = GT;
-		Constraint smokeConst[1];
-		smokeConst[0].name[0] = 'S';
-		smokeConst[0].name[1] = '\0';
-		smokeConst[0].type = INT;
-		smokeConst[0].intVal = 1;
-		smokeConst[0].op = EQ;
+		Constraint constr[2];
+		constr[0].name[0] = 'T';
+		constr[0].name[1] = '\0';
+		constr[0].type = INT;
+		constr[0].intVal = tempVal;
+		constr[0].op = GT;
+		constr[1].name[0] = 'S';
+		constr[1].name[1] = '\0';
+		constr[1].type = INT;
+		constr[1].intVal = 15;
+		constr[1].op = GT;
 		TimeMs win = getWindow();
 		// Packet Temp -> Smoke
 		RulePkt *pkt = new RulePkt(i==1);
-		pkt->addRootPredicate(smokeId, smokeConst, 1);
+		pkt->addRootPredicate(smokeId, constr, 2);
 		int q = rand() % 10;
 		if (q == 0) {
 			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
@@ -454,7 +454,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		}
 		if(q == 3) {
 			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep;
+			ExtParameter * ep = new ExtParameter();
 			char ext_param1name[5];
 			char ext_param2name[6];
 			ext_param1name[0] = 'c';
@@ -469,7 +469,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 			ext_param2name[3] = 't';
 			ext_param2name[4] = 'y';
 			ext_param2name[5] = '\0';
-			ep->evIndex1 = 1;
+			ep->evIndex1 = 0;
 			ep->evIndex2 = 0;
 			strcpy(ep->name1, ext_param1name);
 			strcpy(ep->name2, ext_param2name);
@@ -498,7 +498,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		}
 		if(q == 4) {
 			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep;
+			ExtParameter * ep = new ExtParameter();
 			char ext_param1name[5];
 			char ext_param2name[6];
 			ext_param1name[0] = 'n';
@@ -513,7 +513,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 			ext_param2name[3] = 'm';
 			ext_param2name[4] = 'e';
 			ext_param2name[5] = '\0';
-			ep->evIndex1 = 1;
+			ep->evIndex1 = 0;
 			ep->evIndex2 = 0;
 			strcpy(ep->name1, ext_param1name);
 			strcpy(ep->name2, ext_param2name);
@@ -542,7 +542,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		}
 		if(q == 5) {
 			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep;
+			ExtParameter * ep = new ExtParameter();
 			char ext_param1name[5];
 			char ext_param2name[6];
 			ext_param1name[0] = 'c';
@@ -557,7 +557,7 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 			ext_param2name[3] = 't';
 			ext_param2name[4] = 'y';
 			ext_param2name[5] = '\0';
-			ep->evIndex1 = 1;
+			ep->evIndex1 = 0;
 			ep->evIndex2 = 0;
 			strcpy(ep->name1, ext_param1name);
 			strcpy(ep->name2, ext_param2name);

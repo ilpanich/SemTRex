@@ -64,6 +64,7 @@ void trex_testing::runEval() {
 
 	// What to run?
 	for (int seed=1; seed<=numRuns; ++seed) {
+		/*
 		runCoreLast(seed, paramHandler, resultListener);
 		runCoreEach(seed, paramHandler, resultListener);
 		runFireFirst(seed, paramHandler, resultListener);
@@ -88,7 +89,8 @@ void trex_testing::runEval() {
 		runNumProcEach(seed, paramHandler, resultListener);
 		runSelection(seed, paramHandler, resultListener);
 		runAggregate(seed, paramHandler, resultListener);
-		runAggregate(seed, paramHandler, resultListener);
+		*/
+		runKb(seed, paramHandler, resultListener);
 	}
 
 	delete resultListener;
@@ -1456,9 +1458,9 @@ void runKb(int seed, ParamHandler *paramHandler, EvalResultListener *resultListe
 	getThroughputFile(throughputFile, name, seed);
 	getDroppedFile(droppedFile, name, seed);
 	getMinTimeFile(minTimeFile, name, seed);
-	getMaxTimeFile(minTimeFile, name, seed);
-	getMeanTimeFile(minTimeFile, name, seed);
-	getPercTimeFile(minTimeFile, name, seed);
+	getMaxTimeFile(maxTimeFile, name, seed);
+	getMeanTimeFile(meanTimeFile, name, seed);
+	getPercTimeFile(percTimeFile, name, seed);
 	paramHandler->setDefaultParameters();
 	paramHandler->setCaseStudy(KB_STUDY);
 	paramHandler->setNumRules(1000);
