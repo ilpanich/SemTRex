@@ -1530,9 +1530,9 @@ void runParam(int seed, ParamHandler *paramHandler, EvalResultListener *resultLi
 	paramHandler->setNumDefinitions(100);
 	paramHandler->setNumProc(5);
 
-	int maxMessagesPerSecond = 3400;
-	int minMessagesPerSecond = 100;
-	int tick = 300;
+	int maxMessagesPerSecond = 10000;
+	int minMessagesPerSecond = 1000;
+	int tick = 1000;
 
 	int i = 2;
 
