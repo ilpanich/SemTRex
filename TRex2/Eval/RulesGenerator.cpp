@@ -682,7 +682,7 @@ void RulesGenerator::createParamRules(set<RulePkt *> &rules) {
 		TimeMs win = getWindow();
 		CompKind kind = getCompKind();
 		pkt->addPredicate(id*1000+1, constraint, 1, 0, win, kind);
-		pkt->addParameterBetweenStates(0, "Z", 1, "Z");
+		pkt->addParameterBetweenStates(id*1000, "Z", id*1000+1, "Z");
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
 		pkt->setCompositeEventTemplate(ceTemplate);
 		if (paramHandler->getConsuming()) pkt->addConsuming(1);
