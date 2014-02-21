@@ -1515,9 +1515,9 @@ void runParam(int seed, ParamHandler *paramHandler, EvalResultListener *resultLi
 	getThroughputFile(throughputFile, name, seed);
 	getDroppedFile(droppedFile, name, seed);
 	getMinTimeFile(minTimeFile, name, seed);
-	getMaxTimeFile(minTimeFile, name, seed);
-	getMeanTimeFile(minTimeFile, name, seed);
-	getPercTimeFile(minTimeFile, name, seed);
+	getMaxTimeFile(maxTimeFile, name, seed);
+	getMeanTimeFile(meanTimeFile, name, seed);
+	getPercTimeFile(percTimeFile, name, seed);
 	paramHandler->setDefaultParameters();
 	paramHandler->setCaseStudy(PARAM_STUDY);
 	paramHandler->setNumRules(1000);
