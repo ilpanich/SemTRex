@@ -54,6 +54,7 @@ void runNumProcEach(int seed, ParamHandler *paramHandler, EvalResultListener *re
 void runSelection(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 void runAggregate(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 void runKb(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
+void runParam(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener);
 
 void trex_testing::runEval() {
 	// How many runs?
@@ -90,6 +91,7 @@ void trex_testing::runEval() {
 		runSelection(seed, paramHandler, resultListener);
 		runAggregate(seed, paramHandler, resultListener);
 		*/
+		runParam(seed, paramHandler, resultListener);
 		runKb(seed, paramHandler, resultListener);
 	}
 
@@ -1506,3 +1508,60 @@ void runKb(int seed, ParamHandler *paramHandler, EvalResultListener *resultListe
 		}
 	}
 }
+
+void runParam(int seed, ParamHandler *paramHandler, EvalResultListener *resultListener) {
+	string name = "TRex2_Param";
+	string throughputFile, droppedFile, minTimeFile, maxTimeFile, meanTimeFile, percTimeFile;
+	getThroughputFile(throughputFile, name, seed);
+	getDroppedFile(droppedFile, name, seed);
+	getMinTimeFile(minTimeFile, name, seed);
+	getMaxTimeFile(minTimeFile, name, seed);
+	getMeanTimeFile(minTimeFile, name, seed);
+	getPercTimeFile(minTimeFile, name, seed);
+	paramHandler->setDefaultParameters();
+	paramHandler->setCaseStudy(PARAM_STUDY);
+	paramHandler->setNumRules(1000);
+	paramHandler->setPubNum(10000);
+
+	paramHandler->setEachPerc(100);
+	paramHandler->setFirstPerc(0);
+	paramHandler->setLastPerc(0);
+
+	paramHandler->setNumDefinitions(100);
+	paramHandler->setNumProc(5);
+
+	int maxMessagesPerSecond = 3400;
+	int minMessagesPerSecond = 100;
+	int tick = 300;
+
+	for (int s=minMessagesPerSecond; s<=maxMessagesPerSecond; s+=tick) {
+		paramHandler->setSleepTime(1000000/s);
+		for (int i=2; i<=5; i++) {
+			srand(seed);
+			cout << endl << "* Msg/s -> " << s << " | Number of states -> " << i << endl;
+			paramHandler->setNumRulePredicates(i);
+			EvaluationRunner runner = EvaluationRunner(paramHandler, resultListener);
+			resultListener->reset();
+			int dropped = runner.startEval();
+			double duration = ((double) paramHandler->getPubNum()*paramHandler->getSleepTime())/1000000.00;
+			resultListener->printToFile(s, throughputFile.data(), duration, (i==2 && s!=minMessagesPerSecond), (i==2));
+			resultListener->printMeanProcTime(s, meanTimeFile.data(), (i==2 && s!=minMessagesPerSecond), (i==2));
+			resultListener->printMinProcTime(s, minTimeFile.data(), (i==2 && s!=minMessagesPerSecond), (i==2));
+			resultListener->printMaxProcTime(s, maxTimeFile.data(), (i==2 && s!=minMessagesPerSecond), (i==2));
+			resultListener->printPercProcTime(s, percTimeFile.data(), (i==2 && s!=minMessagesPerSecond), (i==2));
+			ofstream file;
+			file.open(droppedFile.data(), ios::app);
+			if (i==2) {
+				file << s << "\t" << (dropped*100/paramHandler->getPubNum()) << "\t";
+			}
+			else if (i<5) {
+				file << (dropped*100/paramHandler->getPubNum()) << "\t";
+			}
+			else {
+				file << (dropped*100/paramHandler->getPubNum()) << "\n";
+			}
+			file.close();
+		}
+	}
+}
+

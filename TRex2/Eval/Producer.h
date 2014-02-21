@@ -81,9 +81,15 @@ public:
 	PubPkt * createSelectionPkt();
 
 	/**
-	* Creates a packet for the selection test case
+	* Creates a packet for the kb test case
 	*/
 	PubPkt * createKbPkt();
+
+	/**
+	 * Creates a packet for the param test case
+	 */
+
+	PubPkt * createParamPkt();
 
 private:
 	ParamHandler *paramHandler;		// Handler of parameters

@@ -37,6 +37,7 @@ PubPkt * Producer::createPubPkt() {
 	if (caseStudy==LENGTH_STUDY || caseStudy==WIDTH_STUDY) return createLengthPkt();
 	if (caseStudy==SELECTION_STUDY) return createSelectionPkt();
 	if (caseStudy==KB_STUDY) return createKbPkt();
+	if (caseStudy==PARAM_STUDY) return createParamPkt();
 	int eventType = getRandomEventType();
 	Attribute attributes[paramHandler->getNumAttributes()];
 	initAttributes(attributes, paramHandler->getNumAttributes());
@@ -174,5 +175,21 @@ PubPkt * Producer::createKbPkt() {
 	attr[3].intVal = (rand()%100)+1;
 	pkt = new PubPkt(smokeType, attr, 4);
 
+	return pkt;
+}
+
+PubPkt * Producer::createParamPkt() {
+	int type = (rand()%paramHandler->getNumDefinitions())+1;
+	int state = rand()%paramHandler->getNumRulePredicates();
+	Attribute attr[2];
+	attr[0].name[0] = 'V';
+	attr[0].name[1] = '\0';
+	attr[0].type = INT;
+	attr[0].intVal = 1;
+	attr[1].name[0] = 'Z';
+	attr[1].name[1] = '\0';
+	attr[1].type = INT;
+	attr[1].intVal = rand()%100+1;
+	PubPkt *pkt = new PubPkt(type*1000+state, attr, 2);
 	return pkt;
 }

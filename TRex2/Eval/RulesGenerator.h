@@ -131,6 +131,11 @@ private:
 	 */
 	void createKbRules(std::set<RulePkt *> &rules);
 
+	/**
+	 * Creates a basic selection rule evaluation
+	 */
+	void createParamRules(std::set<RulePkt *> &rules);
+
 };
 
 #endif

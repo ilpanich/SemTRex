@@ -41,6 +41,7 @@ void RulesGenerator::createRulePkts(set<RulePkt *> &rules) {
 	else if (caseStudy==SELECTION_STUDY) createSelectionRules(rules);
 	else if (caseStudy==AGGREGATE_STUDY) createAggregateRules(rules);
 	else if (caseStudy==KB_STUDY) createKbRules(rules);
+	else if (caseStudy==PARAM_STUDY) createParamRules(rules);
 	else {
 		// Rules are randomly generated (synthetic workload)
 		for (int i=0; i<numRules; i++) {
@@ -660,6 +661,31 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 		}
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
 		pkt->setCompositeEventTemplate(ceTemplate);
+		rules.insert(pkt);
+	}
+}
+
+void RulesGenerator::createParamRules(set<RulePkt *> &rules) {
+	// This is the first part of the id of the event: it is multiplied by 1000 and added to the state identifier
+	int id = 1;
+	for (int i=1; i<=paramHandler->getNumRules(); i++) {
+		if (i%(paramHandler->getNumDefinitions())==0) id=1;
+		else id++;
+		RulePkt *pkt = new RulePkt(i==1);
+		Constraint constraint[1];
+		constraint[0].name[0] = 'V';
+		constraint[0].name[1] = '\0';
+		constraint[0].type = INT;
+		constraint[0].intVal = 1;
+		constraint[0].op = EQ;
+		pkt->addRootPredicate(id*1000, constraint, 1);
+		TimeMs win = getWindow();
+		CompKind kind = getCompKind();
+		pkt->addPredicate(id*1000+1, constraint, 1, 0, win, kind);
+		pkt->addParameterBetweenStates(0, "Z", 1, "Z");
+		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
+		pkt->setCompositeEventTemplate(ceTemplate);
+		if (paramHandler->getConsuming()) pkt->addConsuming(1);
 		rules.insert(pkt);
 	}
 }
