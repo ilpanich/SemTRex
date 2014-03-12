@@ -355,6 +355,7 @@ void RulesGenerator::createAggregateRules(set<RulePkt *> &rules) {
 
 // Edit the following function to generate kb rules, no matter if they are non-sense, it is just a test case
 void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
+	int id = 1;
 	int tempVal = 1;
 	// This is the id of the smoke event (we compute the id of the temp event as smokeId+1000).
 	// SmokeId varies in the range 1..numFireDefinitions
@@ -367,25 +368,20 @@ void RulesGenerator::createKbRules(set<RulePkt *> &rules) {
 	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	for (int i=1; i<=paramHandler->getNumRules(); i++) {
-		if (i%(paramHandler->getNumDefinitions())==0) smokeId=1;
-		else smokeId++;
-		// 100 different temperature (between 1 and 100)
-		if (tempVal++>=100) tempVal = 1;
-		Constraint constr[2];
-		constr[0].name[0] = 'T';
-		constr[0].name[1] = '\0';
-		constr[0].type = INT;
-		constr[0].intVal = tempVal;
-		constr[0].op = GT;
-		constr[1].name[0] = 'S';
-		constr[1].name[1] = '\0';
-		constr[1].type = INT;
-		constr[1].intVal = 15;
-		constr[1].op = GT;
-		TimeMs win = getWindow();
-		// Packet Temp -> Smoke
+		if (i%(paramHandler->getNumDefinitions())==0) id=1;
+		else id++;
 		RulePkt *pkt = new RulePkt(i==1);
-		pkt->addRootPredicate(smokeId, constr, 2);
+		Constraint constraint[1];
+		constraint[0].name[0] = 'V';
+		constraint[0].name[1] = '\0';
+		constraint[0].type = INT;
+		constraint[0].intVal = 1;
+		constraint[0].op = EQ;
+		pkt->addRootPredicate(id*1000, constraint, 1);
+		TimeMs win = getWindow();
+		CompKind kind = getCompKind();
+		pkt->addPredicate(id*1000+1, constraint, 1, 0, win, kind);
+		pkt->addParameterBetweenStates(id*1000, "Z", id*1000+1, "Z");
 		int q = rand() % 10;
 		if (q == 0) {
 			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
