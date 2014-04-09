@@ -101,3 +101,12 @@ void EvalResultListener::printPercProcTime(int label, char const *fileName, bool
 	file << percentile << "\t";
 	file.close();
 }
+
+void EvalResultListener::printDetectedEvents(int label, char const *fileName, bool newLine, bool printLabel) {
+	ofstream file;
+	file.open(fileName, ios::app);
+	if (newLine) file << "\n";
+	if (printLabel) file << label << "\t";
+	file << detectedEvents << "\t";
+	file.close();
+}

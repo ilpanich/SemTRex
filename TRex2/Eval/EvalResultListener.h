@@ -94,6 +94,15 @@ public:
 	 */
 	void printPercProcTime(int label, char const *fileName, bool newLine, bool printLabel);
 
+	/**
+	 * Prints the number of events detected so far.
+	 * The label is written on the left of the written result (for faster processing).
+	 * If newLine, starts writing on a new line.
+	 * If printLabel, prints label before writing.
+	 */
+	void printDetectedEvents(int label, char const *fileName, bool newLine, bool printLabel);
+
+
 private:
 	std::list<double> times;	// List of all processing times
 	long detectedEvents;			// Events detected so far

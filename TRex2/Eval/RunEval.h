@@ -28,6 +28,11 @@ namespace trex_testing {
  */
 void runEval();
 
+/**
+ * Starts the basic evaluation
+ */
+void runBasicEval();
+
 } // end namespace trex_testing
 
 #endif

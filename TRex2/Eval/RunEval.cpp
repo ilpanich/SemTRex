@@ -21,6 +21,7 @@
 #include <string>
 #include <sstream>
 #include "RunEval.h"
+#include "BasicEval.h"
 #include "RunEvalCommon.h"
 #include "EvaluationRunner.h"
 #include "EvalResultListener.h"
@@ -97,6 +98,12 @@ void trex_testing::runEval() {
 
 	delete resultListener;
 	delete paramHandler;
+}
+
+// Run Basic Eval
+void trex_testing::runBasicEval() {
+	BasicEval * b = new BasicEval();
+	b->startBasicEval();
 }
 
 // Core Test Case (Last)

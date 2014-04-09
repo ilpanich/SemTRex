@@ -4,6 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../Eval/BasicEval.cpp \
 ../Eval/EvalResultListener.cpp \
 ../Eval/EvaluationRunner.cpp \
 ../Eval/ParamHandler.cpp \
@@ -13,6 +14,7 @@ CPP_SRCS += \
 ../Eval/RunEvalCommon.cpp 
 
 OBJS += \
+./Eval/BasicEval.o \
 ./Eval/EvalResultListener.o \
 ./Eval/EvaluationRunner.o \
 ./Eval/ParamHandler.o \
@@ -22,6 +24,7 @@ OBJS += \
 ./Eval/RunEvalCommon.o 
 
 CPP_DEPS += \
+./Eval/BasicEval.d \
 ./Eval/EvalResultListener.d \
 ./Eval/EvaluationRunner.d \
 ./Eval/ParamHandler.d \

@@ -40,6 +40,7 @@ void usage() {
 int main(int argc, char* argv[]) {
 	if (argc==2 && strcmp(argv[1], "-test")==0) runTest();
 	else if (argc==2 && strcmp(argv[1], "-eval")==0) runEval();
+	else if (argc==2 && strcmp(argv[1], "-beval")==0) runBasicEval();
 	else if (argc==2 && strcmp(argv[1], "-commTest")==0) launchEchoClient();
 	else if (argc>=2 && argc<=3 && strcmp(argv[1], "-server")==0) {
 		int port = 9999;
