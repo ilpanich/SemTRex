@@ -24,7 +24,7 @@
 using namespace std;
 
 BasicEval::BasicEval() {
-	engine = new TRexEngine(5);
+	engine = new TRexEngine(2);
 	resultListener = new EvalResultListener;
 
 	set<RulePkt *> rulePkts;
@@ -43,321 +43,13 @@ BasicEval::~BasicEval() {
 
 	delete engine;
 }
-/*
-void createKbRules(set<RulePkt *> &rules) {
-	int id = 1;
-	int tempVal = 1;
-	// This is the id of the smoke event (we compute the id of the temp event as smokeId+1000).
-	// SmokeId varies in the range 1..numFireDefinitions
-	int smokeId = 0;
-	string queries[] = {"select ?name where { ?p <isCalled> ?name }", "select ?city where { ?p <bornInLocation> ?city }",
-			"select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }",
-			"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> &city }",
-			"select ?city where { ?p <isCalled> &name. ?p <bornInLocation> ?city }",
-			"select ?name ?city where { ?p <isCalled> &name. ?p <bornInLocation> &city }"};
-	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
-	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-	for (int i=1; i<=paramHandler->getNumRules(); i++) {
-		if (i%(paramHandler->getNumDefinitions())==0) id=1;
-		else id++;
-		RulePkt *pkt = new RulePkt(i==1);
-		Constraint constraint[1];
-		constraint[0].name[0] = 'V';
-		constraint[0].name[1] = '\0';
-		constraint[0].type = INT;
-		constraint[0].intVal = 1;
-		constraint[0].op = EQ;
-		pkt->addRootPredicate(id*1000, constraint, 1);
-		TimeMs win = getWindow();
-		CompKind kind = getCompKind();
-		pkt->addPredicate(id*1000+1, constraint, 1, 0, win, kind);
-		pkt->addParameterBetweenStates(id*1000, "Z", id*1000+1, "Z");
-		int q = rand() % 10;
-		if (q == 0) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			char param1name[5];
-			char param2name[6];
-			param1name[0] = 'n';
-			param1name[1] = 'a';
-			param1name[2] = 'm';
-			param1name[3] = 'e';
-			param1name[4] = '\0';
 
-			param2name[0] = '?';
-			param2name[1] = 'n';
-			param2name[2] = 'a';
-			param2name[3] = 'm';
-			param2name[4] = 'e';
-			param2name[5] = '\0';
-			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
-		}
-		if (q == 1) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			char param1name[5];
-			char param2name[6];
-			param1name[0] = 'c';
-			param1name[1] = 'i';
-			param1name[2] = 't';
-			param1name[3] = 'y';
-			param1name[4] = '\0';
-
-			param2name[0] = '?';
-			param2name[1] = 'c';
-			param2name[2] = 'i';
-			param2name[3] = 't';
-			param2name[4] = 'y';
-			param2name[5] = '\0';
-			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
-		}
-		if (q == 2) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			char param1name[10];
-			char param2name[12];
-			param1name[0] = 'n';
-			param1name[1] = 'a';
-			param1name[2] = 'm';
-			param1name[3] = 'e';
-			param1name[4] = ',';
-			param1name[5] = 'c';
-			param1name[6] = 'i';
-			param1name[7] = 't';
-			param1name[8] = 'y';
-			param1name[9] = '\0';
-
-			param2name[0] = '?';
-			param2name[1] = 'n';
-			param2name[2] = 'a';
-			param2name[3] = 'm';
-			param2name[4] = 'e';
-			param2name[5] = ',';
-			param2name[6] = '?';
-			param2name[7] = 'c';
-			param2name[8] = 'i';
-			param2name[9] = 't';
-			param2name[10] = 'y';
-			param2name[11] = '\0';
-
-			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
-		}
-		if(q == 3) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep = new ExtParameter();
-			char ext_param1name[5];
-			char ext_param2name[6];
-			ext_param1name[0] = 'c';
-			ext_param1name[1] = 'i';
-			ext_param1name[2] = 't';
-			ext_param1name[3] = 'y';
-			ext_param1name[4] = '\0';
-
-			ext_param2name[0] = '&';
-			ext_param2name[1] = 'c';
-			ext_param2name[2] = 'i';
-			ext_param2name[3] = 't';
-			ext_param2name[4] = 'y';
-			ext_param2name[5] = '\0';
-			ep->evIndex1 = 0;
-			ep->evIndex2 = 0;
-			strcpy(ep->name1, ext_param1name);
-			strcpy(ep->name2, ext_param2name);
-			ep->seqId1 = 0;
-			ep->seqId2 = 0;
-
-			pkt->addExtParamToKBPred(ep);
-
-			char param1name[5];
-			char param2name[6];
-			param1name[0] = 'c';
-			param1name[1] = 'i';
-			param1name[2] = 't';
-			param1name[3] = 'y';
-			param1name[4] = '\0';
-
-			param2name[0] = '?';
-			param2name[1] = 'c';
-			param2name[2] = 'i';
-			param2name[3] = 't';
-			param2name[4] = 'y';
-			param2name[5] = '\0';
-
-			pkt->addParamerForQueryKB(0,param1name,0,param2name);
-
-		}
-		if(q == 4) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep = new ExtParameter();
-			char ext_param1name[5];
-			char ext_param2name[6];
-			ext_param1name[0] = 'n';
-			ext_param1name[1] = 'a';
-			ext_param1name[2] = 'm';
-			ext_param1name[3] = 'e';
-			ext_param1name[4] = '\0';
-
-			ext_param2name[0] = '&';
-			ext_param2name[1] = 'n';
-			ext_param2name[2] = 'a';
-			ext_param2name[3] = 'm';
-			ext_param2name[4] = 'e';
-			ext_param2name[5] = '\0';
-			ep->evIndex1 = 0;
-			ep->evIndex2 = 0;
-			strcpy(ep->name1, ext_param1name);
-			strcpy(ep->name2, ext_param2name);
-			ep->seqId1 = 0;
-			ep->seqId2 = 0;
-
-			pkt->addExtParamToKBPred(ep);
-
-			char param1name[5];
-			char param2name[6];
-			param1name[0] = 'c';
-			param1name[1] = 'i';
-			param1name[2] = 't';
-			param1name[3] = 'y';
-			param1name[4] = '\0';
-
-			param2name[0] = '?';
-			param2name[1] = 'c';
-			param2name[2] = 'i';
-			param2name[3] = 't';
-			param2name[4] = 'y';
-			param2name[5] = '\0';
-
-			pkt->addParamerForQueryKB(0,param1name,0,param2name);
-
-		}
-		if(q == 5) {
-			pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",queries[q]);
-			ExtParameter * ep = new ExtParameter();
-			char ext_param1name[5];
-			char ext_param2name[6];
-			ext_param1name[0] = 'c';
-			ext_param1name[1] = 'i';
-			ext_param1name[2] = 't';
-			ext_param1name[3] = 'y';
-			ext_param1name[4] = '\0';
-
-			ext_param2name[0] = '&';
-			ext_param2name[1] = 'c';
-			ext_param2name[2] = 'i';
-			ext_param2name[3] = 't';
-			ext_param2name[4] = 'y';
-			ext_param2name[5] = '\0';
-			ep->evIndex1 = 0;
-			ep->evIndex2 = 0;
-			strcpy(ep->name1, ext_param1name);
-			strcpy(ep->name2, ext_param2name);
-			ep->seqId1 = 0;
-			ep->seqId2 = 0;
-
-			pkt->addExtParamToKBPred(ep);
-			ext_param1name[0] = 'c';
-			ext_param1name[1] = 'i';
-			ext_param1name[2] = 't';
-			ext_param1name[3] = 'y';
-			ext_param1name[4] = '\0';
-
-			ext_param2name[0] = '&';
-			ext_param2name[1] = 'c';
-			ext_param2name[2] = 'i';
-			ext_param2name[3] = 't';
-			ext_param2name[4] = 'y';
-			ext_param2name[5] = '\0';
-			ep->evIndex1 = 1;
-			ep->evIndex2 = 0;
-			strcpy(ep->name1, ext_param1name);
-			strcpy(ep->name2, ext_param2name);
-			ep->seqId1 = 0;
-			ep->seqId2 = 0;
-
-			pkt->addExtParamToKBPred(ep);
-
-			char param1name[10];
-			char param2name[12];
-			param1name[0] = 'n';
-			param1name[1] = 'a';
-			param1name[2] = 'm';
-			param1name[3] = 'e';
-			param1name[4] = ',';
-			param1name[5] = 'c';
-			param1name[6] = 'i';
-			param1name[7] = 't';
-			param1name[8] = 'y';
-			param1name[9] = '\0';
-
-			param2name[0] = '?';
-			param2name[1] = 'n';
-			param2name[2] = 'a';
-			param2name[3] = 'm';
-			param2name[4] = 'e';
-			param2name[5] = ',';
-			param2name[6] = '?';
-			param2name[7] = 'c';
-			param2name[8] = 'i';
-			param2name[9] = 't';
-			param2name[10] = 'y';
-			param2name[11] = '\0';
-
-			pkt->addParamerForQueryKB(0,param1name,0,param2name);
-
-		}
-		if (q > 5) {
-			string query = "";
-			int n = rand() % 79;
-			int c = rand() % 5;
-			if (q % 2 == 0) {
-				query = "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> <" + cities[c] +"> }";
-				pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",query);
-				char param1name[5];
-				char param2name[6];
-				param1name[0] = 'n';
-				param1name[1] = 'a';
-				param1name[2] = 'm';
-				param1name[3] = 'e';
-				param1name[4] = '\0';
-
-				param2name[0] = '?';
-				param2name[1] = 'n';
-				param2name[2] = 'a';
-				param2name[3] = 'm';
-				param2name[4] = 'e';
-				param2name[5] = '\0';
-				pkt->addParamerForQueryKB(0, param1name, 0, param2name);
-			} else {
-				query = "select ?city where { ?p <isCalled> <" + names[n] + ". ?p <bornInLocation> ?city }";
-				pkt->addKBRootPredicate(NULL,0,"/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db",query);
-				char param1name[5];
-				char param2name[6];
-				param1name[0] = 'c';
-				param1name[1] = 'i';
-				param1name[2] = 't';
-				param1name[3] = 'y';
-				param1name[4] = '\0';
-
-				param2name[0] = '?';
-				param2name[1] = 'c';
-				param2name[2] = 'i';
-				param2name[3] = 't';
-				param2name[4] = 'y';
-				param2name[5] = '\0';
-				pkt->addParamerForQueryKB(0, param1name, 0, param2name);
-			}
-
-		}
-		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
-		pkt->setCompositeEventTemplate(ceTemplate);
-		rules.insert(pkt);
-	}
-}*/
 
 void BasicEval::createParamRules(set<RulePkt *> &rules) {
-	int id = rand() % 10;
+	int id = rand() % 3;
 
-	for (int i=1; i<=20; i++) {
-		if (i%20==0) id=1;
-		else id++;
-		RulePkt *pkt = new RulePkt(i==1);
+	for(int i = 0; i < 10; i++) {
+		RulePkt *pkt = new RulePkt(true);
 		int q = rand() % 3;
 		if (q == 0) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -371,7 +63,9 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 			param1name[3] = 'e';
 			param1name[4] = '\0';
 
-			pkt->addParameterBetweenStates(id*1000, param1name, id*1000+1, param1name);
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+
+			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
 		if (q == 1) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -385,7 +79,9 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 			param1name[3] = 'y';
 			param1name[4] = '\0';
 
-			pkt->addParameterBetweenStates(id*1000, param1name, id*1000+1, param1name);
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+
+			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
 		if (q == 2) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -406,95 +102,28 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 			param2name[3] = 'y';
 			param2name[4] = '\0';
 
-			pkt->addParameterBetweenStates(id*1000, param1name, id*1000+1, param1name);
-			pkt->addParameterBetweenStates(id*1000, param2name, id*1000+1, param2name);
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+			pkt->addParameterBetweenStates(0, param2name, 1, param2name);
+
+			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param1: " << pkt->getParameter(0).evIndex1 << "." << pkt->getParameter(0).name1 << " = " << pkt->getParameter(0).evIndex2 << "." << pkt->getParameter(0).name2 << " (" << pkt->getParameter(0).type << ")" << " param2: " << pkt->getParameter(1).evIndex1 << "." << pkt->getParameter(1).name1 << " = " << pkt->getParameter(1).evIndex2 << "." << pkt->getParameter(1).name2 << " (" << pkt->getParameter(1).type << ")" << endl;
 		}
 
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
 		pkt->setCompositeEventTemplate(ceTemplate);
 		rules.insert(pkt);
+
 	}
 }
-/*
-
-void * producer(void *parContext) {
-	Context *c = (Context *) parContext;
-	ParamHandler *paramHandler = c->paramHandler;
-	int queueLimit = paramHandler->getQueueSize();
-	// Creates and stores publication packets
-	queue<PubPkt *> pubs;
-	for (int i=0; i<paramHandler->getPubNum(); i++) {
-		PubPkt *pkt = c->p->createPubPkt();
-		pubs.push(pkt);
-	}
-	// Sends packets
-	int numDropped = 0;
-	Timer t;
-	double elapsedTime = 0;
-	int extraMessagesToSend = 0;
-	int sleepTime = paramHandler->getSleepTime();
-	while (! pubs.empty()) {
-		pthread_mutex_lock(c->mutex);
-		PubPkt *pkt = pubs.front();
-		pubs.pop();
-		if ((int) c->queue.size()>=queueLimit) {
-			delete pkt;
-			numDropped++;
-		} else {
-			pkt->setCurrentTime();
-			c->queue.push(pkt);
-		}
-		if (pubs.empty()) {
-			c->finish = true;
-			c->dropped = numDropped;
-		}
-		pthread_cond_signal(c->cond);
-		pthread_mutex_unlock(c->mutex);
-		// Needs to send messages to compensate increased sleeping time
-		if (extraMessagesToSend>0) {
-			extraMessagesToSend--;
-			continue;
-		}
-		// Sleeps and computes actually sleeping time (extraMessagesToSend is used to compensate rate loss due to thread scheduling)
-		t.start();
-		usleep(sleepTime);
-		t.stop();
-		elapsedTime = t.getElapsedTimeInMicroSec();
-		if (elapsedTime > sleepTime+500) {
-			// TODO: remove comment to generate extraMessages
-			//extraMessagesToSend = elapsedTime/sleepTime;
-		}
-	}
-	return NULL;
-}
-
-void * consumer(void *parContext) {
-	Context *c = (Context *) parContext;
-	while(true) {
-		pthread_mutex_lock(c->mutex);
-		if (c->queue.empty()) {
-			if (c->finish) {
-				pthread_mutex_unlock(c->mutex);
-				break;
-			}
-			pthread_cond_wait(c->cond, c->mutex);
-		}
-		PubPkt *pkt = c->queue.front();
-		c->queue.pop();
-		pthread_mutex_unlock(c->mutex);
-		c->engine->processPubPkt(pkt);
-	}
-	return NULL;
-}*/
 
 PubPkt * BasicEval::createParamPkt1() {
-	int id = rand() % 10 +1;
+	int r = rand();
+	int id = (r % 3) * 1000 +1;
 	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-	int n = rand() % 79;
-	int c = rand() % 5;
+	int n = r % 2;//79;
+	int c = 1; //5;
 	PubPkt *pkt;
-	Attribute attr[1];
+	Attribute attr[2];
 	attr[0].name[0] = 'n';
 	attr[0].name[1] = 'a';
 	attr[0].name[2] = 'm';
@@ -510,18 +139,19 @@ PubPkt * BasicEval::createParamPkt1() {
 	attr[1].type = STRING;
 	strcpy(attr[1].stringVal, cities[c].c_str());
 	pkt = new PubPkt(id, attr, 2);
+	pkt->setCurrentTime();
 
 	return pkt;
 }
 
 PubPkt * BasicEval::createParamPkt2() {
-	int id = rand() % 10;
+	int id = (rand() % 3) * 1000;
 	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-	int n = rand() % 79;
-	int c = rand() % 5;
+	int n = rand() % 2;
+	int c = 1;
 	PubPkt *pkt;
-	Attribute attr[1];
+	Attribute attr[2];
 	attr[0].name[0] = 'n';
 	attr[0].name[1] = 'a';
 	attr[0].name[2] = 'm';
@@ -537,6 +167,7 @@ PubPkt * BasicEval::createParamPkt2() {
 	attr[1].type = STRING;
 	strcpy(attr[1].stringVal, cities[c].c_str());
 	pkt = new PubPkt(id, attr, 2);
+	pkt->setCurrentTime();
 
 	return pkt;
 }
@@ -545,17 +176,18 @@ int BasicEval::startBasicEval() {
 
 	cout << endl << "### Starting evaluation ###" << endl << endl;
 
-	queue<PubPkt *> pubs;
-	for(int i = 0; i < 100; i++) {
-		PubPkt * pkt1 = createParamPkt1();
-		pubs.push(pkt1);
+	vector<PubPkt *> pubs;
+	for(int i = 0; i < 10; i++) {
+		PubPkt * pack1 = createParamPkt1();
+		pubs.push_back(pack1);
 	}
-	for(int i = 0; i < 100; i++)
-		pubs.push(createParamPkt2());
-
-	while(! pubs.empty()) {
-		PubPkt * pkt = pubs.front();
-		pubs.pop();
+	for(int i = 0; i < 10; i++) {
+		PubPkt * pack2 = createParamPkt2();
+		pubs.push_back(pack2);
+	}
+	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
+		PubPkt * pkt = *it;
+		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
 		engine->processPubPkt(pkt);
 	}
 

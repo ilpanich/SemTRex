@@ -21,10 +21,8 @@
 #ifndef BASICEVAL_H_
 #define BASICEVAL_H_
 
-#include <queue>
-#include <pthread.h>
+#include <vector>
 #include <iostream>
-#include <set>
 #include <string>
 #include "../Packets/PubPkt.h"
 #include "../Packets/RulePkt.h"
