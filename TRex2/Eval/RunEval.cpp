@@ -66,10 +66,10 @@ void trex_testing::runEval() {
 
 	// What to run?
 	for (int seed=1; seed<=numRuns; ++seed) {
-		/*
-		runCoreLast(seed, paramHandler, resultListener);
+
+		//runCoreLast(seed, paramHandler, resultListener);
 		runCoreEach(seed, paramHandler, resultListener);
-		runFireFirst(seed, paramHandler, resultListener);
+		/*runFireFirst(seed, paramHandler, resultListener);
 		runFireLast(seed, paramHandler, resultListener);
 		runFireEach(seed, paramHandler, resultListener);
 		runRain(seed, paramHandler, resultListener);
@@ -93,7 +93,7 @@ void trex_testing::runEval() {
 		runAggregate(seed, paramHandler, resultListener);
 		runParam(seed, paramHandler, resultListener);
 		 */
-		runKb(seed, paramHandler, resultListener);
+//		runKb(seed, paramHandler, resultListener);
 	}
 
 	delete resultListener;
@@ -204,6 +204,7 @@ void runCoreEach(int seed, ParamHandler *paramHandler, EvalResultListener *resul
 			resultListener->printMinProcTime(s, minTimeFile.data(), (s!=minMessagesPerSecond), true);
 			resultListener->printMaxProcTime(s, maxTimeFile.data(), (s!=minMessagesPerSecond), true);
 			resultListener->printPercProcTime(s, percTimeFile.data(), (s!=minMessagesPerSecond), true);
+			resultListener->printDetectedEvents(0,"./dectResults", (s!=minMessagesPerSecond), true);
 			ofstream file;
 			file.open(droppedFile.data(), ios::app);
 			file << s << "\t" << (dropped*100/paramHandler->getPubNum()) << endl;

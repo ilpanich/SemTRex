@@ -139,7 +139,6 @@ PubPkt * BasicEval::createParamPkt1() {
 	attr[1].type = STRING;
 	strcpy(attr[1].stringVal, cities[c].c_str());
 	pkt = new PubPkt(id, attr, 2);
-	pkt->setCurrentTime();
 
 	return pkt;
 }
@@ -167,7 +166,6 @@ PubPkt * BasicEval::createParamPkt2() {
 	attr[1].type = STRING;
 	strcpy(attr[1].stringVal, cities[c].c_str());
 	pkt = new PubPkt(id, attr, 2);
-	pkt->setCurrentTime();
 
 	return pkt;
 }
@@ -179,10 +177,12 @@ int BasicEval::startBasicEval() {
 	vector<PubPkt *> pubs;
 	for(int i = 0; i < 10; i++) {
 		PubPkt * pack1 = createParamPkt1();
+		pack1->setTime(i);
 		pubs.push_back(pack1);
 	}
-	for(int i = 0; i < 10; i++) {
+	for(int i = 10; i < 20; i++) {
 		PubPkt * pack2 = createParamPkt2();
+		pack2->setTime(i);
 		pubs.push_back(pack2);
 	}
 	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
@@ -200,3 +200,70 @@ int BasicEval::startBasicEval() {
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;
 }
+
+/*
+void BasicEval::createParamRules(set<RulePkt *> &rules) {
+
+	RulePkt *pkt = new RulePkt(true);
+
+	pkt->addRootPredicate(1000, NULL, 0);
+
+	TimeMs win = 12*60*60*1000;
+	CompKind kind = EACH_WITHIN;
+
+	pkt->addPredicate(1001, NULL, 0, 0, win, kind);
+
+	CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
+	pkt->setCompositeEventTemplate(ceTemplate);
+	rules.insert(pkt);
+
+}
+
+PubPkt * BasicEval::createParamPkt1() {
+	int id = 1000;
+	PubPkt *pkt;
+	pkt = new PubPkt(id, NULL, 0);
+
+	return pkt;
+}
+PubPkt * BasicEval::createParamPkt2() {
+	int id = 1001;
+	PubPkt *pkt;
+	pkt = new PubPkt(id, NULL, 0);
+
+	return pkt;
+}
+
+int BasicEval::startBasicEval() {
+
+	cout << endl << "### Starting evaluation ###" << endl << endl;
+
+	vector<PubPkt *> pubs;
+	for(int i = 0; i < 10; i++) {
+		PubPkt * pack2 = createParamPkt2();
+		pack2->setTime(i);
+		pubs.push_back(pack2);
+	}
+
+	for(int i = 10; i < 20; i++) {
+		PubPkt * pack1 = createParamPkt1();
+		pack1->setTime(i);
+		pubs.push_back(pack1);
+	}
+
+	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
+		PubPkt * pkt = *it;
+		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
+		engine->processPubPkt(pkt);
+	}
+
+	resultListener->printDetectedEvents(0,"./dectResults",1,1);
+	resultListener->printMaxProcTime(0,"./maxTime",1,1);
+	resultListener->printMinProcTime(0,"./minTime",1,1);
+	resultListener->printMeanProcTime(0,"./meanTime",1,1);
+	resultListener->printPercProcTime(0,"./PercTime",1,1);
+
+	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
+	return 0;
+}
+*/

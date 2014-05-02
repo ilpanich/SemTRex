@@ -41,6 +41,7 @@ void EvalResultListener::handleResult(set<PubPkt *> &genPkts, double procTime) {
 	if (procTime>maxProcessingTime) maxProcessingTime = procTime;
 	times.push_back(procTime);
 	numCalls++;
+//	cout << "Listener DectEvents:" << detectedEvents << endl;
 }
 
 void EvalResultListener::printToFile(int label, char const *fileName, double duration, bool newLine, bool printLabel) {
