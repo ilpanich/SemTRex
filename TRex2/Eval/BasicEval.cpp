@@ -23,12 +23,17 @@
 
 using namespace std;
 
-BasicEval::BasicEval() {
+BasicEval::BasicEval(bool testType) {
 	engine = new TRexEngine(2);
 	resultListener = new EvalResultListener;
 
+	evalType = testType;
+
 	set<RulePkt *> rulePkts;
-	createParamRules(rulePkts);
+	if (!evalType)
+		createParamRules(rulePkts);
+	else
+		createKbRules(rulePkts);
 	for (set<RulePkt *>::iterator it=rulePkts.begin(); it!=rulePkts.end(); ++it) {
 		RulePkt *pkt = *it;
 		engine->processRulePkt(pkt);
@@ -45,12 +50,98 @@ BasicEval::~BasicEval() {
 }
 
 
-void BasicEval::createParamRules(set<RulePkt *> &rules) {
-	int id = rand() % 3;
+void BasicEval::createKbRules(set<RulePkt *> &rules) {
+	int id = rand() % 10;
 
-	for(int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 		RulePkt *pkt = new RulePkt(true);
-		int q = rand() % 3;
+		int q = rand() % 6;
+
+		string queries[] = {"select ?name where { ?p <isCalled> ?name }", "select ?city where { ?p <bornInLocation> ?city }",
+				"select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }",
+				"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> &city }",
+				"select ?city where { ?p <isCalled> &name. ?p <bornInLocation> ?city }",
+				"select ?name ?city where { ?p <isCalled> &name. ?p <bornInLocation> &city }"};
+
+		if (q == 0 || q == 3) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'n';
+			param2name[2] = 'a';
+			param2name[3] = 'm';
+			param2name[4] = 'e';
+			param2name[5] = '\0';
+			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+		}
+		if (q == 1 || q == 4) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			char param1name[5];
+			char param2name[6];
+			param1name[0] = 'c';
+			param1name[1] = 'i';
+			param1name[2] = 't';
+			param1name[3] = 'y';
+			param1name[4] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'c';
+			param2name[2] = 'i';
+			param2name[3] = 't';
+			param2name[4] = 'y';
+			param2name[5] = '\0';
+			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+		}
+
+		if (q == 2 || q == 5) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			char param1name[10];
+			char param2name[12];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = ',';
+			param1name[5] = 'c';
+			param1name[6] = 'i';
+			param1name[7] = 't';
+			param1name[8] = 'y';
+			param1name[9] = '\0';
+
+			param2name[0] = '?';
+			param2name[1] = 'n';
+			param2name[2] = 'a';
+			param2name[3] = 'm';
+			param2name[4] = 'e';
+			param2name[5] = ',';
+			param2name[6] = '?';
+			param2name[7] = 'c';
+			param2name[8] = 'i';
+			param2name[9] = 't';
+			param2name[10] = 'y';
+			param2name[11] = '\0';
+			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+		}
+	}
+}
+
+void BasicEval::createParamRules(set<RulePkt *> &rules) {
+	int id = rand() % 10;
+
+	for(int i = 0; i < 100; i++) {
+		RulePkt *pkt = new RulePkt(true);
+		int q = rand() % 6;
+
 		if (q == 0) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
@@ -65,7 +156,7 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
 
-			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
+			//			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
 		if (q == 1) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -81,7 +172,7 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
 
-			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
+			//			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
 		if (q == 2) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -105,7 +196,64 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
 			pkt->addParameterBetweenStates(0, param2name, 1, param2name);
 
-			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param1: " << pkt->getParameter(0).evIndex1 << "." << pkt->getParameter(0).name1 << " = " << pkt->getParameter(0).evIndex2 << "." << pkt->getParameter(0).name2 << " (" << pkt->getParameter(0).type << ")" << " param2: " << pkt->getParameter(1).evIndex1 << "." << pkt->getParameter(1).name1 << " = " << pkt->getParameter(1).evIndex2 << "." << pkt->getParameter(1).name2 << " (" << pkt->getParameter(1).type << ")" << endl;
+			//			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param1: " << pkt->getParameter(0).evIndex1 << "." << pkt->getParameter(0).name1 << " = " << pkt->getParameter(0).evIndex2 << "." << pkt->getParameter(0).name2 << " (" << pkt->getParameter(0).type << ")" << " param2: " << pkt->getParameter(1).evIndex1 << "." << pkt->getParameter(1).name1 << " = " << pkt->getParameter(1).evIndex2 << "." << pkt->getParameter(1).name2 << " (" << pkt->getParameter(1).type << ")" << endl;
+		}
+
+		if (q == 3) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			TimeMs win = 12*60*60*1000;
+			CompKind kind = LAST_WITHIN;
+			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			char param1name[5];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = '\0';
+
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+
+			//					cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
+		}
+		if (q == 4) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			TimeMs win = 12*60*60*1000;
+			CompKind kind = LAST_WITHIN;
+			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			char param1name[5];
+			param1name[0] = 'c';
+			param1name[1] = 'i';
+			param1name[2] = 't';
+			param1name[3] = 'y';
+			param1name[4] = '\0';
+
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+
+			//					cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
+		}
+		if (q == 5) {
+			pkt->addRootPredicate(id*1000, NULL, 0);
+			TimeMs win = 12*60*60*1000;
+			CompKind kind = LAST_WITHIN;
+			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			char param1name[5];
+			char param2name[5];
+			param1name[0] = 'n';
+			param1name[1] = 'a';
+			param1name[2] = 'm';
+			param1name[3] = 'e';
+			param1name[4] = '\0';
+
+			param2name[0] = 'c';
+			param2name[1] = 'i';
+			param2name[2] = 't';
+			param2name[3] = 'y';
+			param2name[4] = '\0';
+
+			pkt->addParameterBetweenStates(0, param1name, 1, param1name);
+			pkt->addParameterBetweenStates(0, param2name, 1, param2name);
+
+			//					cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param1: " << pkt->getParameter(0).evIndex1 << "." << pkt->getParameter(0).name1 << " = " << pkt->getParameter(0).evIndex2 << "." << pkt->getParameter(0).name2 << " (" << pkt->getParameter(0).type << ")" << " param2: " << pkt->getParameter(1).evIndex1 << "." << pkt->getParameter(1).name1 << " = " << pkt->getParameter(1).evIndex2 << "." << pkt->getParameter(1).name2 << " (" << pkt->getParameter(1).type << ")" << endl;
 		}
 
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
@@ -117,11 +265,11 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 PubPkt * BasicEval::createParamPkt1() {
 	int r = rand();
-	int id = (r % 3) * 1000 +1;
+	int id = (r % 10) * 1000 +1;
 	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-	int n = r % 2;//79;
-	int c = 1; //5;
+	int n = r % 79;
+	int c = r % 5;
 	PubPkt *pkt;
 	Attribute attr[2];
 	attr[0].name[0] = 'n';
@@ -144,11 +292,11 @@ PubPkt * BasicEval::createParamPkt1() {
 }
 
 PubPkt * BasicEval::createParamPkt2() {
-	int id = (rand() % 3) * 1000;
+	int id = (rand() % 10) * 1000;
 	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-	int n = rand() % 2;
-	int c = 1;
+	int n = rand() % 79;
+	int c = rand() % 5;
 	PubPkt *pkt;
 	Attribute attr[2];
 	attr[0].name[0] = 'n';
@@ -175,27 +323,29 @@ int BasicEval::startBasicEval() {
 	cout << endl << "### Starting evaluation ###" << endl << endl;
 
 	vector<PubPkt *> pubs;
-	for(int i = 0; i < 10; i++) {
-		PubPkt * pack1 = createParamPkt1();
-		pack1->setTime(i);
-		pubs.push_back(pack1);
+	if (!evalType) {
+		for(int i = 0; i < 1000; i++) {
+			PubPkt * pack1 = createParamPkt1();
+			pack1->setTime(i);
+			pubs.push_back(pack1);
+		}
 	}
-	for(int i = 10; i < 20; i++) {
+	for(int i = 1000; i < 2000; i++) {
 		PubPkt * pack2 = createParamPkt2();
 		pack2->setTime(i);
 		pubs.push_back(pack2);
 	}
 	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
 		PubPkt * pkt = *it;
-		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
+		//		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
 		engine->processPubPkt(pkt);
 	}
 
-	resultListener->printDetectedEvents(0,"./dectResults",1,1);
-	resultListener->printMaxProcTime(0,"./maxTime",1,1);
-	resultListener->printMinProcTime(0,"./minTime",1,1);
-	resultListener->printMeanProcTime(0,"./meanTime",1,1);
-	resultListener->printPercProcTime(0,"./PercTime",1,1);
+	resultListener->printDetectedEvents(evalType,"./dectResults",1,1);
+	resultListener->printMaxProcTime(evalType,"./maxTime",1,1);
+	resultListener->printMinProcTime(evalType,"./minTime",1,1);
+	resultListener->printMeanProcTime(evalType,"./meanTime",1,1);
+	resultListener->printPercProcTime(evalType,"./PercTime",1,1);
 
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;
@@ -266,4 +416,4 @@ int BasicEval::startBasicEval() {
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;
 }
-*/
+ */

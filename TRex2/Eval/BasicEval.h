@@ -40,7 +40,7 @@ public:
 	/**
 	 * Constructor
 	 */
-	BasicEval();
+	BasicEval(bool testType);
 
 	/**
 	 * Destructor
@@ -57,7 +57,11 @@ private:
 
 	EvalResultListener *resultListener;		// ResultListener
 
+	bool evalType;								// TRUE if KB eval, otherwise FALSE
+
 	void createParamRules(std::set<RulePkt *> &rules);
+
+	void createKbRules(std::set<RulePkt *> &rules);
 
 	PubPkt * createParamPkt1();
 

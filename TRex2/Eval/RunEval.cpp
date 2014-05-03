@@ -101,8 +101,8 @@ void trex_testing::runEval() {
 }
 
 // Run Basic Eval
-void trex_testing::runBasicEval() {
-	BasicEval * b = new BasicEval();
+void trex_testing::runBasicEval(bool evalType) {
+	BasicEval * b = new BasicEval(evalType);
 	b->startBasicEval();
 }
 
