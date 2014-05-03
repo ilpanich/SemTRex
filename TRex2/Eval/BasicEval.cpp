@@ -80,7 +80,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[3] = 'm';
 			param2name[4] = 'e';
 			param2name[5] = '\0';
-			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
 		}
 		if (q == 1 || q == 4) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -99,7 +99,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[3] = 't';
 			param2name[4] = 'y';
 			param2name[5] = '\0';
-			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
 		}
 
 		if (q == 2 || q == 5) {
@@ -130,8 +130,13 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[9] = 't';
 			param2name[10] = 'y';
 			param2name[11] = '\0';
-			pkt->addParamerForQueryKB(id*1000, param1name, 0, param2name);
+			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
 		}
+
+		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);
+		pkt->setCompositeEventTemplate(ceTemplate);
+		rules.insert(pkt);
+
 	}
 }
 
