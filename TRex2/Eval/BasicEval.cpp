@@ -80,7 +80,34 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[3] = 'm';
 			param2name[4] = 'e';
 			param2name[5] = '\0';
+
 			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+
+			if (q == 3) {
+				ExtParameter * ep;
+				char ext_param1name[5];
+				char ext_param2name[6];
+				ext_param1name[0] = 'n';
+				ext_param1name[1] = 'a';
+				ext_param1name[2] = 'm';
+				ext_param1name[3] = 'e';
+				ext_param1name[4] = '\0';
+
+				ext_param2name[0] = '&';
+				ext_param2name[1] = 'n';
+				ext_param2name[2] = 'a';
+				ext_param2name[3] = 'm';
+				ext_param2name[4] = 'e';
+				ext_param2name[5] = '\0';
+				ep->evIndex1 = 0;
+				ep->evIndex2 = 0;
+				strcpy(ep->name1, ext_param1name);
+				strcpy(ep->name2, ext_param2name);
+				ep->seqId1 = 0;
+				ep->seqId2 = 0;
+
+				pkt->addExtParamToKBPred(ep);
+			}
 		}
 		if (q == 1 || q == 4) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -100,9 +127,35 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[4] = 'y';
 			param2name[5] = '\0';
 			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+
+			if (q == 4) {
+				ExtParameter * ep;
+				char ext_param1name[5];
+				char ext_param2name[6];
+				ext_param1name[0] = 'c';
+				ext_param1name[1] = 'i';
+				ext_param1name[2] = 't';
+				ext_param1name[3] = 'y';
+				ext_param1name[4] = '\0';
+
+				ext_param2name[0] = '&';
+				ext_param2name[1] = 'c';
+				ext_param2name[2] = 'i';
+				ext_param2name[3] = 't';
+				ext_param2name[4] = 'y';
+				ext_param2name[5] = '\0';
+				ep->evIndex1 = 0;
+				ep->evIndex2 = 0;
+				strcpy(ep->name1, ext_param1name);
+				strcpy(ep->name2, ext_param2name);
+				ep->seqId1 = 0;
+				ep->seqId2 = 0;
+
+				pkt->addExtParamToKBPred(ep);
+			}
 		}
 
-		if (q == 2 || q == 5) {
+		if (q == 2) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
 			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
 			char param1name[10];
@@ -131,6 +184,53 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 			param2name[10] = 'y';
 			param2name[11] = '\0';
 			pkt->addParamerForQueryKB(0, param1name, 0, param2name);
+
+			if (q == 5) {
+				ExtParameter * ep;
+				char ext_param1name[5];
+				char ext_param2name[6];
+				ext_param1name[0] = 'n';
+				ext_param1name[1] = 'a';
+				ext_param1name[2] = 'm';
+				ext_param1name[3] = 'e';
+				ext_param1name[4] = '\0';
+
+				ext_param2name[0] = '&';
+				ext_param2name[1] = 'n';
+				ext_param2name[2] = 'a';
+				ext_param2name[3] = 'm';
+				ext_param2name[4] = 'e';
+				ext_param2name[5] = '\0';
+				ep->evIndex1 = 0;
+				ep->evIndex2 = 0;
+				strcpy(ep->name1, ext_param1name);
+				strcpy(ep->name2, ext_param2name);
+				ep->seqId1 = 0;
+				ep->seqId2 = 0;
+
+				pkt->addExtParamToKBPred(ep);
+
+				ext_param1name[0] = 'c';
+				ext_param1name[1] = 'i';
+				ext_param1name[2] = 't';
+				ext_param1name[3] = 'y';
+				ext_param1name[4] = '\0';
+
+				ext_param2name[0] = '&';
+				ext_param2name[1] = 'c';
+				ext_param2name[2] = 'i';
+				ext_param2name[3] = 't';
+				ext_param2name[4] = 'y';
+				ext_param2name[5] = '\0';
+				ep->evIndex1 = 0;
+				ep->evIndex2 = 0;
+				strcpy(ep->name1, ext_param1name);
+				strcpy(ep->name2, ext_param2name);
+				ep->seqId1 = 0;
+				ep->seqId2 = 0;
+
+				pkt->addExtParamToKBPred(ep);
+			}
 		}
 
 		CompositeEventTemplate *ceTemplate = new CompositeEventTemplate(10);

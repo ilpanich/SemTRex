@@ -525,7 +525,7 @@ bool trex_testing::TestKBSequenceWithExtParams() {
 	Attribute att3;
 	strcpy(att3.name, "city");
 	att3.type = STRING;
-	strcpy(att3.stringVal, "<London>");
+	strcpy(att3.stringVal, "London");
 	PubPkt *pkt1 = new PubPkt(3, &att1, 1);
 	pkt1->setTime(1);
 	att1.intVal = 2;

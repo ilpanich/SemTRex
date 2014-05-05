@@ -77,7 +77,7 @@ bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pVa
         return false;
     size_t start_pos = 0;
     while((start_pos = query.find(pName, start_pos)) != std::string::npos) {
-        query.replace(start_pos, pName.length(), pValue);
+        query.replace(start_pos, pName.length(), "\"" +  pValue + "\"");
         start_pos += pValue.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
     foundEl = replacedParams.find(pName);

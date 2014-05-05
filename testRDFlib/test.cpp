@@ -18,7 +18,8 @@ void replaceAll(std::string& str, const std::string& from, const std::string& to
 int main(int argc, char * argv[]) {
 
 	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-	string query = "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Dover\" }";
+//	string query = "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Dover\" }";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
 	string test = "name";
 
 	string test1 = "a &pippo piace la &paprica. viva &pippo";
@@ -41,7 +42,7 @@ int main(int argc, char * argv[]) {
 
 	replaceAll(test1, test2, test3);
 
-	cout << "Executing query... ";
+	cout << "Executing query... " << endl ;
 
 	rs = RDFQuery::execQuery(db, query, false);
 
@@ -57,12 +58,12 @@ int main(int argc, char * argv[]) {
 	for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
 		Result res = *it;
 		Field f1 = res.getResult()[0];
-		//Field f2 = res.getResult()[1];
+		Field f2 = res.getResult()[1];
 
-		cout << f1.getSValue() << endl;
+		cout << f1.getSValue() << " - " << f2.getSValue() << endl;
 	}
 
-	cout << "DONE!\n";
+	cout << "DONE!" << endl;
 
 	return 0;
 
