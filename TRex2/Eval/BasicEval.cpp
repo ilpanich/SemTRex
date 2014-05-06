@@ -53,7 +53,7 @@ BasicEval::~BasicEval() {
 void BasicEval::createKbRules(set<RulePkt *> &rules) {
 	int id = rand() % 10;
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 250; i++) {
 		RulePkt *pkt = new RulePkt(true);
 		int q = rand() % 6;
 
@@ -436,12 +436,19 @@ int BasicEval::startBasicEval() {
 			pack1->setTime(i);
 			pubs.push_back(pack1);
 		}
+		for(int i = 1000; i < 2000; i++) {
+			PubPkt * pack2 = createParamPkt2();
+			pack2->setTime(i);
+			pubs.push_back(pack2);
+		}
+	} else {
+		for(int i = 10000; i < 16000; i++) {
+			PubPkt * pack2 = createParamPkt2();
+			pack2->setTime(i);
+			pubs.push_back(pack2);
+		}
 	}
-	for(int i = 1000; i < 2000; i++) {
-		PubPkt * pack2 = createParamPkt2();
-		pack2->setTime(i);
-		pubs.push_back(pack2);
-	}
+
 	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
 		PubPkt * pkt = *it;
 		//		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
