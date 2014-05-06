@@ -43,7 +43,7 @@ QueryItem::~QueryItem() {
 
 bool QueryItem::runQuery() {
 
-	cerr << query << endl;
+	//cerr << query << endl;
 
 	if(!needsReplace())
 		rs = RDFQuery::execQuery(db, query, false);
