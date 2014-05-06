@@ -109,7 +109,8 @@ bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, string kb, stri
 
 bool RulePkt::addExtParamToKBPred(ExtParameter *param) {
 	int numPredicates = predicates.size();
-	int nummKBPredicates = predicates.size() + kbPredicates.size();
+//	int nummKBPredicates = predicates.size() + kbPredicates.size();
+	int nummKBPredicates = kbPredicates.size();
 	int kbPId = param->evIndex2;
 	int pId = param->evIndex1;
 	if (numPredicates<=0 || pId >=numPredicates ||

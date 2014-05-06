@@ -42,6 +42,9 @@ QueryItem::~QueryItem() {
 }
 
 bool QueryItem::runQuery() {
+
+	cerr << query << endl;
+
 	if(!needsReplace())
 		rs = RDFQuery::execQuery(db, query, false);
 	else				// TODO: here external parameters of the query must be handled
