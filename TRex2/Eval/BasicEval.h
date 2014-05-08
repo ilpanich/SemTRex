@@ -24,6 +24,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <time.h>
 #include "../Packets/PubPkt.h"
 #include "../Packets/RulePkt.h"
 #include "../Engine/TRexEngine.h"

@@ -433,7 +433,11 @@ PubPkt * BasicEval::createParamPkt2() {
 
 int BasicEval::startBasicEval() {
 
+	time_t bTime, eTime;
+	double duration;
+
 	cout << endl << "### Starting evaluation ###" << endl << endl;
+	bTime = time(NULL);
 
 	vector<PubPkt *> pubs;
 	if (!evalType) {
@@ -461,11 +465,16 @@ int BasicEval::startBasicEval() {
 		engine->processPubPkt(pkt);
 	}
 
+	eTime = time(NULL);
+
+	duration = eTime - bTime;
+
 	resultListener->printDetectedEvents(evalType,"./dectResults",1,1);
 	resultListener->printMaxProcTime(evalType,"./maxTime",1,1);
 	resultListener->printMinProcTime(evalType,"./minTime",1,1);
 	resultListener->printMeanProcTime(evalType,"./meanTime",1,1);
 	resultListener->printPercProcTime(evalType,"./PercTime",1,1);
+	resultListener->printToFile(evalType,"./throughput",duration,1,1);
 
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;
