@@ -437,7 +437,6 @@ int BasicEval::startBasicEval() {
 	double duration;
 
 	cout << endl << "### Starting evaluation ###" << endl << endl;
-	bTime = time(NULL);
 
 	vector<PubPkt *> pubs;
 	if (!evalType) {
@@ -458,6 +457,8 @@ int BasicEval::startBasicEval() {
 			pubs.push_back(pack2);
 		}
 	}
+
+	bTime = time(NULL);
 
 	for (vector<PubPkt *>::iterator it = pubs.begin(); it != pubs.end(); it++) {
 		PubPkt * pkt = *it;
