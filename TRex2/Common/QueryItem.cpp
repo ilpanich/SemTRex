@@ -8,6 +8,7 @@
 #include "QueryItem.hpp"
 
 using namespace std;
+using namespace boost;
 
 QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p) {
 
@@ -35,6 +36,9 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 			replacedParams.insert(make_pair(string(par.name2), false));
 		}
 	}
+
+	limit = RS_MAX_DIM / (fields.size() * sizeof(char[STRING_LEN]));
+	offset = 0;
 }
 
 QueryItem::~QueryItem() {
@@ -111,4 +115,10 @@ void QueryItem::resetExtParRepl() {
 			it->second = false;
 		query = originalQuery;
 	}
+}
+
+bool QueryItem::hasMoreResults() {
+	offset += limit;
+	string nextQuery = originalQuery + " LIMIT " + lexical_cast<string>(limit) + "OFFSET " + lexical_cast<string>(offset);
+	return RDFQuery::execQuery(db, query, false).getAllRes().empty();
 }

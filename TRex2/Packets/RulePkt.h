@@ -46,11 +46,8 @@ typedef struct EventPredicate {
  * A basic KB predicate - Panigati
  */
 typedef struct KnowledgeBasePredicate {
-	//int eventType;						// Type of the event required by this predicate
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
-//	PredKind refPredType;		//Type of the referenced predicate
-//	int refersTo;							// Index of the reference predicate (-1 if root)
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
 	unsigned char * dbId;			// The KB db identifier for cache access

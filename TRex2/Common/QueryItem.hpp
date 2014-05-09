@@ -15,18 +15,22 @@
 #include <string>
 #include <vector>
 
+#define RS_MAX_DIM 536870912
+
 class QueryItem {
 
 private:
-	std::string db;							// The KB db reference for quering
-	std::string query;						// The KB query
-	std::string originalQuery;				// The original query, in case substitution occurs
-	unsigned char * dbId;						// The KB db identifier for cache access
-	unsigned char * qId;						// The KB query identifier for cache access
-	std::vector<ExtParameter> params;			// The KB query optional external parameters
-	std::vector<std::string> fields;			// The list of fields that the query returns
-	Resultset rs;							// The KB query retrieved results set
-	std::map<std::string, bool> replacedParams;	// Tell if a parameter has been replaced or not
+	std::string db;									// The KB db reference for quering
+	std::string query;								// The KB query
+	std::string originalQuery;						// The original query, in case substitution occurs
+	unsigned char * dbId;							// The KB db identifier for cache access
+	unsigned char * qId;							// The KB query identifier for cache access
+	std::vector<ExtParameter> params;				// The KB query optional external parameters
+	std::vector<std::string> fields;				// The list of fields that the query returns
+	Resultset rs;									// The KB query retrieved results set
+	int limit;										// The maximum number of results those can be stored in memory
+	int offset;										// Offset for scanning query results
+	std::map<std::string, bool> replacedParams;		// Tell if a parameter has been replaced or not
 
 public:
 
@@ -43,6 +47,8 @@ public:
 	bool replaceExtParam(const std::string& pName, const std::string& pValue);
 
 	bool needsReplace();
+
+	bool hasMoreResults();
 
 	std::vector<ExtParam>& getExtParams () { return params;}
 

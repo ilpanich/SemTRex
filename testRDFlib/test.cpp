@@ -19,7 +19,7 @@ int main(int argc, char * argv[]) {
 
 	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
 //	string query = "select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Dover\" }";
-	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 10";
 	string test = "name";
 
 	string test1 = "a &pippo piace la &paprica. viva &pippo";

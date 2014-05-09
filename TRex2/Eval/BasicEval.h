@@ -32,6 +32,9 @@
 #include "EvalResultListener.h"
 #include "../Common/Timer.h"
 
+#include "rts/operator/RDFQuery.hpp"
+#include "rts/operator/Resultset.hpp"
+
 /**
  * Basic test cases
  */
@@ -64,9 +67,9 @@ private:
 
 	void createKbRules(std::set<RulePkt *> &rules);
 
-	PubPkt * createParamPkt1();
+	PubPkt * createParamPkt1(Resultset rs);
 
-	PubPkt * createParamPkt2();
+	PubPkt * createParamPkt2(Resultset rs);
 
 };
 
