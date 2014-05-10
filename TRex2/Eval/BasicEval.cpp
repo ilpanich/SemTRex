@@ -251,7 +251,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 void BasicEval::createParamRules(set<RulePkt *> &rules) {
 	int id = rand() % 10;
 
-	for(int i = 0; i < 100; i++) {
+	for(int i = 0; i < 1; i++) {
 		RulePkt *pkt = new RulePkt(true);
 		int q =  3;//rand() % 6;
 
@@ -313,10 +313,10 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 		}
 
 		if (q == 3) {
-			pkt->addRootPredicate(id*1000, NULL, 0);
+			pkt->addRootPredicate(1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
 			CompKind kind = LAST_WITHIN;
-			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			pkt->addPredicate(1000+1, NULL, 0, 0, win, kind);
 			char param1name[5];
 			param1name[0] = 'n';
 			param1name[1] = 'a';
@@ -378,16 +378,16 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 PubPkt * BasicEval::createParamPkt1(Resultset rs) {
 	int r = rand();
-	int id = (r % 10) * 1000 +1;
+	int id = 1001; //(r % 10) * 1000 +1;
 	int pos;
 	string name, city;
 //	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 //	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 //	int n = r % 79;
 //	int c = r % 5;
-	pos = r % 150;
-	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
-	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
+	pos = 1;
+	name = "Chris Barrie"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
+	city = "Hanover"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
 	PubPkt *pkt;
 	Attribute attr[2];
 	attr[0].name[0] = 'n';
@@ -411,15 +411,15 @@ PubPkt * BasicEval::createParamPkt1(Resultset rs) {
 
 PubPkt * BasicEval::createParamPkt2(Resultset rs) {
 	int r = rand();
-	int id = (rand() % 10) * 1000;
+	int id = 1000; //(rand() % 10) * 1000;
 	int pos;
 	string name, city;
 	//	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
-		pos = r % 150;
-		name = rs.getAllRes().at(pos).getResult()[0].getSValue();
-		city = rs.getAllRes().at(pos).getResult()[0].getSValue();
+		pos = 1;
+		name = "Chris Barrie"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
+		city = "Hanover"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
 		PubPkt *pkt;
 		Attribute attr[2];
 		attr[0].name[0] = 'n';
@@ -449,12 +449,12 @@ int BasicEval::startBasicEval() {
 	Resultset rs;
 
 	cout << endl << "### Starting evaluation ###" << endl << endl;
-
-	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
-	rs = RDFQuery::execQuery(db, query, false);
-
-	cout << "Resultset size: " << (int) rs.getAllRes().size() << endl;
+//
+//	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
+//	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
+//	rs = RDFQuery::execQuery(db, query, false);
+//
+//	cout << "Resultset size: " << (int) rs.getAllRes().size() << endl;
 
 	cout << "### Generating Packets ###" << endl;
 
