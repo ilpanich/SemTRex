@@ -51,7 +51,7 @@ BasicEval::~BasicEval() {
 
 
 void BasicEval::createKbRules(set<RulePkt *> &rules) {
-	int id = rand() % 10;
+	int id = 1; //rand() % 10;
 
 	for (int i = 0; i < 100; i++) {
 		RulePkt *pkt = new RulePkt(true);
@@ -251,10 +251,10 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 void BasicEval::createParamRules(set<RulePkt *> &rules) {
 	int id = rand() % 10;
 
-	for(int i = 0; i < 1; i++) {
+	for(int i = 0; i < 100; i++) {
 		RulePkt *pkt = new RulePkt(true);
-		int q =  3;//rand() % 6;
-
+		int q = rand() % 3;
+/*
 		if (q == 0) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
@@ -310,9 +310,9 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 			pkt->addParameterBetweenStates(0, param2name, 1, param2name);
 
 			//			cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param1: " << pkt->getParameter(0).evIndex1 << "." << pkt->getParameter(0).name1 << " = " << pkt->getParameter(0).evIndex2 << "." << pkt->getParameter(0).name2 << " (" << pkt->getParameter(0).type << ")" << " param2: " << pkt->getParameter(1).evIndex1 << "." << pkt->getParameter(1).name1 << " = " << pkt->getParameter(1).evIndex2 << "." << pkt->getParameter(1).name2 << " (" << pkt->getParameter(1).type << ")" << endl;
-		}
+		}*/
 
-		if (q == 3) {
+		if (q == 0) {
 			pkt->addRootPredicate(1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
 			CompKind kind = LAST_WITHIN;
@@ -328,11 +328,11 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 			//					cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
-		if (q == 4) {
-			pkt->addRootPredicate(id*1000, NULL, 0);
+		if (q == 1) {
+			pkt->addRootPredicate(1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
 			CompKind kind = LAST_WITHIN;
-			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			pkt->addPredicate(1000+1, NULL, 0, 0, win, kind);
 			char param1name[5];
 			param1name[0] = 'c';
 			param1name[1] = 'i';
@@ -344,11 +344,11 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 
 			//					cout << pkt->getPredicate(0).eventType << " -> " << pkt->getPredicate(1).eventType << " param: " << pkt->getParameter(0).evIndex1 << "." << string(pkt->getParameter(0).name1) << " = " << pkt->getParameter(0).evIndex2 << "." << string(pkt->getParameter(0).name2) << " (" << pkt->getParameter(0).type << ")" << endl;
 		}
-		if (q == 5) {
-			pkt->addRootPredicate(id*1000, NULL, 0);
+		if (q == 2) {
+			pkt->addRootPredicate(1000, NULL, 0);
 			TimeMs win = 12*60*60*1000;
 			CompKind kind = LAST_WITHIN;
-			pkt->addPredicate(id*1000+1, NULL, 0, 0, win, kind);
+			pkt->addPredicate(1000+1, NULL, 0, 0, win, kind);
 			char param1name[5];
 			char param2name[5];
 			param1name[0] = 'n';
@@ -386,8 +386,8 @@ PubPkt * BasicEval::createParamPkt1(Resultset rs) {
 //	int n = r % 79;
 //	int c = r % 5;
 	pos = 1;
-	name = "Chris Barrie"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
-	city = "Hanover"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
+	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
+	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 	PubPkt *pkt;
 	Attribute attr[2];
 	attr[0].name[0] = 'n';
@@ -418,8 +418,8 @@ PubPkt * BasicEval::createParamPkt2(Resultset rs) {
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
 		pos = 1;
-		name = "Chris Barrie"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
-		city = "Hanover"; //rs.getAllRes().at(pos).getResult()[0].getSValue();
+		name = rs.getAllRes().at(pos).getResult()[0].getSValue();
+		city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 		PubPkt *pkt;
 		Attribute attr[2];
 		attr[0].name[0] = 'n';
@@ -450,9 +450,9 @@ int BasicEval::startBasicEval() {
 
 	cout << endl << "### Starting evaluation ###" << endl << endl;
 //
-//	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-//	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
-//	rs = RDFQuery::execQuery(db, query, false);
+	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
+	rs = RDFQuery::execQuery(db, query, false);
 //
 //	cout << "Resultset size: " << (int) rs.getAllRes().size() << endl;
 
