@@ -10,7 +10,7 @@
 using namespace std;
 using namespace boost;
 
-QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p) {
+QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p, CompKind k) {
 
 	db = string(kb);
 	query = string(q);
@@ -18,6 +18,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 	dbId = kbId;
 	qId = queryId;
 	params = p;
+	kind = k;
 
 	if(query.length() > 0) {
 		const char* t;

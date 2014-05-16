@@ -27,6 +27,7 @@ private:
 	unsigned char * qId;							// The KB query identifier for cache access
 	std::vector<ExtParameter> params;				// The KB query optional external parameters
 	std::vector<std::string> fields;				// The list of fields that the query returns
+	CompKind kind;									// The kind of constraint
 	Resultset rs;									// The KB query retrieved results set
 	int limit;										// The maximum number of results those can be stored in memory
 	int offset;										// Offset for scanning query results
@@ -34,7 +35,7 @@ private:
 
 public:
 
-	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, unsigned char * queryId, std::vector<ExtParameter> p);
+	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, unsigned char * queryId, std::vector<ExtParameter> p, CompKind k);
 
 	~QueryItem();
 

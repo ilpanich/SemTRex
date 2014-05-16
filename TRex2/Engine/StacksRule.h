@@ -114,7 +114,7 @@ private:
 	CompositeEventGenerator *eventGenerator;											// Used to generate composite event attributes (if any)
 	int compositeEventId;																					// Used to generate a composite event id no attributes are defined
 
-	std::map<int, QueryItem * > queryRegistry;					// Keeps the registry of the query to be executed
+	std::map<int, QueryItem *> queryRegistry;					// Keeps the registry of the query to be executed
 
 	/**
 	 * Adds the packet to the given stack (can be a normal stack, or a stack for negations or aggregates)

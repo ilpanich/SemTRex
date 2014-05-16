@@ -48,6 +48,7 @@ typedef struct EventPredicate {
 typedef struct KnowledgeBasePredicate {
 	Constraint *constraints;	// Predicate constraints
 	int constraintsNum;				// Number of constraints in the predicate
+	CompKind kind;						// The kind of constraint
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
 	unsigned char * dbId;			// The KB db identifier for cache access
@@ -96,6 +97,24 @@ public:
 	 * Returns false if an error occurs.
 	 */
 	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
+
+	/**
+		 * Adds the KB root predicate, in case it is a KB Predicate
+		 * it refers the last standard predicate (at least one standard predicate must exist)
+		 * The KB base count starts from the end of the standard predicate count (KBpredicates are
+		 * inserted at the end of the predicates stack).
+		 * Returns false if an error occurs
+		 */
+	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind);
+
+	/**
+	 * Adds a KB predicate; KB root predicate must be already defined.
+	 * The KB base count starts from the end of the standard predicate count (KBpredicates are
+	 * inserted at the end of the predicates stack).
+	 * Returns false if an error occurs.
+	 */
+	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind);
+
 
 	/**
 	 * Adds external parameter to KB predicate the first id refers to a standard predicate,

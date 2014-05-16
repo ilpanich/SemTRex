@@ -54,7 +54,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 
 	// Initialize the query registry with the kb predicates related queries
 	for (int i=0; i< pkt->getKBPredicatesNum(); i++) {
-		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param);
+		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param, pkt->getKBPredicate(i).kind);
 		queryRegistry.insert(make_pair(kbNum, item));
 		kbNum++;
 	}
@@ -148,11 +148,11 @@ StacksRule::~StacksRule() {
 		delete it->second;
 	}
 
-	/*
+
 	for (map<int, QueryItem *>::iterator it=queryRegistry.begin(); it!=queryRegistry.end(); ++it) {
 		delete it->second;
 	}
-	 */
+
 
 	delete eventGenerator;
 	// Check if the new code requires other cleaning actions to be performed on destroy
