@@ -31,7 +31,7 @@ void runEval();
 /**
  * Starts the basic evaluation
  */
-void runBasicEval(bool evalType);
+void runBasicEval();
 
 } // end namespace trex_testing
 

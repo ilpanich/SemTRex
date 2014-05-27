@@ -202,7 +202,8 @@ void TRexEngine::processPubPkt(PubPkt *pkt) {
 	// Notifies results to listeners
 	for (set<ResultListener *>::iterator it=resultListeners.begin(); it!=resultListeners.end(); ++it) {
 		ResultListener *listener = *it;
-		listener->handleResult(result, duration);
+		if (pkt->getEventType() == 1000) // TODO: Remove! Modified engine version for eval purposes
+			listener->handleResult(result, duration);
 	}
 
 	for (set<PubPkt *>::iterator it=result.begin(); it!=result.end(); ++it) {

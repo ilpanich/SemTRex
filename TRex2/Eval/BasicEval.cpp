@@ -23,7 +23,7 @@
 
 using namespace std;
 
-BasicEval::BasicEval(bool testType) {
+BasicEval::BasicEval(bool testType, int numRules) {
 	engine = new TRexEngine(2);
 	resultListener = new EvalResultListener;
 
@@ -31,9 +31,9 @@ BasicEval::BasicEval(bool testType) {
 
 	set<RulePkt *> rulePkts;
 	if (!evalType)
-		createParamRules(rulePkts);
+		createParamRules(rulePkts, numRules);
 	else
-		createKbRules(rulePkts);
+		createKbRules(rulePkts, numRules);
 	for (set<RulePkt *>::iterator it=rulePkts.begin(); it!=rulePkts.end(); ++it) {
 		RulePkt *pkt = *it;
 		engine->processRulePkt(pkt);
@@ -50,24 +50,24 @@ BasicEval::~BasicEval() {
 }
 
 
-void BasicEval::createKbRules(set<RulePkt *> &rules) {
+void BasicEval::createKbRules(set<RulePkt *> &rules, int numRules) {
 	int id = 1; //rand() % 10;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < numRules; i++) {
 		RulePkt *pkt = new RulePkt(true);
-		int q = i;  //rand() % 8;
-		string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
-		string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
-		int n = rand() % 79;
-		int c = rand() % 5;
+		int q = rand() % 6;
+//		string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
+//		string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
+//		int n = rand() % 79;
+//		int c = rand() % 5;
 
 		string queries[] = {"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> ?c  }", "select ?city where { ?p <bornInLocation> ?city }",
 				"select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }",
 				"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> &city }",
 				"select ?city where { ?p <isCalled> &name. ?p <bornInLocation> ?city }",
-				"select ?name ?city where { ?p <isCalled> &name. ?p <bornInLocation> &city }",
-				"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"" + cities[c] + "\" }",
-				"select ?city where { ?p <isCalled> \"" + names[n] + "\". ?p <bornInLocation> ?city }"};
+				"select ?name ?city where { ?p <isCalled> &name. ?p <bornInLocation> &city }"}; //,
+//				"select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"" + cities[c] + "\" }",
+//				"select ?city where { ?p <isCalled> \"" + names[n] + "\". ?p <bornInLocation> ?city }"};
 
 		if (q == 0 || q == 3 || q == 6) {
 			pkt->addRootPredicate(1000, NULL, 0);
@@ -248,12 +248,12 @@ void BasicEval::createKbRules(set<RulePkt *> &rules) {
 	}
 }
 
-void BasicEval::createParamRules(set<RulePkt *> &rules) {
-	int id = rand() % 10;
+void BasicEval::createParamRules(set<RulePkt *> &rules, int numRules) {
+	//int id = rand() % 10;
 
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < numRules; i++) {
 		RulePkt *pkt = new RulePkt(true);
-		int q = i; //rand() % 3;
+		int q = rand() % 3;
 		/*
 		if (q == 0) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
@@ -376,7 +376,7 @@ void BasicEval::createParamRules(set<RulePkt *> &rules) {
 	}
 }
 
-PubPkt * BasicEval::createParamPkt1(Resultset rs) {
+PubPkt * BasicEval::createParamPkt1(Resultset rs, int numPkt) {
 	int r = rand();
 	int id = 1001; //(r % 10) * 1000 +1;
 	int pos;
@@ -385,7 +385,7 @@ PubPkt * BasicEval::createParamPkt1(Resultset rs) {
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
 	//	int c = r % 5;
-	pos = r % 20;
+	pos = r % (numPkt / 20);
 	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
 	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 	PubPkt *pkt;
@@ -409,7 +409,7 @@ PubPkt * BasicEval::createParamPkt1(Resultset rs) {
 	return pkt;
 }
 
-PubPkt * BasicEval::createParamPkt2(Resultset rs) {
+PubPkt * BasicEval::createParamPkt2(Resultset rs, int numPkt) {
 	int r = rand();
 	int id = 1000; //(rand() % 10) * 1000;
 	int pos;
@@ -417,7 +417,7 @@ PubPkt * BasicEval::createParamPkt2(Resultset rs) {
 	//	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
-	pos = r % 20;
+	pos = r % (numPkt / 20);
 	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
 	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 	PubPkt *pkt;
@@ -441,18 +441,13 @@ PubPkt * BasicEval::createParamPkt2(Resultset rs) {
 	return pkt;
 }
 
-int BasicEval::startBasicEval() {
+int BasicEval::startBasicEval(Resultset rs, int numPkt) {
 
 	time_t bTime, eTime;
 	double duration;
 
-	Resultset rs;
-
 	cout << endl << "### Starting evaluation ###" << endl << endl;
 	//
-	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city }";
-	rs = RDFQuery::execQuery(db, query, false);
 	//
 	//	cout << "Resultset size: " << (int) rs.getAllRes().size() << endl;
 
@@ -460,23 +455,23 @@ int BasicEval::startBasicEval() {
 
 	vector<PubPkt *> pubs;
 	if (!evalType) {
-		for(int i = 0; i < 200; i++) {
+		for(int i = 0; i < numPkt; i++) {
 			//			cout << "1" << endl;
-			PubPkt * pack1 = createParamPkt1(rs);
+			PubPkt * pack1 = createParamPkt1(rs, numPkt);
 			pack1->setTime(i);
 			pubs.push_back(pack1);
 			//			cout << "2" << endl;
 		}
-		for(int i = 200; i < 400; i++) {
+		for(int i = numPkt; i < numPkt * 2; i++) {
 			//			cout << "3" << endl;
-			PubPkt * pack2 = createParamPkt2(rs);
+			PubPkt * pack2 = createParamPkt2(rs, numPkt);
 			pack2->setTime(i);
 			pubs.push_back(pack2);
 			//			cout << "4" << endl;
 		}
 	} else {
-		for(int i = 0; i < 200; i++) {
-			PubPkt * pack2 = createParamPkt2(rs);
+		for(int i = 0; i < numPkt; i++) {
+			PubPkt * pack2 = createParamPkt2(rs, numPkt);
 			pack2->setTime(i);
 			pubs.push_back(pack2);
 		}
@@ -501,13 +496,19 @@ int BasicEval::startBasicEval() {
 	eTime = time(NULL);
 
 	duration = eTime - bTime;
+	string dectFN = "./Results/dectResults" + boost::lexical_cast<std::string>(evalType);
+	string maxFN = "./Results/maxTime" + boost::lexical_cast<std::string>(evalType);
+	string minFN = "./Results/minTime" + boost::lexical_cast<std::string>(evalType);
+	string meanFN = "./Results/meanTime" + boost::lexical_cast<std::string>(evalType);
+	string percFN = "./Results/percTime" + boost::lexical_cast<std::string>(evalType);
+	string thrFN = "./Results/throughput" + boost::lexical_cast<std::string>(evalType);
 
-	resultListener->printDetectedEvents(evalType,"./dectResults",1,1);
-	resultListener->printMaxProcTime(evalType,"./maxTime",1,1);
-	resultListener->printMinProcTime(evalType,"./minTime",1,1);
-	resultListener->printMeanProcTime(evalType,"./meanTime",1,1);
-	resultListener->printPercProcTime(evalType,"./PercTime",1,1);
-	resultListener->printToFile(evalType,"./throughput",nPkt/(duration*1000000),1,1);
+	resultListener->printDetectedEvents(numPkt,dectFN.c_str(),1,1);
+	resultListener->printMaxProcTime(numPkt,maxFN.c_str(),1,1);
+	resultListener->printMinProcTime(numPkt,minFN.c_str(),1,1);
+	resultListener->printMeanProcTime(numPkt,meanFN.c_str(),1,1);
+	resultListener->printPercProcTime(numPkt,percFN.c_str(),1,1);
+	resultListener->printToFile(numPkt,thrFN.c_str(),nPkt/(duration*1000000),1,1);
 
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;

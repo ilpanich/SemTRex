@@ -101,9 +101,22 @@ void trex_testing::runEval() {
 }
 
 // Run Basic Eval
-void trex_testing::runBasicEval(bool evalType) {
-	BasicEval * b = new BasicEval(evalType);
-	b->startBasicEval();
+void trex_testing::runBasicEval() {
+
+	Resultset rs;
+	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 500";
+	rs = RDFQuery::execQuery(db, query, false);
+
+	int i = 10;
+
+	while (i <= 10000) {
+		BasicEval * b = new BasicEval(0,i);
+		b->startBasicEval(rs,i*20);
+		b = new BasicEval(1,i);
+		b->startBasicEval(rs,i*20);
+		i = i * 5;
+	}
 }
 
 // Core Test Case (Last)

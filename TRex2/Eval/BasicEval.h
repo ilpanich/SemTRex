@@ -44,7 +44,7 @@ public:
 	/**
 	 * Constructor
 	 */
-	BasicEval(bool testType);
+	BasicEval(bool testType, int numRules);
 
 	/**
 	 * Destructor
@@ -54,7 +54,7 @@ public:
 	/**
 	 * Performs an evaluation test: returns the total number of packets dropped by the producer
 	 */
-	int startBasicEval();
+	int startBasicEval(Resultset rs, int numPkt);
 
 private:
 	TRexEngine *engine;						// Engine
@@ -63,13 +63,13 @@ private:
 
 	bool evalType;								// TRUE if KB eval, otherwise FALSE
 
-	void createParamRules(std::set<RulePkt *> &rules);
+	void createParamRules(std::set<RulePkt *> &rules, int numRules);
 
-	void createKbRules(std::set<RulePkt *> &rules);
+	void createKbRules(std::set<RulePkt *> &rules, int numRules);
 
-	PubPkt * createParamPkt1(Resultset rs);
+	PubPkt * createParamPkt1(Resultset rs, int numPkt);
 
-	PubPkt * createParamPkt2(Resultset rs);
+	PubPkt * createParamPkt2(Resultset rs, int numPkt);
 
 };
 
