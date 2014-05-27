@@ -24,7 +24,7 @@
 using namespace std;
 
 BasicEval::BasicEval(bool testType, int numRules) {
-	engine = new TRexEngine(2);
+	engine = new TRexEngine(4);
 	resultListener = new EvalResultListener;
 
 	evalType = testType;
@@ -503,12 +503,12 @@ int BasicEval::startBasicEval(Resultset rs, int numPkt) {
 	string percFN = "./Results/percTime" + boost::lexical_cast<std::string>(evalType);
 	string thrFN = "./Results/throughput" + boost::lexical_cast<std::string>(evalType);
 
-	resultListener->printDetectedEvents(numPkt,dectFN.c_str(),1,1);
-	resultListener->printMaxProcTime(numPkt,maxFN.c_str(),1,1);
-	resultListener->printMinProcTime(numPkt,minFN.c_str(),1,1);
-	resultListener->printMeanProcTime(numPkt,meanFN.c_str(),1,1);
-	resultListener->printPercProcTime(numPkt,percFN.c_str(),1,1);
-	resultListener->printToFile(numPkt,thrFN.c_str(),nPkt/(duration*1000000),1,1);
+	resultListener->printDetectedEvents(nPkt,dectFN.c_str(),1,1);
+	resultListener->printMaxProcTime(nPkt,maxFN.c_str(),1,1);
+	resultListener->printMinProcTime(nPkt,minFN.c_str(),1,1);
+	resultListener->printMeanProcTime(nPkt,meanFN.c_str(),1,1);
+	resultListener->printPercProcTime(nPkt,percFN.c_str(),1,1);
+	resultListener->printToFile(nPkt,thrFN.c_str(),nPkt/(duration*1000000),1,1);
 
 	cout << endl << endl << "### Evaluation finished ###" << endl << endl;
 	return 0;

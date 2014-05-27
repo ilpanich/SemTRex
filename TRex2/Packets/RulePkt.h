@@ -88,7 +88,7 @@ public:
 		 * inserted at the end of the predicates stack).
 		 * Returns false if an error occurs
 		 */
-	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
+//	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
 
 	/**
 	 * Adds a KB predicate; KB root predicate must be already defined.
@@ -96,7 +96,7 @@ public:
 	 * inserted at the end of the predicates stack).
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
+//	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query);
 
 	/**
 		 * Adds the KB root predicate, in case it is a KB Predicate
@@ -105,7 +105,7 @@ public:
 		 * inserted at the end of the predicates stack).
 		 * Returns false if an error occurs
 		 */
-	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind);
+	bool addKBRootPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind = LAST_WITHIN);
 
 	/**
 	 * Adds a KB predicate; KB root predicate must be already defined.
@@ -113,7 +113,7 @@ public:
 	 * inserted at the end of the predicates stack).
 	 * Returns false if an error occurs.
 	 */
-	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind);
+	bool addKBPredicate(Constraint *constr, int constrLen, std::string kb, std::string query, CompKind kind = LAST_WITHIN);
 
 
 	/**

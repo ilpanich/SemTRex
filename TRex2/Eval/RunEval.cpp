@@ -112,11 +112,14 @@ void trex_testing::runBasicEval() {
 
 	while (i <= 10000) {
 		BasicEval * b = new BasicEval(0,i);
-		b->startBasicEval(rs,i*20);
+		b->startBasicEval(rs,i*2.5);
+		delete b;
 		b = new BasicEval(1,i);
-		b->startBasicEval(rs,i*20);
-		i = i * 5;
+		b->startBasicEval(rs,i*2.5);
+		delete b;
+		i = i * 4;
 	}
+
 }
 
 // Core Test Case (Last)
