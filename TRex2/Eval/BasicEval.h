@@ -61,7 +61,9 @@ private:
 
 	EvalResultListener *resultListener;		// ResultListener
 
-	bool evalType;								// TRUE if KB eval, otherwise FALSE
+	bool evalType;							// TRUE if KB eval, otherwise FALSE
+
+	int numR;								// Number of rules
 
 	void createParamRules(std::set<RulePkt *> &rules, int numRules);
 

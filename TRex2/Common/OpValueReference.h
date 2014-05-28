@@ -33,6 +33,7 @@ public:
 	 * Creates an exact copy (deep copy) of the data structure
 	 */
 	virtual OpValueReference * dup() = 0;
+
 };
 
 #endif /* OPVALUEREFERENCE_H_ */

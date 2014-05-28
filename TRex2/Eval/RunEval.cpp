@@ -93,7 +93,7 @@ void trex_testing::runEval() {
 		runAggregate(seed, paramHandler, resultListener);
 		runParam(seed, paramHandler, resultListener);
 		 */
-//		runKb(seed, paramHandler, resultListener);
+		//		runKb(seed, paramHandler, resultListener);
 	}
 
 	delete resultListener;
@@ -108,16 +108,21 @@ void trex_testing::runBasicEval() {
 	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 500";
 	rs = RDFQuery::execQuery(db, query, false);
 
-	int i = 10;
+	int j;
 
-	while (i <= 10000) {
-		BasicEval * b = new BasicEval(0,i);
-		b->startBasicEval(rs,i*2.5);
-		delete b;
-		b = new BasicEval(1,i);
-		b->startBasicEval(rs,i*2.5);
-		delete b;
-		i = i * 4;
+	for(int i = 1000; i <= 5000; i += 1000) {
+
+		j = 100;
+
+		while (j <= 1000) {
+			BasicEval * b = new BasicEval(0,j);
+			b->startBasicEval(rs,i);
+			delete b;
+			b = new BasicEval(1,j);
+			b->startBasicEval(rs,i);
+			delete b;
+			j = j +100;
+		}
 	}
 
 }

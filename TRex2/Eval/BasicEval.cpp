@@ -28,6 +28,7 @@ BasicEval::BasicEval(bool testType, int numRules) {
 	resultListener = new EvalResultListener;
 
 	evalType = testType;
+	numR = numRules;
 
 	set<RulePkt *> rulePkts;
 	if (!evalType)
@@ -496,12 +497,12 @@ int BasicEval::startBasicEval(Resultset rs, int numPkt) {
 	eTime = time(NULL);
 
 	duration = eTime - bTime;
-	string dectFN = "./Results/dectResults" + boost::lexical_cast<std::string>(evalType);
-	string maxFN = "./Results/maxTime" + boost::lexical_cast<std::string>(evalType);
-	string minFN = "./Results/minTime" + boost::lexical_cast<std::string>(evalType);
-	string meanFN = "./Results/meanTime" + boost::lexical_cast<std::string>(evalType);
-	string percFN = "./Results/percTime" + boost::lexical_cast<std::string>(evalType);
-	string thrFN = "./Results/throughput" + boost::lexical_cast<std::string>(evalType);
+	string dectFN = "./Results/dectResults" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
+	string maxFN = "./Results/maxTime" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
+	string minFN = "./Results/minTime" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
+	string meanFN = "./Results/meanTime" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
+	string percFN = "./Results/percTime" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
+	string thrFN = "./Results/throughput" + boost::lexical_cast<string>(evalType) + "_" + boost::lexical_cast<string>(numR);
 
 	resultListener->printDetectedEvents(nPkt,dectFN.c_str(),1,1);
 	resultListener->printMaxProcTime(nPkt,maxFN.c_str(),1,1);
