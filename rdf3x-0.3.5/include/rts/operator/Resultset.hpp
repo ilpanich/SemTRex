@@ -23,6 +23,7 @@ public:
 
 	void addResult(Result r);
 	std::vector<Result> getAllRes();
+	void clearRes();
 
 	iterator first() {return results.begin();}
 

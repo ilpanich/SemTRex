@@ -43,7 +43,7 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 }
 
 QueryItem::~QueryItem() {
-
+	rs.clearRes();
 }
 
 bool QueryItem::runQuery() {

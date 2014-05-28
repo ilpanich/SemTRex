@@ -545,33 +545,44 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 						Result res = *it;
 						if(item->getField(parameter->name2) != -1) {
 							Field f = res.getResult()[item->getField(parameter->name2)];
-							if (type1 == INT && f.getType() != INTV) return false;
-							if (type1 == FLOAT && f.getType() != FLOATV) return false;
-							if (type1 == BOOL && f.getType() != BOOLV) return false;
-							if (type1 == STRING && f.getType() != STRINGV) return false;
+							if (type1 == INT && f.getType() != INTV) { rs.clearRes(); return false; }
+							if (type1 == FLOAT && f.getType() != FLOATV) { rs.clearRes(); return false; };
+							if (type1 == BOOL && f.getType() != BOOLV) { rs.clearRes(); return false; }
+							if (type1 == STRING && f.getType() != STRINGV) { rs.clearRes(); return false; }
 							switch(type1) {
 							case INT:
-								if (pkt->getIntAttributeVal(index1)==f.getIValue())
+								if (pkt->getIntAttributeVal(index1)==f.getIValue()) {
+									rs.clearRes();
 									return true;
+								}
 								break;
 							case FLOAT:
-								if (pkt->getFloatAttributeVal(index1)==f.getFValue())
+								if (pkt->getFloatAttributeVal(index1)==f.getFValue()) {
+									rs.clearRes();
 									return true;
+								}
 								break;
 							case BOOL:
-								if (pkt->getBoolAttributeVal(index1)==f.getBValue())
+								if (pkt->getBoolAttributeVal(index1)==f.getBValue()) {
+									rs.clearRes();
 									return true;
+								}
 								break;
 							case STRING:
 								char result1[STRING_VAL_LEN];
 								pkt->getStringAttributeVal(index1, result1);
-								if (strcmp(result1, f.getSValue())==0)
+								if (strcmp(result1, f.getSValue())==0) {
+									rs.clearRes();
 									return true;
+								}
 								break;
 							}
-						} else
+						} else {
+							rs.clearRes();
 							return false;
+						}
 					}
+					rs.clearRes();
 					return false;
 				}
 				return false;
@@ -630,10 +641,10 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 							if (! pkt->getAttributeIndexAndType(par1Name, index1, type1)) return false;
 							if(item->getField(par2Name) != -1) {
 								Field f = res.getResult()[item->getField(par2Name)];
-								if (type1 == INT && f.getType() != INTV) return false;
-								if (type1 == FLOAT && f.getType() != FLOATV) return false;
-								if (type1 == BOOL && f.getType() != BOOLV) return false;
-								if (type1 == STRING && f.getType() != STRINGV) return false;
+								if (type1 == INT && f.getType() != INTV) { rs.clearRes(); return false; }
+								if (type1 == FLOAT && f.getType() != FLOATV) { rs.clearRes(); return false; }
+								if (type1 == BOOL && f.getType() != BOOLV) { rs.clearRes(); return false; }
+								if (type1 == STRING && f.getType() != STRINGV) { rs.clearRes(); return false; }
 								switch(type1) {
 								case INT:
 									if (pkt->getIntAttributeVal(index1)==f.getIValue())
@@ -654,14 +665,19 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 										valid++;
 									break;
 								}
-							} else
+							} else {
+								rs.clearRes();
 								return false;
+							}
 							if (valid != idx +1)
 								break;
 						}
-						if (valid == parSize)
+						if (valid == parSize) {
+							rs.clearRes();
 							return true;
+						}
 					}
+					rs.clearRes();
 					return false;
 				} else
 					return false;

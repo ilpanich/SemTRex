@@ -27,3 +27,8 @@ vector<Result> Resultset::getAllRes()
 {
 	return Resultset::results;
 }
+
+void Resultset::clearRes()
+{
+	Resultset::results.clear();
+}
