@@ -112,7 +112,7 @@ void trex_testing::runBasicEval() {
 
 	for(int i = 100; i <= 2500; i += 100) {
 
-		j = 10;
+		j = 50;
 
 		while (j <= 500) {
 			BasicEval * b = new BasicEval(0,j);
@@ -121,7 +121,7 @@ void trex_testing::runBasicEval() {
 			b = new BasicEval(1,j);
 			b->startBasicEval(rs,i);
 			delete b;
-			j = j +100;
+			j = j + 50;
 		}
 	}
 
