@@ -108,21 +108,13 @@ void trex_testing::runBasicEval() {
 	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 500";
 	rs = RDFQuery::execQuery(db, query, false);
 
-	int j;
-
-	for(int i = 100; i <= 2500; i += 100) {
-
-		j = 50;
-
-		while (j <= 500) {
-			BasicEval * b = new BasicEval(0,j);
-			b->startBasicEval(rs,i);
-			delete b;
-			b = new BasicEval(1,j);
-			b->startBasicEval(rs,i);
-			delete b;
-			j = j + 50;
-		}
+	for(int i = 200; i <= 3000; i += 100) {
+		BasicEval * b = new BasicEval(0,100);
+		b->startBasicEval(rs,i);
+		delete b;
+		b = new BasicEval(1,100);
+		b->startBasicEval(rs,i);
+		delete b;
 	}
 
 }
