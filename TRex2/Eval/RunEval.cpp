@@ -109,10 +109,10 @@ void trex_testing::runBasicEval() {
 	rs = RDFQuery::execQuery(db, query, false);
 
 	for(int i = 200; i <= 3000; i += 100) {
-		BasicEval * b = new BasicEval(0,100);
+		BasicEval * b = new BasicEval(0,50);
 		b->startBasicEval(rs,i);
 		delete b;
-		b = new BasicEval(1,100);
+		b = new BasicEval(1,50);
 		b->startBasicEval(rs,i);
 		delete b;
 	}
