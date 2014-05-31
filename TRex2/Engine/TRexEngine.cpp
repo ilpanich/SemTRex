@@ -71,7 +71,8 @@ void * processor(void *parShared) {
 					}
 				}
 				if (lastState) {
-					s->stacksRule->find(i)->second->startComputation(s->pkt, s->result);
+					s->stacksRule->find(i)->second->startComputation(s->pkt, s->result, s->qResCache);
+					//s->stacksRule->find(i)->second->startComputation(s->pkt, s->result);
 				}
 			}
 		}
@@ -136,6 +137,7 @@ void TRexEngine::finalize() {
 		shared[i].resultMutex = resultMutex;
 		shared[i].resultCond = resultCond;
 		shared[i].stacksRule = stacksRules;
+		shared[i].qResCache = qResCache;
 		shared[i].stillProcessing = stillProcessing;
 		pthread_mutex_init(shared[i].processMutex, NULL);
 		pthread_cond_init(shared[i].processCond, NULL);

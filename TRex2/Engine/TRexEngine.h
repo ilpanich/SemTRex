@@ -26,9 +26,16 @@
 #include "ResultListener.h"
 #include "../Packets/RulePkt.h"
 #include "../Packets/PubPkt.h"
+#include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
 #include <pthread.h>
 
 typedef std::map<int, StacksRule *> StacksRules;
+
+typedef struct CacheStruct {
+	unsigned char * dbId;
+	unsigned char * queryId;
+	Resultset rs;
+} Cache;
 
 typedef struct SharedStruct {
 	pthread_cond_t *processCond;
@@ -43,6 +50,7 @@ typedef struct SharedStruct {
 	MatchingHandler *mh;
 	StacksRules *stacksRule;
 	PubPkt *pkt;
+	Cache *qResCache;
 } Shared;
 
 /**
@@ -93,6 +101,7 @@ private:
 	std::set<ResultListener *> resultListeners;	// Result listeners associated with the processing engine
 	pthread_t *threads;													// Array of threads to use
 	Shared *shared;															// Shared Memory
+	Cache *qResCache;				// Query Result Cache
 	int numProc;																// Number of processors to use
 
 };
