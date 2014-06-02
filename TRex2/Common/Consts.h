@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
 #include <map>
+#include <string>
 
 /**
  * LOG defines whether debugging information have to be printed during exeucution or not
@@ -221,8 +222,18 @@ typedef struct ExtParam {
 typedef struct ResIDstruct {
 	unsigned char * dbId;
 	unsigned char * qId;
+
+	bool operator<( const ResIDstruct &r ) const {
+		if (strcmp((const char*) dbId, (const char*) r.dbId) < 0) return true;
+		if (strcmp((const char*) dbId, (const char*) r.dbId) > 0) return false;
+		if (strcmp((const char*) dbId, (const char*) r.dbId) == 0) {
+			if (strcmp((const char*) qId, (const char*) r.qId) < 0) return true;
+			if (strcmp((const char*) qId, (const char*) r.qId) > 0) return false;
+			if (strcmp((const char*) qId, (const char*) r.qId) == 0) return false;
+		}
+	}
 } ResultID;
 
-typedef std::map<ResultID *,  Resultset *> Cache;
+typedef std::map<ResultID,  Resultset> Cache;
 
 #endif

@@ -131,7 +131,7 @@ bool QueryItem::hasMoreResults() {
 }
 
 bool QueryItem::hasCachedResults(Cache *qCache) {
-	Cache::iterator it = qCache->find(*resID);
+	Cache::iterator it = qCache->find(resID);
 	if (it == qCache->end())
 		return false;
 
@@ -139,11 +139,11 @@ bool QueryItem::hasCachedResults(Cache *qCache) {
 }
 
 Resultset QueryItem::getCachedResults(Cache *qCache) {
-	Cache::iterator it = qCache->find(*resID);
+	Cache::iterator it = qCache->find(resID);
 
 	return it->second;
 }
 
 void QueryItem::storeResults(Cache *qCache) {
-	qCache->insert(pair<ResultID *, Resultset *>(*resID,rs)));
+	qCache->insert(make_pair(resID,rs));
 }
