@@ -25,6 +25,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
+#include <map>
 
 /**
  * LOG defines whether debugging information have to be printed during exeucution or not
@@ -211,5 +213,16 @@ typedef struct ExtParam {
 	int evIndex2;
 	char name2[NAME_LEN];
 } ExtParameter;
+
+/*
+ * Cache structures
+ */
+
+typedef struct ResIDstruct {
+	unsigned char * dbId;
+	unsigned char * qId;
+} ResultID;
+
+typedef std::map<ResultID *,  Resultset *> Cache;
 
 #endif

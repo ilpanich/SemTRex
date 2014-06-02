@@ -31,12 +31,6 @@
 
 typedef std::map<int, StacksRule *> StacksRules;
 
-typedef struct CacheStruct {
-	unsigned char * dbId;
-	unsigned char * queryId;
-	Resultset rs;
-} Cache;
-
 typedef struct SharedStruct {
 	pthread_cond_t *processCond;
 	pthread_cond_t *resultCond;

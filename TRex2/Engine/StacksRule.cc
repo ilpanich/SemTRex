@@ -171,7 +171,9 @@ void StacksRule::addToNegationStack(PubPkt *pkt, int index) {
 	parametricAddToStack(pkt, negsSize[index], receivedNegs[index]);
 }
 
-void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results) {
+void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results, Cache *cache) {
+
+	queryCache = cache;
 
 	// Adds the terminator to the last stack
 	pkt->incRefCount();
@@ -228,7 +230,7 @@ void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &res
 			if (stateIndex!=0) addToStack(pkt, stateIndex);
 			else lastStack = true;
 		}
-		if (lastStack) startComputation(pkt, results);
+		if (lastStack) startComputation(pkt, results, NULL);
 	}
 }
 
@@ -539,7 +541,7 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 			}
 			else {
 
-				if (item->runQuery()) {
+				if (item->runQuery(queryCache)) {
 					Resultset rs = item->getResult();
 					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
 						Result res = *it;
@@ -628,7 +630,7 @@ bool StacksRule::checkParameter(PubPkt *pkt, PartialEvent *partialEvent, Paramet
 				return false;
 			} else {
 
-				if (item->runQuery()) {
+				if (item->runQuery(queryCache)) {
 					Resultset rs = item->getResult();
 					for(Resultset::iterator it=rs.first(); it!=rs.last(); it++) {
 						Result res = *it;

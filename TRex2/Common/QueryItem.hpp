@@ -23,8 +23,7 @@ private:
 	std::string db;									// The KB db reference for quering
 	std::string query;								// The KB query
 	std::string originalQuery;						// The original query, in case substitution occurs
-	unsigned char * dbId;							// The KB db identifier for cache access
-	unsigned char * qId;							// The KB query identifier for cache access
+	ResultID resID;
 	std::vector<ExtParameter> params;				// The KB query optional external parameters
 	std::vector<std::string> fields;				// The list of fields that the query returns
 	CompKind kind;									// The kind of constraint
@@ -33,13 +32,17 @@ private:
 	int offset;										// Offset for scanning query results
 	std::map<std::string, bool> replacedParams;		// Tell if a parameter has been replaced or not
 
+	bool hasCachedResults(Cache *qCache);
+	Resultset getCachedResults(Cache *qCache);
+	void storeResults(Cache *qCache);
+
 public:
 
 	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, unsigned char * queryId, std::vector<ExtParameter> p, CompKind k);
 
 	~QueryItem();
 
-	bool runQuery();
+	bool runQuery(Cache *qCache);
 
 	Resultset getResult();
 

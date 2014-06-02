@@ -78,7 +78,7 @@ public:
 	/**
 	 * Adds the given packet to stack 0 and starts the computation of composite events.
 	 */
-	void startComputation(PubPkt *pkt, std::set<PubPkt *> &results);
+	void startComputation(PubPkt *pkt, std::set<PubPkt *> &results, Cache *cache);
 
 	/**
 	 * Process pkt: used only for testing purpose
@@ -115,6 +115,8 @@ private:
 	int compositeEventId;																					// Used to generate a composite event id no attributes are defined
 
 	std::map<int, QueryItem *> queryRegistry;					// Keeps the registry of the query to be executed
+
+	Cache * queryCache;											// Cache for queries results
 
 	/**
 	 * Adds the packet to the given stack (can be a normal stack, or a stack for negations or aggregates)

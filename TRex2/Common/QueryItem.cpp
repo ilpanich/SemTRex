@@ -15,8 +15,8 @@ QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned cha
 	db = string(kb);
 	query = string(q);
 	originalQuery = string(q);
-	dbId = kbId;
-	qId = queryId;
+	resID.dbId = kbId;
+	resID.qId = queryId;
 	params = p;
 	kind = k;
 
@@ -46,12 +46,18 @@ QueryItem::~QueryItem() {
 	rs.clearRes();
 }
 
-bool QueryItem::runQuery() {
+bool QueryItem::runQuery(Cache *qCache) {
 
 	//cerr << query << endl;
 
-	if(!needsReplace())
-		rs = RDFQuery::execQuery(db, query, false);
+	if(!needsReplace()) {
+		if(!hasCachedResults(qCache)) {
+			rs = RDFQuery::execQuery(db, query, false);
+			storeResults(qCache);
+		}
+		else
+			rs = getCachedResults(qCache);
+	}
 	else				// TODO: here external parameters of the query must be handled
 		return false;
 	if(rs.getAllRes().empty())
@@ -81,20 +87,20 @@ bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pVa
 
 	map<string,bool>::iterator foundEl;
 
-    if(pName.empty())
-        return false;
-    size_t start_pos = 0;
-    while((start_pos = query.find(pName, start_pos)) != std::string::npos) {
-        query.replace(start_pos, pName.length(), "\"" +  pValue + "\"");
-        start_pos += pValue.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
-    foundEl = replacedParams.find(pName);
-    if (foundEl == replacedParams.end())
-    	return false;
-    else {
-    	foundEl->second = true;
-    	return true;
-    }
+	if(pName.empty())
+		return false;
+	size_t start_pos = 0;
+	while((start_pos = query.find(pName, start_pos)) != std::string::npos) {
+		query.replace(start_pos, pName.length(), "\"" +  pValue + "\"");
+		start_pos += pValue.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+	}
+	foundEl = replacedParams.find(pName);
+	if (foundEl == replacedParams.end())
+		return false;
+	else {
+		foundEl->second = true;
+		return true;
+	}
 }
 
 bool QueryItem::needsReplace() {
@@ -122,4 +128,22 @@ bool QueryItem::hasMoreResults() {
 	offset += limit;
 	string nextQuery = originalQuery + " LIMIT " + lexical_cast<string>(limit) + "OFFSET " + lexical_cast<string>(offset);
 	return RDFQuery::execQuery(db, query, false).getAllRes().empty();
+}
+
+bool QueryItem::hasCachedResults(Cache *qCache) {
+	Cache::iterator it = qCache->find(*resID);
+	if (it == qCache->end())
+		return false;
+
+	return true;
+}
+
+Resultset QueryItem::getCachedResults(Cache *qCache) {
+	Cache::iterator it = qCache->find(*resID);
+
+	return it->second;
+}
+
+void QueryItem::storeResults(Cache *qCache) {
+	qCache->insert(pair<ResultID *, Resultset *>(*resID,rs)));
 }
