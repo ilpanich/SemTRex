@@ -55,8 +55,36 @@ bool QueryItem::runQuery(Cache *qCache) {
 			rs = RDFQuery::execQuery(db, query, false);
 			storeResults(qCache);
 		}
-		else
+		else {
+			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
+			//			rs = RDFQuery::execQuery(db, query, false);
 			rs = getCachedResults(qCache);
+			Resultset rs1 = RDFQuery::execQuery(db, query, false);
+
+			int cont = 0;
+			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
+				cont++;
+				cerr << cont << ")CACHE SIZE (" << rs1.getAllRes().size() << ") DIFFERENT FROM REAL QUERY ANSWER SET SIZE (" << rs.getAllRes().size() << ")!" << endl;
+			}
+			else {
+				for (int i = 0; i < rs1.getAllRes().size(); i++) {
+					Result res1 = rs1.getAllRes().at(i);
+					Result res2 = rs.getAllRes().at(i);
+					if (res1.getResult().size() != res2.getResult().size())
+						cerr << "CACHE CONTENT DIFFERENT FROM REAL QUERY ANSWER SET CONTENT!" << endl;
+					else {
+						for (int j = 0; j < res1.getResult().size(); j++) {
+							Field f1 = res1.getResult()[j];
+							Field f2 = res2.getResult()[j];
+							if(strcmp(f1.getSValue(), f2.getSValue()) != 0)
+								cerr << "CACHE FIELD CONTENT DIFFERENT FROM REAL QUERY ANSWER SET FIELD CONTENT!" << endl;
+						}
+
+					}
+
+				}
+			}
+		}
 	}
 	else				// TODO: here external parameters of the query must be handled
 		return false;
@@ -141,9 +169,18 @@ bool QueryItem::hasCachedResults(Cache *qCache) {
 Resultset QueryItem::getCachedResults(Cache *qCache) {
 	Cache::iterator it = qCache->find(resID);
 
+//		for(Resultset::iterator iter=it->second.first(); iter!=it->second.last(); iter++) {
+//			Result res = *iter;
+//			for (int i = 0; i < res.getResult().size(); i++) {
+//				Field f = res.getResult()[i];
+//				cerr << f.getSValue() << "\t";
+//			}
+//			cerr << endl;
+//		}
 	return it->second;
 }
 
+
 void QueryItem::storeResults(Cache *qCache) {
-	qCache->insert(make_pair(resID,rs));
+	qCache->insert(make_pair(resID, rs));
 }

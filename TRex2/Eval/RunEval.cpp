@@ -26,6 +26,7 @@
 #include "EvaluationRunner.h"
 #include "EvalResultListener.h"
 #include "ParamHandler.h"
+#include <unistd.h>
 
 using namespace std;
 using namespace trex_testing;
@@ -111,9 +112,11 @@ void trex_testing::runBasicEval() {
 	for(int i = 200; i <= 3000; i += 100) {
 		BasicEval * b = new BasicEval(0,50);
 		b->startBasicEval(rs,i);
+		usleep(1500);
 		delete b;
 		b = new BasicEval(1,50);
 		b->startBasicEval(rs,i);
+		usleep(1500);
 		delete b;
 	}
 

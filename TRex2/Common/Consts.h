@@ -232,6 +232,14 @@ typedef struct ResIDstruct {
 			if (strcmp((const char*) qId, (const char*) r.qId) == 0) return false;
 		}
 	}
+
+	bool operator==( const ResIDstruct &r ) const {
+			if (strcmp((const char*) dbId, (const char*) r.dbId) == 0 && strcmp((const char*) qId, (const char*) r.qId) == 0) {
+				return true;
+			}
+			else
+				return false;
+		}
 } ResultID;
 
 typedef std::map<ResultID,  Resultset> Cache;
