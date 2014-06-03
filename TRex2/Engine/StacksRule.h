@@ -28,6 +28,7 @@
 #include "../Packets/PubPkt.h"
 #include "../Packets/RulePkt.h"
 #include "../Engine/IndexingTableCommon.h"
+#include "../Common/ResultsCache.hpp"
 #include "CompositeEventGenerator.h"
 #include "Stack.h"
 #include <list>
@@ -78,7 +79,7 @@ public:
 	/**
 	 * Adds the given packet to stack 0 and starts the computation of composite events.
 	 */
-	void startComputation(PubPkt *pkt, std::set<PubPkt *> &results, Cache *cache);
+	void startComputation(PubPkt *pkt, std::set<PubPkt *> &results, ResultsCache *cache);
 
 	/**
 	 * Process pkt: used only for testing purpose
@@ -116,7 +117,7 @@ private:
 
 	std::map<int, QueryItem *> queryRegistry;					// Keeps the registry of the query to be executed
 
-	Cache * queryCache;											// Cache for queries results
+	ResultsCache * queryCache;											// Cache for queries results
 
 	/**
 	 * Adds the packet to the given stack (can be a normal stack, or a stack for negations or aggregates)

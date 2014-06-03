@@ -90,7 +90,7 @@ TRexEngine::TRexEngine(int parNumProc) {
 	threads = new pthread_t[numProc];
 	stacksRules = new StacksRules;
 	shared = new Shared[numProc];
-	qResCache = new Cache;
+	qResCache = new ResultsCache;
 }
 
 TRexEngine::~TRexEngine() {

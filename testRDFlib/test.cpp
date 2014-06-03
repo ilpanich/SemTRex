@@ -27,6 +27,17 @@ int main(int argc, char * argv[]) {
 	string test2 = "&pippo";
 	string test3 = "0";
 
+	string t1 = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db#select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Worcester,_Massachusetts\" }";
+	string t2 = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db#select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Worcester,_Massachusetts\" }";
+	string t3 = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db#select ?name where { ?p <isCalled> ?name. ?p <bornInLocation> \"Braunau_am_Inn\" }";
+	int compRes;
+	compRes = t1.compare(t2);
+	cout << compRes << endl;
+	compRes = t1.compare(t3);
+	cout << compRes << endl;
+	compRes = t2.compare(t3);
+	cout << compRes << endl;
+
 	const char* p;
 	const char* z;
 

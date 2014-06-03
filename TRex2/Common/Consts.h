@@ -25,7 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
+
 #include <map>
 #include <string>
 
@@ -215,33 +215,5 @@ typedef struct ExtParam {
 	char name2[NAME_LEN];
 } ExtParameter;
 
-/*
- * Cache structures
- */
-
-typedef struct ResIDstruct {
-	unsigned char * dbId;
-	unsigned char * qId;
-
-	bool operator<( const ResIDstruct &r ) const {
-		if (strcmp((const char*) dbId, (const char*) r.dbId) < 0) return true;
-		if (strcmp((const char*) dbId, (const char*) r.dbId) > 0) return false;
-		if (strcmp((const char*) dbId, (const char*) r.dbId) == 0) {
-			if (strcmp((const char*) qId, (const char*) r.qId) < 0) return true;
-			if (strcmp((const char*) qId, (const char*) r.qId) > 0) return false;
-			if (strcmp((const char*) qId, (const char*) r.qId) == 0) return false;
-		}
-	}
-
-	bool operator==( const ResIDstruct &r ) const {
-			if (strcmp((const char*) dbId, (const char*) r.dbId) == 0 && strcmp((const char*) qId, (const char*) r.qId) == 0) {
-				return true;
-			}
-			else
-				return false;
-		}
-} ResultID;
-
-typedef std::map<ResultID,  Resultset> Cache;
 
 #endif

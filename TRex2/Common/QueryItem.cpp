@@ -10,13 +10,12 @@
 using namespace std;
 using namespace boost;
 
-QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, unsigned char * queryId, vector<ExtParameter> p, CompKind k) {
+QueryItem::QueryItem(string & kb, string & q, unsigned char * kbId, vector<ExtParameter> p, CompKind k) {
 
 	db = string(kb);
 	query = string(q);
 	originalQuery = string(q);
-	resID.dbId = kbId;
-	resID.qId = queryId;
+	//resID.dbId = kbId;
 	params = p;
 	kind = k;
 
@@ -46,7 +45,7 @@ QueryItem::~QueryItem() {
 	rs.clearRes();
 }
 
-bool QueryItem::runQuery(Cache *qCache) {
+bool QueryItem::runQuery(ResultsCache *qCache) {
 
 	//cerr << query << endl;
 
@@ -56,34 +55,33 @@ bool QueryItem::runQuery(Cache *qCache) {
 			storeResults(qCache);
 		}
 		else {
-			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
-			//			rs = RDFQuery::execQuery(db, query, false);
+//			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
+//			//			rs = RDFQuery::execQuery(db, query, false);
 			rs = getCachedResults(qCache);
-			Resultset rs1 = RDFQuery::execQuery(db, query, false);
-
-			int cont = 0;
-			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
-				cont++;
-				cerr << cont << ")CACHE SIZE (" << rs1.getAllRes().size() << ") DIFFERENT FROM REAL QUERY ANSWER SET SIZE (" << rs.getAllRes().size() << ")!" << endl;
-			}
-			else {
-				for (int i = 0; i < rs1.getAllRes().size(); i++) {
-					Result res1 = rs1.getAllRes().at(i);
-					Result res2 = rs.getAllRes().at(i);
-					if (res1.getResult().size() != res2.getResult().size())
-						cerr << "CACHE CONTENT DIFFERENT FROM REAL QUERY ANSWER SET CONTENT!" << endl;
-					else {
-						for (int j = 0; j < res1.getResult().size(); j++) {
-							Field f1 = res1.getResult()[j];
-							Field f2 = res2.getResult()[j];
-							if(strcmp(f1.getSValue(), f2.getSValue()) != 0)
-								cerr << "CACHE FIELD CONTENT DIFFERENT FROM REAL QUERY ANSWER SET FIELD CONTENT!" << endl;
-						}
-
-					}
-
-				}
-			}
+//			Resultset rs1 = RDFQuery::execQuery(db, query, false);
+//
+//			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
+//				cerr << query << endl;
+//				cerr << ")CACHE SIZE (" << rs.getAllRes().size() << ") DIFFERENT FROM REAL QUERY ANSWER SET SIZE (" << rs1.getAllRes().size() << ")!" << endl;
+//			}
+//			else {
+//				for (int i = 0; i < rs1.getAllRes().size(); i++) {
+//					Result res1 = rs1.getAllRes().at(i);
+//					Result res2 = rs.getAllRes().at(i);
+//					if (res1.getResult().size() != res2.getResult().size())
+//						cerr << "CACHE CONTENT DIFFERENT FROM REAL QUERY ANSWER SET CONTENT!" << endl;
+//					else {
+//						for (int j = 0; j < res1.getResult().size(); j++) {
+//							Field f1 = res1.getResult()[j];
+//							Field f2 = res2.getResult()[j];
+//							if(strcmp(f1.getSValue(), f2.getSValue()) != 0)
+//								cerr << "CACHE FIELD CONTENT DIFFERENT FROM REAL QUERY ANSWER SET FIELD CONTENT!" << endl;
+//						}
+//
+//					}
+//
+//				}
+//			}
 		}
 	}
 	else				// TODO: here external parameters of the query must be handled
@@ -158,29 +156,31 @@ bool QueryItem::hasMoreResults() {
 	return RDFQuery::execQuery(db, query, false).getAllRes().empty();
 }
 
-bool QueryItem::hasCachedResults(Cache *qCache) {
-	Cache::iterator it = qCache->find(resID);
-	if (it == qCache->end())
-		return false;
-
-	return true;
+bool QueryItem::hasCachedResults(ResultsCache *qCache) {
+	return qCache->hasEntry(db, query);
 }
 
-Resultset QueryItem::getCachedResults(Cache *qCache) {
-	Cache::iterator it = qCache->find(resID);
+Resultset QueryItem::getCachedResults(ResultsCache *qCache) {
 
-//		for(Resultset::iterator iter=it->second.first(); iter!=it->second.last(); iter++) {
-//			Result res = *iter;
-//			for (int i = 0; i < res.getResult().size(); i++) {
-//				Field f = res.getResult()[i];
-//				cerr << f.getSValue() << "\t";
-//			}
-//			cerr << endl;
-//		}
-	return it->second;
+	return qCache->getEntry(db, query).getRes();
+
+//	Cache::iterator it = qCache->find(resID);
+//
+////		for(Resultset::iterator iter=it->second.first(); iter!=it->second.last(); iter++) {
+////			Result res = *iter;
+////			for (int i = 0; i < res.getResult().size(); i++) {
+////				Field f = res.getResult()[i];
+////				cerr << f.getSValue() << "\t";
+////			}
+////			cerr << endl;
+////		}
+//	return it->second;
 }
 
 
-void QueryItem::storeResults(Cache *qCache) {
-	qCache->insert(make_pair(resID, rs));
+void QueryItem::storeResults(ResultsCache *qCache) {
+	qCache->addEntry(db, query, rs);
+
+//	for (Cache::iterator it = qCache->begin(); it != qCache->end(); it ++)
+//		cerr << "Cache Entry: " << it->first << endl;
 }

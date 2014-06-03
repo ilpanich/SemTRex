@@ -52,7 +52,6 @@ typedef struct KnowledgeBasePredicate {
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
 	unsigned char * dbId;			// The KB db identifier for cache access
-	unsigned char * qId;				// The KB query identifier for cache access
 	std::vector<ExtParameter> param;			// External Parameters
 } KBPredicate;
 

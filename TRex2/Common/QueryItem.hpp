@@ -12,6 +12,7 @@
 #include "../../rdf3x-0.3.5/include/rts/operator/Field.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
+#include "../Common/ResultsCache.hpp"
 #include <string>
 #include <vector>
 
@@ -23,7 +24,6 @@ private:
 	std::string db;									// The KB db reference for quering
 	std::string query;								// The KB query
 	std::string originalQuery;						// The original query, in case substitution occurs
-	ResultID resID;
 	std::vector<ExtParameter> params;				// The KB query optional external parameters
 	std::vector<std::string> fields;				// The list of fields that the query returns
 	CompKind kind;									// The kind of constraint
@@ -32,17 +32,17 @@ private:
 	int offset;										// Offset for scanning query results
 	std::map<std::string, bool> replacedParams;		// Tell if a parameter has been replaced or not
 
-	bool hasCachedResults(Cache *qCache);
-	Resultset getCachedResults(Cache *qCache);
-	void storeResults(Cache *qCache);
+	bool hasCachedResults(ResultsCache *qCache);
+	Resultset getCachedResults(ResultsCache *qCache);
+	void storeResults(ResultsCache *qCache);
 
 public:
 
-	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, unsigned char * queryId, std::vector<ExtParameter> p, CompKind k);
+	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, std::vector<ExtParameter> p, CompKind k);
 
 	~QueryItem();
 
-	bool runQuery(Cache *qCache);
+	bool runQuery(ResultsCache *qCache);
 
 	Resultset getResult();
 

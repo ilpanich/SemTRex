@@ -54,7 +54,7 @@ StacksRule::StacksRule(RulePkt *pkt) {
 
 	// Initialize the query registry with the kb predicates related queries
 	for (int i=0; i< pkt->getKBPredicatesNum(); i++) {
-		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).qId, pkt->getKBPredicate(i).param, pkt->getKBPredicate(i).kind);
+		QueryItem * item = new QueryItem(pkt->getKBPredicate(i).db, pkt->getKBPredicate(i).query, pkt->getKBPredicate(i).dbId, pkt->getKBPredicate(i).param, pkt->getKBPredicate(i).kind);
 		queryRegistry.insert(make_pair(kbNum, item));
 		kbNum++;
 	}
@@ -171,7 +171,7 @@ void StacksRule::addToNegationStack(PubPkt *pkt, int index) {
 	parametricAddToStack(pkt, negsSize[index], receivedNegs[index]);
 }
 
-void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results, Cache *cache) {
+void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results, ResultsCache *cache) {
 
 	queryCache = cache;
 
