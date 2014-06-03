@@ -7,6 +7,8 @@ CPP_SRCS += \
 ../Common/CompositeEventTemplate.cpp \
 ../Common/OpTree.cpp \
 ../Common/QueryItem.cpp \
+../Common/ResultEntry.cpp \
+../Common/ResultsCache.cpp \
 ../Common/TimeMs.cpp \
 ../Common/Timer.cpp 
 
@@ -18,6 +20,8 @@ OBJS += \
 ./Common/Funs.o \
 ./Common/OpTree.o \
 ./Common/QueryItem.o \
+./Common/ResultEntry.o \
+./Common/ResultsCache.o \
 ./Common/TimeMs.o \
 ./Common/Timer.o 
 
@@ -28,6 +32,8 @@ CPP_DEPS += \
 ./Common/CompositeEventTemplate.d \
 ./Common/OpTree.d \
 ./Common/QueryItem.d \
+./Common/ResultEntry.d \
+./Common/ResultsCache.d \
 ./Common/TimeMs.d \
 ./Common/Timer.d 
 

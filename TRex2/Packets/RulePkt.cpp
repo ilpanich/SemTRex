@@ -118,7 +118,6 @@ bool RulePkt::addKBRootPredicate(Constraint constr[], int constrLen, string kb, 
 //	p.refersTo = predicates.size() - 1;
 	p.db = kb;
 	p.query = q;
-	p.dbId = MD5((const unsigned char*) kb.c_str(), kb.length(), NULL);
 	p.constraints = new Constraint[constrLen];
 	for (int i=0; i<constrLen; i++) p.constraints[i] = constr[i];
 	kbPredicates.insert(make_pair(kbPredicates.size(), p));
@@ -135,7 +134,6 @@ bool RulePkt::addKBPredicate(Constraint constr[], int constrLen, string kb, stri
 	p.kind = kind;
 	p.db = kb;
 	p.query = q;
-	p.dbId = MD5((const unsigned char*) kb.c_str(), kb.length(), NULL);
 	// The following line executes the query. Must be moved to the appropriate TESLA rule execution section
 	//p.rs = RDFQuery::execQuery(kb*, query*, false);
 	p.constraints = new Constraint[constrLen];

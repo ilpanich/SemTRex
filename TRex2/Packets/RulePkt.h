@@ -26,7 +26,6 @@
 #include "../Common/CompositeEventTemplate.h"
 #include <set>
 #include <map>
-#include <openssl/md5.h>
 #include <string>
 #include <vector>
 
@@ -51,7 +50,6 @@ typedef struct KnowledgeBasePredicate {
 	CompKind kind;						// The kind of constraint
 	std::string db;				// The KB db reference for quering
 	std::string query;			// The KB query
-	unsigned char * dbId;			// The KB db identifier for cache access
 	std::vector<ExtParameter> param;			// External Parameters
 } KBPredicate;
 

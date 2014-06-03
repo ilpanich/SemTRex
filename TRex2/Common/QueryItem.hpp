@@ -38,7 +38,7 @@ private:
 
 public:
 
-	QueryItem(std::string & kb, std::string & q, unsigned char * kbId, std::vector<ExtParameter> p, CompKind k);
+	QueryItem(std::string & kb, std::string & q, std::vector<ExtParameter> p, CompKind k);
 
 	~QueryItem();
 
