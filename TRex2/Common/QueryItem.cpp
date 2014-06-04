@@ -49,15 +49,17 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 
 	//cerr << query << endl;
 
+//	cout << "Processing query: " << query << endl;
+
 	if(!needsReplace()) {
-		//		if(!hasCachedResults(qCache)) {
-		//			rs = RDFQuery::execQuery(db, query, false);
-		//			storeResults(qCache);
-		//		}
-		//		else {
+//				if(!hasCachedResults(qCache)) {
+//					rs = RDFQuery::execQuery(db, query, false);
+//					storeResults(qCache);
+//				}
+//				else {
 		//			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
 		rs = RDFQuery::execQuery(db, query, false);
-		//			rs = getCachedResults(qCache);
+//					rs = getCachedResults(qCache);
 		//			Resultset rs1 = RDFQuery::execQuery(db, query, false);
 		//
 		//			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
@@ -82,7 +84,7 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 		//
 		//				}
 		//			}
-		//		}
+//				}
 	}
 	else				// TODO: here external parameters of the query must be handled
 		return false;

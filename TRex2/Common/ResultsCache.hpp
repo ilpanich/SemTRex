@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <pthread.h>
 #include "ResultEntry.hpp"
 
 class ResultsCache {
@@ -25,6 +26,11 @@ public:
 
 private:
 	std::vector<ResultEntry> cache;
+
+#if MP_MODE == MP_LOCK
+	pthread_mutex_t *mutex;	// Mutex for synchronized methods
+#endif
+
 };
 
 #endif /* RESULTSCACHE_HPP_ */

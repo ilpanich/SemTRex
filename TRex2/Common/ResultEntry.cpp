@@ -9,6 +9,10 @@
 
 using namespace std;
 
+ResultEntry::ResultEntry() {
+
+}
+
 ResultEntry::ResultEntry(string dbId, string qId, Resultset rs) {
 	db = dbId;
 	query = qId;

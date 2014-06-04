@@ -117,6 +117,7 @@ TRexEngine::~TRexEngine() {
 		delete stackRule;
 	}
 	delete stacksRules;
+	delete qResCache;
 }
 
 void TRexEngine::finalize() {

@@ -13,6 +13,7 @@
 
 class ResultEntry {
 public:
+	ResultEntry();
 	ResultEntry(std::string dbId, std::string qId, Resultset rs);
 	virtual ~ResultEntry();
 

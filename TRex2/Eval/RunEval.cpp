@@ -106,16 +106,43 @@ void trex_testing::runBasicEval() {
 
 	Resultset rs;
 	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
-	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 500";
+	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 6000";
 	rs = RDFQuery::execQuery(db, query, false);
+	Resultset * rs1 = new Resultset();
+
+	for (Resultset::iterator it = rs.first(); it != rs.last(); it++) {
+		Result r = *it;
+		string f1 = string(r.getResult()[0].getSValue());
+		string f2 = string(r.getResult()[1].getSValue());
+
+		//		cout << f1 << " " << f2 << endl;
+
+		int pos1 = f1.find_first_not_of("abcdefghijklmonpqrstuvxwyzABCDEFGHIJKLMONPQRSTUVWXYZ ");
+		int pos2 = f2.find_first_not_of("abcdefghijklmonpqrstuvxwyzABCDEFGHIJKLMONPQRSTUVWXYZ_0123456789 ");
+
+		//		cout << pos1 << " " << pos2 << endl;
+
+		if(pos1 < 0 && pos2 < 0)
+			rs1->addResult(r);
+	}
+
+//	for (Resultset::iterator it = rs1->first(); it != rs1->last(); it++) {
+//		Result r = *it;
+//		string f1 = string(r.getResult()[0].getSValue());
+//		string f2 = string(r.getResult()[1].getSValue());
+//
+//		cout << f1 << " " << f2 << endl;
+//	}
+//
+//	cout << "Original size: " << rs.getAllRes().size() << " - Purged size: " << rs1->getAllRes().size() << endl;
 
 	for(int i = 200; i <= 3000; i += 100) {
 		BasicEval * b = new BasicEval(0,50);
-		b->startBasicEval(rs,i);
+		b->startBasicEval(*rs1,i);
 		usleep(1500);
 		delete b;
 		b = new BasicEval(1,50);
-		b->startBasicEval(rs,i);
+		b->startBasicEval(*rs1,i);
 		usleep(1500);
 		delete b;
 	}
