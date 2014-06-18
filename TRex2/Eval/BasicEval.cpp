@@ -72,7 +72,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules, int numRules) {
 
 		if (q == 0 || q == 3 || q == 6) {
 			pkt->addRootPredicate(1000, NULL, 0);
-			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			pkt->addKBRootPredicate(NULL, 0, "/home/panigati/db", queries[q]);
 			char param1name[5];
 			char param2name[6];
 			param1name[0] = 'n';
@@ -118,7 +118,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules, int numRules) {
 		}
 		if (q == 1 || q == 4 || q == 7) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
-			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			pkt->addKBRootPredicate(NULL, 0, "/home/panigati/db", queries[q]);
 			char param1name[5];
 			char param2name[6];
 			param1name[0] = 'c';
@@ -164,7 +164,7 @@ void BasicEval::createKbRules(set<RulePkt *> &rules, int numRules) {
 
 		if (q == 2 || q == 5) {
 			pkt->addRootPredicate(id*1000, NULL, 0);
-			pkt->addKBRootPredicate(NULL, 0, "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db", queries[q]);
+			pkt->addKBRootPredicate(NULL, 0, "/home/panigati/db", queries[q]);
 			char param1name[10];
 			char param2name[12];
 			param1name[0] = 'n';
@@ -386,7 +386,7 @@ PubPkt * BasicEval::createParamPkt1(Resultset rs, int numPkt) {
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
 	//	int c = r % 5;
-	pos = r % numPkt;
+	pos = r % (numPkt / 5);
 	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
 	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 	PubPkt *pkt;
@@ -418,7 +418,7 @@ PubPkt * BasicEval::createParamPkt2(Resultset rs, int numPkt) {
 	//	string names[] = {"Stanley Holloway","Jerry Springer","Will Self","Ernest Thesiger","Peter Ackroyd","Mary Wollstonecraft Shelley","Mary Shelley","Alan M. Turing","Virginia Woolf","Beniaminus Disraeli","Davidas Rikardas","Michael Moorcock","Gilbert Keith Chesterton","Alistair Darling","Horace Walpole","Harold Alexander","John Donne","William Blake","Christopher Ingold","Neil Ross","Pops Mensah-Bonsu","Peter Cheyney","Kathryn Beaumont","Kelenna Azubuike","Carlos Raúl Villanueva","Michael Woodruff","Sean Yazbeck","Layla El","Alfred James Shaughnessy","Richard Harvey","John Sebastian Helmcken","David Boadella","Terry Fox","Clara Hughes","Dufferin Roblin","Gary Doer","David Reimer","James Coyne","Andy Bathgate","Mike Keane","Alexander Steen","Raymond Henault","Steve Corino","Bill Masterton","Ted Irvine","Ted Harris","Shannon Rempel","Reg Abbott","Jonathan Toews","Paul Baxter","John Marks (hockey)","Bruno Zarrillo","Lonny Bohonos","Travis Zajac","Frank Mathers","Dustin Boyd","Jennifer Ellison","Alfred Lennon","Mal Evans","Stephen Baxter","Gulielmus Ewart Gladstone","William Gladstone","Clive Barker","John Horton Conway","John Conway","Felicia Hemans","Andy Burnham","James Bulger","Mumes Bulger","James Larkin","Frank Hornby","Cathy Tyson","Augustus Radcliffe Grote","Neil Buchanan","Stephen Molyneux","Julia Lennon","Alfred Cheetham","John Redwood","Edward Pellew"};
 	//	string cities[] = {"London","Winnipeg","Dover","Liverpool","Cambridge"};
 	//	int n = r % 79;
-	pos = r % numPkt;
+	pos = r % (numPkt / 5);
 	name = rs.getAllRes().at(pos).getResult()[0].getSValue();
 	city = rs.getAllRes().at(pos).getResult()[1].getSValue();
 	PubPkt *pkt;
@@ -489,7 +489,7 @@ int BasicEval::startBasicEval(Resultset rs, int numPkt) {
 		PubPkt * pkt = *it;
 		//		cout << "Type: " << pkt->getEventType() << "\tAttr1: " << pkt->getAttribute(0).stringVal << "\tAttr2: " << pkt->getAttribute(1).stringVal << endl;
 		engine->processPubPkt(pkt);
-		if (j % 10 == 0)
+		if (j % 500 == 0)
 			cout << "Processed packets: " << j << endl;
 		j++;
 	}

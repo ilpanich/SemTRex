@@ -105,7 +105,7 @@ void trex_testing::runEval() {
 void trex_testing::runBasicEval() {
 
 	Resultset rs;
-	string db = "/home/lele/git/SemTRex/rdf3x-0.3.5/bin/db";
+	string db = "/home/panigati/db";
 	string query = "select ?name ?city where { ?p <isCalled> ?name. ?p <bornInLocation> ?city } LIMIT 6000";
 	rs = RDFQuery::execQuery(db, query, false);
 	Resultset * rs1 = new Resultset();

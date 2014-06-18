@@ -19,6 +19,8 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 	params = p;
 	kind = k;
 
+	isParametric = false;
+
 	if(query.length() > 0) {
 		const char* t;
 		char * qy = new char[query.length() + 1];
@@ -35,10 +37,15 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 			ExtParameter par = *it;
 			replacedParams.insert(make_pair(string(par.name2), false));
 		}
+		isParametric = true;
 	}
 
 	limit = RS_MAX_DIM / (fields.size() * sizeof(char[STRING_LEN]));
 	offset = 0;
+
+	if(isParametric) {
+		// TODO: Convert parameters in variables and add them to the query select clause
+	}
 }
 
 QueryItem::~QueryItem() {
@@ -51,15 +58,17 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 
 //	cout << "Processing query: " << query << endl;
 
+	// TODO: verify if the query is parametric and extract the results filtering the in-memory resultset
+
 	if(!needsReplace()) {
-//				if(!hasCachedResults(qCache)) {
-//					rs = RDFQuery::execQuery(db, query, false);
-//					storeResults(qCache);
-//				}
-//				else {
+				if(!hasCachedResults(qCache)) {
+					rs = RDFQuery::execQuery(db, query, false);
+					storeResults(qCache);
+				}
+				else {
 		//			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
-		rs = RDFQuery::execQuery(db, query, false);
-//					rs = getCachedResults(qCache);
+//		rs = RDFQuery::execQuery(db, query, false);
+					rs = getCachedResults(qCache);
 		//			Resultset rs1 = RDFQuery::execQuery(db, query, false);
 		//
 		//			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
@@ -84,7 +93,7 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 		//
 		//				}
 		//			}
-//				}
+				}
 	}
 	else				// TODO: here external parameters of the query must be handled
 		return false;
@@ -127,6 +136,7 @@ bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pVa
 		return false;
 	else {
 		foundEl->second = true;
+		paramsReplacement.insert(make_pair(pName, pValue));
 		return true;
 	}
 }
@@ -149,6 +159,7 @@ void QueryItem::resetExtParRepl() {
 		for (map<string,bool>::iterator it=replacedParams.begin(); it!=replacedParams.end(); it++)
 			it->second = false;
 		query = originalQuery;
+		paramsReplacement.clear();
 	}
 }
 

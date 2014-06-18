@@ -31,6 +31,8 @@ private:
 	int limit;										// The maximum number of results those can be stored in memory
 	int offset;										// Offset for scanning query results
 	std::map<std::string, bool> replacedParams;		// Tell if a parameter has been replaced or not
+	std::map<std::string, std::string> paramsReplacement;	//Keep track of which is the parameter value at run time
+	bool isParametric;								// true if the query contains external parameters, false otherwise
 
 	bool hasCachedResults(ResultsCache *qCache);
 	Resultset getCachedResults(ResultsCache *qCache);
