@@ -14,6 +14,7 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 
 	db = string(kb);
 	query = string(q);
+	nonParamQuery = string(q);
 	originalQuery = string(q);
 	//resID.dbId = kbId;
 	params = p;
@@ -35,7 +36,10 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 	if (!params.empty()) {
 		for(vector<ExtParameter>::iterator it=params.begin(); it!=params.end(); it++) {
 			ExtParameter par = *it;
+			string parStr = string(par.name2) + " where";
 			replacedParams.insert(make_pair(string(par.name2), false));
+			nonParamQuery.replace(nonParamQuery.find("where"), parStr.length() - 6, parStr);
+			replace(nonParamQuery.begin(),nonParamQuery.end(), '&', '?');
 		}
 		isParametric = true;
 	}
@@ -43,9 +47,6 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 	limit = RS_MAX_DIM / (fields.size() * sizeof(char[STRING_LEN]));
 	offset = 0;
 
-	if(isParametric) {
-		// TODO: Convert parameters in variables and add them to the query select clause
-	}
 }
 
 QueryItem::~QueryItem() {

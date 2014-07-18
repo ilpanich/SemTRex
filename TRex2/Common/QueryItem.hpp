@@ -15,6 +15,7 @@
 #include "../Common/ResultsCache.hpp"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #define RS_MAX_DIM 536870912
 
@@ -24,6 +25,7 @@ private:
 	std::string db;									// The KB db reference for quering
 	std::string query;								// The KB query
 	std::string originalQuery;						// The original query, in case substitution occurs
+	std::string nonParamQuery;						// The original query where each ExtParameter is transformed in SPARQL variable
 	std::vector<ExtParameter> params;				// The KB query optional external parameters
 	std::vector<std::string> fields;				// The list of fields that the query returns
 	CompKind kind;									// The kind of constraint
