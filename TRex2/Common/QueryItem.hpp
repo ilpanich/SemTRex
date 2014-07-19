@@ -10,6 +10,7 @@
 
 #include "../Common/Consts.h"
 #include "../../rdf3x-0.3.5/include/rts/operator/Field.hpp"
+#include "../../rdf3x-0.3.5/include/rts/operator/Result.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/Resultset.hpp"
 #include "../../rdf3x-0.3.5/include/rts/operator/RDFQuery.hpp"
 #include "../Common/ResultsCache.hpp"
@@ -33,12 +34,12 @@ private:
 	int limit;										// The maximum number of results those can be stored in memory
 	int offset;										// Offset for scanning query results
 	std::map<std::string, bool> replacedParams;		// Tell if a parameter has been replaced or not
-	std::map<std::string, std::string> paramsReplacement;	//Keep track of which is the parameter value at run time
+	std::map<std::string, std::string> paramsReplacement;	//Keeps track of which is the parameter value at run time
 	bool isParametric;								// true if the query contains external parameters, false otherwise
 
-	bool hasCachedResults(ResultsCache *qCache);
-	Resultset getCachedResults(ResultsCache *qCache);
-	void storeResults(ResultsCache *qCache);
+	bool hasCachedResults(ResultsCache *qCache, std::string query);
+	Resultset getCachedResults(ResultsCache *qCache, std::string query);
+	void storeResults(ResultsCache *qCache, std::string query);
 
 public:
 

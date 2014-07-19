@@ -22,26 +22,41 @@ QueryItem::QueryItem(string & kb, string & q, vector<ExtParameter> p, CompKind k
 
 	isParametric = false;
 
-	if(query.length() > 0) {
-		const char* t;
-		char * qy = new char[query.length() + 1];
-		strcpy(qy, query.substr(query.find_first_of("?"), query.find("where") - query.find_first_of("?")).c_str());
-
-		for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
-		{
-			fields.push_back(t);
-		}
-	}
-
 	if (!params.empty()) {
+		int pos = 0;
 		for(vector<ExtParameter>::iterator it=params.begin(); it!=params.end(); it++) {
 			ExtParameter par = *it;
 			string parStr = string(par.name2) + " where";
 			replacedParams.insert(make_pair(string(par.name2), false));
 			nonParamQuery.replace(nonParamQuery.find("where"), parStr.length() - 6, parStr);
 			replace(nonParamQuery.begin(),nonParamQuery.end(), '&', '?');
+			pos++;
 		}
 		isParametric = true;
+	}
+
+	if(!isParametric) {
+		if(query.length() > 0) {
+			const char* t;
+			char * qy = new char[query.length() + 1];
+			strcpy(qy, query.substr(query.find_first_of("?"), query.find("where") - query.find_first_of("?")).c_str());
+
+			for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
+			{
+				fields.push_back(t);
+			}
+		}
+	} else {
+		if(nonParamQuery.length() > 0) {
+			const char* t;
+			char * qy = new char[nonParamQuery.length() + 1];
+			strcpy(qy, nonParamQuery.substr(nonParamQuery.find_first_of("?"), nonParamQuery.find("where") - nonParamQuery.find_first_of("?")).c_str());
+
+			for (t = strtok( qy, " " );  t;  t = strtok( NULL, " " ))
+			{
+				fields.push_back(t);
+			}
+		}
 	}
 
 	limit = RS_MAX_DIM / (fields.size() * sizeof(char[STRING_LEN]));
@@ -55,46 +70,42 @@ QueryItem::~QueryItem() {
 
 bool QueryItem::runQuery(ResultsCache *qCache) {
 
-	//cerr << query << endl;
-
-//	cout << "Processing query: " << query << endl;
-
 	// TODO: verify if the query is parametric and extract the results filtering the in-memory resultset
 
 	if(!needsReplace()) {
-				if(!hasCachedResults(qCache)) {
-					rs = RDFQuery::execQuery(db, query, false);
-					storeResults(qCache);
+		if(!isParametric) {
+			if(!hasCachedResults(qCache, query)) {
+				rs = RDFQuery::execQuery(db, query, false);
+				storeResults(qCache, query);
+			}
+			else {
+
+				rs = getCachedResults(qCache, query);
+
+			}
+		} else {
+			Resultset auxRS;
+			if(!hasCachedResults(qCache, nonParamQuery)) {
+				auxRS = RDFQuery::execQuery(db, nonParamQuery, false);
+				storeResults(qCache, nonParamQuery);
+			} else {
+				auxRS = getCachedResults(qCache, nonParamQuery);
+			}
+
+			for(Resultset::iterator it = auxRS.first(); it != auxRS.last(); it++) {
+				bool ok = true;
+				Result res = *it;
+				for(map<string, string>::iterator iter = paramsReplacement.begin(); iter != paramsReplacement.end(); iter++) {
+					string pN = iter->first;
+					string pV = iter->second;
+					if(strcmp(res.getResult()[getField(pN.c_str())], pV) != 0)
+						ok = false;
 				}
-				else {
-		//			//			cerr << "CACHE HIT: DB -> " << resID.dbId << " QUERY -> " << resID.qId << endl;
-//		rs = RDFQuery::execQuery(db, query, false);
-					rs = getCachedResults(qCache);
-		//			Resultset rs1 = RDFQuery::execQuery(db, query, false);
-		//
-		//			if (rs1.getAllRes().size() != rs.getAllRes().size()) {
-		//				cerr << query << endl;
-		//				cerr << ")CACHE SIZE (" << rs.getAllRes().size() << ") DIFFERENT FROM REAL QUERY ANSWER SET SIZE (" << rs1.getAllRes().size() << ")!" << endl;
-		//			}
-		//			else {
-		//				for (int i = 0; i < rs1.getAllRes().size(); i++) {
-		//					Result res1 = rs1.getAllRes().at(i);
-		//					Result res2 = rs.getAllRes().at(i);
-		//					if (res1.getResult().size() != res2.getResult().size())
-		//						cerr << "CACHE CONTENT DIFFERENT FROM REAL QUERY ANSWER SET CONTENT!" << endl;
-		//					else {
-		//						for (int j = 0; j < res1.getResult().size(); j++) {
-		//							Field f1 = res1.getResult()[j];
-		//							Field f2 = res2.getResult()[j];
-		//							if(strcmp(f1.getSValue(), f2.getSValue()) != 0)
-		//								cerr << "CACHE FIELD CONTENT DIFFERENT FROM REAL QUERY ANSWER SET FIELD CONTENT!" << endl;
-		//						}
-		//
-		//					}
-		//
-		//				}
-		//			}
-				}
+				if(ok)
+					rs.addResult(res);
+
+			}
+		}
 	}
 	else				// TODO: here external parameters of the query must be handled
 		return false;
@@ -170,11 +181,11 @@ bool QueryItem::hasMoreResults() {
 	return RDFQuery::execQuery(db, query, false).getAllRes().empty();
 }
 
-bool QueryItem::hasCachedResults(ResultsCache *qCache) {
+bool QueryItem::hasCachedResults(ResultsCache *qCache, string query) {
 	return qCache->hasEntry(db, query);
 }
 
-Resultset QueryItem::getCachedResults(ResultsCache *qCache) {
+Resultset QueryItem::getCachedResults(ResultsCache *qCache, string query) {
 
 	return qCache->getEntry(db, query).getRes();
 
@@ -192,7 +203,7 @@ Resultset QueryItem::getCachedResults(ResultsCache *qCache) {
 }
 
 
-void QueryItem::storeResults(ResultsCache *qCache) {
+void QueryItem::storeResults(ResultsCache *qCache, string query) {
 	qCache->addEntry(db, query, rs);
 
 	//	for (Cache::iterator it = qCache->begin(); it != qCache->end(); it ++)

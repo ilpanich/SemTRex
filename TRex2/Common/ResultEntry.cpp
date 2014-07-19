@@ -10,13 +10,14 @@
 using namespace std;
 
 ResultEntry::ResultEntry() {
-
+	hitCounter = 0;
 }
 
 ResultEntry::ResultEntry(string dbId, string qId, Resultset rs) {
 	db = dbId;
 	query = qId;
 	results = rs;
+	hitCounter = 0;
 }
 
 ResultEntry::~ResultEntry() {
@@ -33,3 +34,10 @@ Resultset ResultEntry::getRes() {
 	return results;
 }
 
+void ResultEntry::incrementHitCounter() {
+	hitCounter++;
+}
+
+int ResultEntry::getHitCounter() {
+	return hitCounter;
+}

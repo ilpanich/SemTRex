@@ -21,10 +21,15 @@ public:
 	std::string getQuery();
 	Resultset getRes();
 
+	void incrementHitCounter();
+	int getHitCounter();
+
 private:
 	std::string db;
 	std::string query;
 	Resultset results;
+
+	int hitCounter;
 
 };
 
