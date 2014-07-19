@@ -97,8 +97,11 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 				Result res = *it;
 				for(map<string, string>::iterator iter = paramsReplacement.begin(); iter != paramsReplacement.end(); iter++) {
 					string pN = iter->first;
+					char * paramN;
+					strcpy(paramN, pN.c_str());
 					string pV = iter->second;
-					if(strcmp(res.getResult()[getField(pN.c_str())], pV) != 0)
+					Field f = res.getResult()[getField(paramN)];
+					if(strcmp(pV.c_str(), f.getSValue()) != 0)
 						ok = false;
 				}
 				if(ok)
