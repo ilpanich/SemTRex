@@ -22,6 +22,7 @@ public:
 
 	std::vector<Field> getResult();
 	void addElement(std::string e);
+	void removeElement(int pos);
 
 };
 

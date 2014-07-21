@@ -101,12 +101,14 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 					strcpy(paramN, pN.c_str());
 					string pV = iter->second;
 					Field f = res.getResult()[getField(paramN)];
-					if(strcmp(pV.c_str(), f.getSValue()) != 0)
+					if(strcmp(pV.c_str(), f.getSValue()) != 0) {
 						ok = false;
+						break;
+					} else
+						res.removeElement(getField(paramN));
 				}
 				if(ok)
 					rs.addResult(res);
-
 			}
 		}
 	}

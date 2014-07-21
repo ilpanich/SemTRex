@@ -66,3 +66,7 @@ void Result::addElement(string e)
 
 }
 
+void Result::removeElement(int pos) {
+	Result::result.erase(Result::result.begin() +  pos);
+}
+
