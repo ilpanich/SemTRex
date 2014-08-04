@@ -94,6 +94,9 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 
 			for(Resultset::iterator it = auxRS.first(); it != auxRS.last(); it++) {
 				bool ok = true;
+				bool okArray[paramsReplacement.size()];
+				okArray[0] = false;
+				int curr = 0;
 				Result res = *it;
 				for(map<string, string>::iterator iter = paramsReplacement.begin(); iter != paramsReplacement.end(); iter++) {
 					string pN = iter->first;
@@ -102,11 +105,18 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 					string pV = iter->second;
 					Field f = res.getResult()[getField(paramN)];
 					if(strcmp(pV.c_str(), f.getSValue()) != 0) {
-						ok = false;
-						break;
-					} else
+						okArray[curr] = true;
+						if(curr < paramsReplacement.size() - 1) {
+							curr++;
+							okArray[curr] = false;
+						}
 						res.removeElement(getField(paramN));
+						break;
+					} //else
+//						res.removeElement(getField(paramN));
 				}
+				for(int i = 0; i < curr + 1; i++)
+					ok = ok && okArray[i];
 				if(ok)
 					rs.addResult(res);
 			}
