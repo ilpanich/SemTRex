@@ -39,7 +39,7 @@ private:
 
 	bool hasCachedResults(ResultsCache *qCache, std::string query);
 	Resultset getCachedResults(ResultsCache *qCache, std::string query);
-	void storeResults(ResultsCache *qCache, std::string query);
+	void storeResults(ResultsCache *qCache, std::string query, Resultset *res = NULL);
 
 public:
 

@@ -87,7 +87,7 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 			Resultset auxRS;
 			if(!hasCachedResults(qCache, nonParamQuery)) {
 				auxRS = RDFQuery::execQuery(db, nonParamQuery, false);
-				storeResults(qCache, nonParamQuery);
+				storeResults(qCache, nonParamQuery, &auxRS);
 			} else {
 				auxRS = getCachedResults(qCache, nonParamQuery);
 			}
@@ -218,8 +218,11 @@ Resultset QueryItem::getCachedResults(ResultsCache *qCache, string query) {
 }
 
 
-void QueryItem::storeResults(ResultsCache *qCache, string query) {
-	qCache->addEntry(db, query, rs);
+void QueryItem::storeResults(ResultsCache *qCache, string query, Resultset *res) {
+	if(res == NULL)
+		qCache->addEntry(db, query, rs);
+	else
+		qCache->addEntry(db,query, *res);
 
 	//	for (Cache::iterator it = qCache->begin(); it != qCache->end(); it ++)
 	//		cerr << "Cache Entry: " << it->first << endl;
