@@ -207,6 +207,7 @@ void StacksRule::startComputation(PubPkt *pkt, set<PubPkt *> &results, ResultsCa
 }
 
 void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &results, int index) {
+	ResultsCache * testCache = new ResultsCache;
 	map<int, set<int> >::iterator aggIt=mh->matchingAggregates.find(index);
 	if (aggIt!=mh->matchingAggregates.end()) {
 		for (set<int>::iterator it=aggIt->second.begin(); it!=aggIt->second.end(); ++it) {
@@ -230,7 +231,7 @@ void StacksRule::processPkt(PubPkt *pkt, MatchingHandler *mh, set<PubPkt *> &res
 			if (stateIndex!=0) addToStack(pkt, stateIndex);
 			else lastStack = true;
 		}
-		if (lastStack) startComputation(pkt, results, NULL);
+		if (lastStack) startComputation(pkt, results, testCache);
 	}
 }
 

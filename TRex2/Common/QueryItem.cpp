@@ -84,6 +84,8 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 
 			}
 		} else {
+
+			// TODO: PANIGATI Check from here
 			Resultset auxRS;
 			if(!hasCachedResults(qCache, nonParamQuery)) {
 				auxRS = RDFQuery::execQuery(db, nonParamQuery, false);
@@ -227,3 +229,4 @@ void QueryItem::storeResults(ResultsCache *qCache, string query, Resultset *res)
 	//	for (Cache::iterator it = qCache->begin(); it != qCache->end(); it ++)
 	//		cerr << "Cache Entry: " << it->first << endl;
 }
+
