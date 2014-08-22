@@ -85,7 +85,6 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 			}
 		} else {
 
-			// TODO: PANIGATI Check from here
 			Resultset auxRS;
 			if(!hasCachedResults(qCache, nonParamQuery)) {
 				auxRS = RDFQuery::execQuery(db, nonParamQuery, false);
@@ -102,11 +101,11 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 				Result res = *it;
 				for(map<string, string>::iterator iter = paramsReplacement.begin(); iter != paramsReplacement.end(); iter++) {
 					string pN = iter->first;
-					char * paramN;
+					char * paramN = new char[pN.length() + 1];
 					strcpy(paramN, pN.c_str());
 					string pV = iter->second;
 					Field f = res.getResult()[getField(paramN)];
-					if(strcmp(pV.c_str(), f.getSValue()) != 0) {
+					if(strcmp(pV.c_str(), f.getSValue()) == 0) {
 						okArray[curr] = true;
 						if(curr < paramsReplacement.size() - 1) {
 							curr++;
@@ -124,7 +123,7 @@ bool QueryItem::runQuery(ResultsCache *qCache) {
 			}
 		}
 	}
-	else				// TODO: here external parameters of the query must be handled
+	else
 		return false;
 	if(rs.getAllRes().empty())
 		return false;
@@ -149,9 +148,10 @@ int QueryItem::getField(char * name) {
 	return -1;
 }
 
-bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pValue) {
+bool QueryItem::replaceExtParam(const string& pName, const string& pValue) {
 
 	map<string,bool>::iterator foundEl;
+	string parName = pName;
 
 	if(pName.empty())
 		return false;
@@ -165,7 +165,8 @@ bool QueryItem::replaceExtParam(const std::string& pName, const std::string& pVa
 		return false;
 	else {
 		foundEl->second = true;
-		paramsReplacement.insert(make_pair(pName, pValue));
+		parName[0] = '?';
+		paramsReplacement.insert(make_pair(parName, pValue));
 		return true;
 	}
 }
